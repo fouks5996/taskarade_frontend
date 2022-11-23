@@ -2,7 +2,7 @@ import Provider from "./Provider";
 
 function Providers({ providers }: ProvidersProps) {
   return (
-    <div>
+    <div className="flex gap-3">
       {Object.values(providers)
         .filter((provider) => provider.id !== "credentials")
         .map((provider) => (

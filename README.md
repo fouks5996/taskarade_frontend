@@ -32,3 +32,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+yahoo_ACCOUNT: 
+id: taskarade.app@yahoo.com
+mdp: azertyuiop199659$
+
+SENDGRID_ACCOUNT: 
+id: taskarade.app@yahoo.com
+mdp: azertyuiop199659$
+api_key: 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
+
+SINGLE-SENDER-VERFI:
+from: foucauldbeaumont@yahoo.fr
+reply: no-reply@taskarade.fr

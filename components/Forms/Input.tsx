@@ -13,10 +13,12 @@ function Input({
   register,
   validationsSchema,
   errors,
+  textarea
 }: InputProps) {
-  return (
+
+  if (!textarea) return (
     <div className="flex flex-col gap-1.5 w-[320px] z-50">
-      <Text normal small>
+      <Text medium size="14">
         <span className={` transition-all`}>{label}</span>
       </Text>
       <div className="relative">
@@ -24,18 +26,33 @@ function Input({
           name={name}
           {...register(name, validationsSchema)}
           defaultValue={defaultValue && defaultValue}
-          className={`h-[50px] text-s ${errorInput(
+          className={`h-[46px] ${errorInput(
             errors,
             name
-          )} transition-all focus:outline-none focus:ring-1 focus:ring-purple_dark rounded-lg bg-blue_light w-full pl-11 placeholder:font-semi_normal placeholder:text-xs`}
+          )} transition-all peer focus:text-grey-text-active focus:outline-none text-grey-text-inactive text-14 font-medium focus:ring-2 focus:ring-stroke-blue rounded-md bg-blue-600 w-full ${icon ? "pl-11" : "pl-4"} placeholder:text-grey-text-placeholder placeholder:text-13 placeholder:font-regular`}
           placeholder={placeholder}
           type={type}
         />
         {errorMessage(errors, name)}
-        <span className="absolute top-4 left-3"> {icon} </span>
+        <span className="absolute font-regular text-20 text-grey-text-placeholder peer-focus:text-grey-text-active top-3 left-3"> {icon} </span>
       </div>
     </div>
-  );
+  )
+  if(textarea) return ( 
+    <>
+      <textarea
+      name={name}
+      defaultValue={defaultValue && defaultValue}
+      className={` ${errorInput(
+        errors,
+        name
+      )} block focus:ring-2 bg-blue-600 focus:ring-stroke-blue w-full h-[130px] p-4 resize-none rounded-md text-grey-text-active text-14 placeholder:text focus:outline-none placeholder:font-regular placeholder:text-14 placeholder:text-grey-text-placeholder`}
+      placeholder={placeholder}
+      {...register(name, validationsSchema)}
+      />
+      {errorMessage(errors, name)}
+    </> 
+  )
 }
 
 export interface InputProps {
@@ -48,6 +65,7 @@ export interface InputProps {
   register?: UseFormRegister<FieldValues>;
   validationsSchema?: Object;
   errors?: UseFormSetError<any>;
+  textarea?: boolean;
 }
 
 export default Input;

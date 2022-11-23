@@ -1,41 +1,30 @@
 import { ReactNode } from "react";
-import Text from "./Text";
 
-function Heading({
-  children,
-  subTitle,
-  title,
-  sectionTitle,
-  center,
-}: HeadingProps) {
+function Heading({ children, size, center }: HeadingProps) {
   const getSize = () => {
-    if (subTitle) return "text-m";
-    if (title) return "text-xxl leading-[50px]";
-    if (sectionTitle) return "text-xl";
+    if (size === "28") return "text-28";
+    if (size === "20") return "text-20";
   };
 
   return (
     <h1
-      className={`${getSize()} font-inter ${center && "text-center"} font-bold`}
+      className={`${getSize()} font-black text-grey-text-active ${
+        center && "text-center"
+      }`}
     >
-      {" "}
-      {children}{" "}
+      {children}
     </h1>
   );
 }
 
 export interface HeadingProps {
   children?: ReactNode;
-  subTitle: Boolean;
-  title: Boolean;
-  sectionTitle: Boolean;
+  size: String;
   center: Boolean;
 }
 
 Heading.defaultProps = {
-  subTitle: false,
-  title: false,
-  sectionTitle: false,
+  title: "28",
   center: false,
 };
 

@@ -2,47 +2,54 @@ import { ReactNode } from "react";
 
 function Text({
   children,
-  medium,
-  base,
-  baseL,
-  small,
-  xSmall,
-  semiNormal,
-  normal,
-  semiBold,
-  light,
+  size,
   color,
-  style,
   underline,
   pointer,
   center,
+  black,
+  bold,
+  sb,
+  medium,
+  medium_italic,
+  regular,
+  onclick,
+  hoverUnderline
 }: TextProps) {
   const fontSize = () => {
-    if (xSmall) return "text-xs";
-    if (small) return "text-s";
-    if (base) return "text-base";
-    if (baseL) return "text-baseL";
-    if (medium) return "text-m";
+    if (size === "12") return "text-12";
+    if (size === "13") return "text-13";
+    if (size === "14") return "text-14";
+    if (size === "16") return "text-16";
+    if (size === "18") return "text-18";
+    if (size === "20") return "text-20";
+    if (size === "24") return "text-24";
+    if (size === "28") return "text-28";
   };
 
   const fontWeight = () => {
-    if (light) return "font-light";
-    if (semiNormal) return "font-semi_normal";
-    if (normal) return "font-normal";
-    if (semiBold) return "font-semi_bold";
+    if (black) return "font-black";
+    if (bold) return "font-bold";
+    if (sb) return "font-sb";
+    if (medium) return "font-medium";
+    if (medium_italic) return "font-medium_italic";
+    if (regular) return "font-regular";
   };
 
   const fontSpecial = () => {
-    if (color === "purple") return "text-purple_dark font-normal text-xs";
-    if (color === "grey") return "text-grey_dark";
+    if (color === "active") return "text-grey-text-active";
+    if (color === "inactive") return "text-grey-text-inactive";
+    if (color === "placeholder") return "text-grey-text-placeholder";
     if (color === "red") return "text-red";
-    if (style === "italic") return "italic";
   };
   return (
     <p
+    onClick={() => onclick()}
       className={`${fontSize()} ${fontWeight()} ${fontSpecial()} ${
         underline && "underline"
-      } ${pointer && "cursor-pointer"}  ${center && "text-center"} font-inter`}
+      } ${
+        hoverUnderline && "hover:underline"
+      } ${pointer && "cursor-pointer"} break-all ${center && "text-center"}`}
     >
       {" "}
       {children}{" "}
@@ -52,37 +59,35 @@ function Text({
 
 export interface TextProps {
   children?: ReactNode;
-  medium: Boolean;
-  base: Boolean;
-  baseL: Boolean;
-  small: Boolean;
-  xSmall: Boolean;
-  semiNormal: Boolean;
-  normal: Boolean;
-  semiBold: Boolean;
-  light: Boolean;
+  black: Boolean;
+  bold: Boolean,
+  sb: Boolean,
+  medium: Boolean,
+  medium_italic: Boolean,
+  regular: Boolean,
+  size: String
   color: String;
-  style: String;
   underline: Boolean;
+  hoverUnderline: Boolean;
   pointer: Boolean;
   center: Boolean;
+  onclick: Function
 }
 
 Text.defaultProps = {
-  medium: false,
-  base: false,
-  baseL: false,
-  small: false,
-  xSmall: false,
-  semiNormal: false,
-  normal: false,
-  semiBold: false,
-  light: false,
-  color: "",
-  style: "",
+  black: false,
+  bold: false,
+  sb: false,
+  medium: true,
+  medium_italic: false,
+  regular: false,
+  size: "16",
+  color: "active",
   underline: false,
+  hoverUnderline:false,
   pointer: false,
   center: false,
+  onclick: () => {}
 };
 
 export default Text;

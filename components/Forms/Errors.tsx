@@ -1,12 +1,12 @@
 import { UseFormSetError } from "react-hook-form";
 
 export const errorInput = (target: UseFormSetError<any>, name: string) => {
-  return target[name] ? "border border-red" : "border border-gray";
+  return target[name] ? "border border-red" : "border-none";
 };
 
 export const errorMessage = (target: UseFormSetError<any>, name: string) => {
   return (
-    target && <span className="text-red text-sm">{target[name]?.message}</span>
+    target && <span className="text-red text-13 font-regular">{target[name]?.message}</span>
   );
 };
 
@@ -16,7 +16,7 @@ export const removeServerError = (setServerError: Function) => {
       state: false,
       message: "",
     });
-  }, 3000);
+  }, 6000);
 };
 
 export const createServerError = async (
@@ -36,6 +36,22 @@ export const errorMessageValues = {
     pattern: {
       value: /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/,
       message: "L'email que vous avez saisi n'est pas valide",
+    },
+  },
+  
+  subject: {
+    required: "Required",
+  },
+
+  description: {
+    required: "Required",
+  },
+  
+  estimated_time:{
+    required: "Required",
+    pattern: {
+      value: /^[0-9]*$/,
+      message: "Only numbers",
     },
   },
 
@@ -69,11 +85,11 @@ export const errorMessageValues = {
   },
 
   loginError: {
-    message: "Vos identifiants ne semblent pas correspondre",
+    message: "Your credentials don't seem to match",
   },
 
   signupError: {
     message:
-      "Une erreur est survenue, l'email que vous avez saisi existe peut être déjà",
+      "An error has occurred, the email you entered may already exist",
   },
 };

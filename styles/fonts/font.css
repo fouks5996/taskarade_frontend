@@ -1,0 +1,55 @@
+@font-face {
+    font-family: 'BRHendrix-SemiBold';
+    src: url('BRHendrix-SemiBold.woff2') format('woff2'),
+    url('BRHendrix-SemiBold.woff') format('woff'),
+    url('BRHendrix-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BRHendrix-Medium';
+    src: url('BRHendrix-Medium.woff2') format('woff2'),
+    url('BRHendrix-Medium.woff') format('woff'),
+    url('BRHendrix-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BRHendrix-Regular';
+    src: url('BRHendrix-Regular.woff2') format('woff2'),
+    url('BRHendrix-Regular.woff') format('woff'),
+    url('BRHendrix-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'BRHendrix-Black';
+    src: url('BRHendrix-Black.woff2') format('woff2'),
+    url('BRHendrix-Black.woff') format('woff'),
+    url('BRHendrix-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BRHendrix-MediumItalic';
+    src: url('BRHendrix-MediumItalic.woff2') format('woff2'),
+    url('BRHendrix-MediumItalic.woff') format('woff'),
+    url('BRHendrix-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BR Hendrix Bold';
+    /*src: url('BRHendrix-Bold.woff2') format('woff2'),*/
+    /*url('BRHendrix-Bold.woff') format('woff'),*/
+    src: url("BRHendrix-Bold.ttf") format('truetype');
+
+}
+

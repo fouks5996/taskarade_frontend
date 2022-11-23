@@ -37,9 +37,3 @@ export default function Blog() {
   );
 }
 
-export async function getStaticProps() {
-  const single_type = await fetcher(path("BLOG_single_type"));
-  return {
-    props: { single_type },
-  };
-}

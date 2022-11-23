@@ -1,8 +1,6 @@
 import { post } from "../../services/config";
 import { path } from "../../services/routes";
 import { useSession } from "next-auth/react";
-import { useCurrentUser } from "../../services/api/user";
-import Loader from "../Loader/Loader";
 
 export default function PostData({ mutate, user }) {
   const { data } = useSession();
