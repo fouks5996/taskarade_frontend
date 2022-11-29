@@ -58,6 +58,7 @@ export default function SignIn({ providers }) {
 					<Heading size='28'> Welcome Back. </Heading>
 
 					<form
+						id={"signin"}
 						onSubmit={handleSubmit(onSubmit)}
 						className='flex flex-col gap-7 mt-8'>
 						<div className='flex flex-col gap-4'>
@@ -103,7 +104,7 @@ export default function SignIn({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button submit principal>
+							<Button form={"signin"} submit principal>
 								Login to your account
 							</Button>
 						</div>

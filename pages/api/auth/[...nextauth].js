@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { signIn } from "../../../services/auth/auth";
 
 export default NextAuth({
+	secret: process.env.NEXTAUTH_SECRET,
 	providers: [
 		GithubProvider({
 			clientId: process.env.GITHUB_CLIENT_ID,

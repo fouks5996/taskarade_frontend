@@ -8,6 +8,7 @@ import Text from "../Typography/Text";
 import AvatarGroup from "../Avatar/AvatarGroup";
 import WidgetNavigation from "../Widgets/WidgetNavigation";
 import WidgetItem from "../Widgets/WidgetItem";
+import WidgetSidebarSkeleton from "../Skeleton/WidgetSidebarSkeleton";
 
 export default function WidgetSidebar() {
 	const router = useRouter();
@@ -17,18 +18,12 @@ export default function WidgetSidebar() {
 	const [getId, setGetId] = useState(null);
 
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
-	if (isLoading)
-		return (
-			<div className='w-[270px] max-w-[270px] flex justify-center items-center p-4 absolute top-0 left-[0px] h-screen bg-blue-700'>
-				<Loader type='spin' height={30} width={30} />
-			</div>
-		);
+	if (isLoading) return <WidgetSidebarSkeleton />;
 
 	return (
 		<div className='w-[270px] max-w-[270px] flex justify-center items-center p-5 absolute top-0 left-[0px] h-screen bg-blue-700'>
 			<div className='w-full h-full'>
 				<div className='flex items-center gap-3 '>
-					{/* 					<SidebarElement name={project.data?.attributes.name} /> */}
 					<div className='flex flex-col'>
 						<Heading size='20'> {project.data?.attributes.name} </Heading>
 						<Text regular size='13' color='placeholder'>
@@ -39,12 +34,18 @@ export default function WidgetSidebar() {
 				</div>
 				<div className='flex flex-col gap-8 mt-5'>
 					<div>
-						<WidgetNavigation label='widget' mutate={mutate} project_id={id} />
+						<WidgetNavigation
+							widgetOwner={project.data?.attributes.creator.data.id}
+							label='widget'
+							mutate={mutate}
+							project_id={id}
+						/>
 						<div className='flex flex-col gap-1.5'>
 							{project.data?.attributes.project_widgets.data.map((widget) => (
 								<WidgetItem
 									key={widget.id}
 									widget={widget}
+									widgets={project.data?.attributes.project_widgets}
 									getId={getId}
 									setGetId={setGetId}
 									mutate={mutate}
@@ -52,9 +53,15 @@ export default function WidgetSidebar() {
 							))}
 						</div>
 					</div>
+
 					<div>
-						<WidgetNavigation label='collaborator' collaborator />
-						<div className='flex flex-col gap-4 mt-6'>
+						<WidgetNavigation
+							widgetOwner={project.data?.attributes.creator.data.id}
+							label='collaborator'
+							collaborator={project.data?.attributes.collaborations}
+							mutate={mutate}
+						/>
+						<div className='flex flex-col gap-2 mt-6'>
 							{project.data?.attributes.collaborations.data.map(
 								(collaborator) => (
 									<AvatarGroup
@@ -75,3 +82,5 @@ export default function WidgetSidebar() {
 		</div>
 	);
 }
+
+WidgetSidebar.auth = true;

@@ -41,3 +41,5 @@ export const Layout = ({ title, children }: Props) => {
 };
 
 export default Layout;
+
+Layout.auth = true;

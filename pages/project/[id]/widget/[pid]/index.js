@@ -1,12 +1,12 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
-import Layout from "../../../../components/Layout/Layout";
-import Loader from "../../../../components/Loader/Loader";
-import Notes from "../../../../components/Widgets/Notes/Notes";
-import Tasks from "../../../../components/Widgets/Tasks/Tasks";
-import Tickets from "../../../../components/Widgets/Tickets/Tickets";
-import { useCurrentWidget } from "../../../../services/api/widget";
+import Layout from "../../../../../components/Layout/Layout";
+import Loader from "../../../../../components/Loader/Loader";
+import Notes from "../../../../../components/Widgets/Notes/Notes";
+import Tasks from "../../../../../components/Widgets/Tasks/Tasks";
+import Tickets from "../../../../../components/Widgets/Tickets/Tickets";
+import { useCurrentWidget } from "../../../../../services/api/widget";
 
 export default function Index() {
 	const router = useRouter();
@@ -14,6 +14,7 @@ export default function Index() {
 	const { data } = useSession();
 	const jwt = data?.jwt;
 	const { widget, isLoading } = useCurrentWidget(jwt, parseInt(pid));
+
 	if (isLoading)
 		return (
 			<Layout>
@@ -60,3 +61,5 @@ export default function Index() {
 			);
 	}
 }
+
+Index.auth = true;

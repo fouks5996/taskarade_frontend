@@ -14,7 +14,8 @@ function Text({
   medium_italic,
   regular,
   onclick,
-  hoverUnderline
+  hoverUnderline,
+  breakWord
 }: TextProps) {
   const fontSize = () => {
     if (size === "12") return "text-12";
@@ -41,15 +42,16 @@ function Text({
     if (color === "inactive") return "text-grey-text-inactive";
     if (color === "placeholder") return "text-grey-text-placeholder";
     if (color === "red") return "text-red";
+    if (color === "blue") return "text-blue-300";
   };
   return (
     <p
     onClick={() => onclick()}
-      className={`${fontSize()} ${fontWeight()} ${fontSpecial()} ${
+      className={`${fontSize()} ${fontWeight()} ${fontSpecial()} ${breakWord ? "whitespace-nowrap" : ""} ${
         underline && "underline"
       } ${
         hoverUnderline && "hover:underline"
-      } ${pointer && "cursor-pointer"} break-all ${center && "text-center"}`}
+      } ${pointer && "cursor-pointer"} breakWord-all ${center && "text-center"}`}
     >
       {" "}
       {children}{" "}
@@ -71,6 +73,7 @@ export interface TextProps {
   hoverUnderline: Boolean;
   pointer: Boolean;
   center: Boolean;
+  breakWord: Boolean;
   onclick: Function
 }
 
@@ -87,6 +90,8 @@ Text.defaultProps = {
   hoverUnderline:false,
   pointer: false,
   center: false,
+  break: false,
+  breakWord:false,
   onclick: () => {}
 };
 

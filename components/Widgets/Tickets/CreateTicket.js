@@ -36,8 +36,9 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 	const { ticketPriority, isLoading2 } = useTicketPriority();
 	const router = useRouter();
 	const { pid } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
+	const { data: session } = useSession();
+
+	const jwt = session?.jwt;
 	if (isLoading && isLoading2)
 		return (
 			<div className='flex h-full justify-center items-center'>
@@ -46,21 +47,23 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 		);
 
 	const onSubmit = async (data) => {
-		console.log(data);
 		const body = {
 			data: {
 				subject: data.subject,
 				description: data.description,
 				estimated_time: `${data.estimated_time_value}${data.estimated_time_format}`,
-				realized_time: `${data.realized_time_value}${data.realized_time_format}`,
-				ticket_priority: parseInt(data.ticket_priority),
-				ticket_status: parseInt(data.ticket_status),
+				realized_time: "0min",
+				ticket_priority: data.ticket_priority
+					? parseInt(data.ticket_priority)
+					: 1,
+				ticket_status: data.ticket_status ? parseInt(data.ticket_status) : 1,
 				assigned: parseInt(data.assigned),
 				Start_date: startDate,
 				end_date: endDate,
 				review_date: reviewDate,
 				project_widget: parseInt(pid),
 				identifier: Math.floor(Math.random() * 100),
+				ticket_owner: session.id,
 			},
 		};
 
@@ -100,6 +103,7 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 				<Heading size={"28"}> Create a ticket </Heading>{" "}
 			</div>
 			<form
+				id='create'
 				onSubmit={handleSubmit(onSubmit)}
 				className='flex flex-col gap-6 px-8 mt-8'>
 				<Input
@@ -197,26 +201,6 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 								/>
 							</div>
 						</AttributesWrapper>
-						<AttributesWrapper>
-							<AttributesLabel label={"Realized time :"} />
-							<div className='flex items-center relative max-w-[120px]'>
-								<Input
-									placeholder='Ex: 34'
-									type={"text"}
-									name={"realized_time_value"}
-									defaultValue={0}
-									register={register}
-									errors={errors}
-									validationsSchema={errorMessageValues.estimated_time}
-								/>
-								<SelectItem
-									register={register}
-									label='realized_time_format'
-									datas={timeFormat}
-									time
-								/>
-							</div>
-						</AttributesWrapper>
 					</div>
 				</div>
 				<div>
@@ -238,7 +222,12 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 						{...register("file")}
 					/>
 				</div>
-				<Button principal type='submit' width={"fit"}>
+				<Button
+					color={"blue"}
+					principal
+					type='submit'
+					form={"create"}
+					width={"fit"}>
 					Submit
 				</Button>
 			</form>
@@ -256,6 +245,7 @@ export function SelectItem({
 	if (collab) {
 		return (
 			<select
+				name={"label"}
 				{...register(label)}
 				className='bg-transparent rounded-md text-grey-text-active py-2 px-3 text-14 cursor-pointer hover:bg-blue-700 border border-stroke-blue focus:outline-none'>
 				{datas?.data.map((r) => {
@@ -272,6 +262,7 @@ export function SelectItem({
 	} else {
 		return (
 			<select
+				name={"label"}
 				{...register(label)}
 				className={`${
 					time
@@ -301,7 +292,7 @@ export function AttributesLabel({ label }) {
 
 export function AttributesWrapper({ children }) {
 	return (
-		<div className='flex items-center justify-between gap-2 min-w-[200px]'>
+		<div className='flex items-center relative justify-between gap-2 min-w-[200px]'>
 			{children}
 		</div>
 	);

@@ -15,3 +15,17 @@ export function useCurrentProject(jwt, id) {
 		mutate: mutate,
 	};
 }
+
+export function useProjectCollab(id, jwt) {
+	const { data, error, mutate } = useSWR(
+		[path("current_project_collab", id), jwt],
+		currentFetcher
+	);
+
+	return {
+		project_collab: data,
+		isLoading: !error && !data,
+		isError: error,
+		mutate: mutate,
+	};
+}

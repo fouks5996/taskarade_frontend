@@ -6,6 +6,9 @@ module.exports = {
 	],
 	plugins: [],
 	theme: {
+		screens: {
+			"max-screen": "1700px",
+		},
 		borderRadius: {
 			md: "8px",
 			full: "100%",

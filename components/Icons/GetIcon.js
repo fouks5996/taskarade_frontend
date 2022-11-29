@@ -6,10 +6,10 @@ import { HiOutlineTicket } from "react-icons/hi";
 export function getIcon(id) {
 	switch (id) {
 		case 1:
-			return <AiOutlineEdit />;
+			return <span> &#128221;</span>;
 		case 2:
-			return <MdOutlineTaskAlt />;
+			return <span> &#128736;</span>;
 		case 3:
-			return <HiOutlineTicket />;
+			return <span className='pb-1'> &#127915;</span>;
 	}
 }

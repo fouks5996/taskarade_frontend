@@ -52,6 +52,7 @@ export async function post(url, body, jwt = null) {
 			body: JSON.stringify(body),
 		});
 	}
+
 	return {
 		success: res,
 		error: res.error,

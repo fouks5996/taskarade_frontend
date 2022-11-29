@@ -1,29 +1,26 @@
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import Text from "../Typography/Text";
 import { useCurrentUser } from "../../services/api/user";
-import Loader from "../Loader/Loader";
 import AvatarGroup from "../Avatar/AvatarGroup";
-import {
-	IoMdNotificationsOutline,
-	IoNotificationsOutline,
-} from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import Search from "../Search/Search";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
+import { NotificationDot, Notifications } from "../notification/Notifications";
+import HeaderSkeleton from "../Skeleton/HeaderSkeleton";
 
 export default function Header() {
 	const { data: session } = useSession();
 	const jwt = session?.jwt;
-	const { user, isLoading } = useCurrentUser(jwt);
-	const router = useRouter();
+	const { user, isLoading, mutate } = useCurrentUser(jwt);
+	const [showNotification, setShowNotification] = useState(false);
 
-	useEffect(() => {
-		if (router.asPath !== "/") setState(true);
-	}, [router]);
-	const [state, setState] = useState(false);
+	if (isLoading) return <HeaderSkeleton />;
 
-	if (isLoading) return <Loader type='spin' height={20} width={20} />;
+	function ifSeen() {
+		return user?.notifications?.some(
+			(notification) => notification.seen === false
+		);
+	}
 
 	return (
 		<div
@@ -41,9 +38,23 @@ export default function Header() {
 								}>
 								Sign out
 							</button>
-							<Text color='inactive' size='24'>
-								<IoMdNotificationsOutline />
-							</Text>
+							<div className='relative  text-20 font-regular text-grey-text-active'>
+								<span
+									onClick={() => setShowNotification(true)}
+									className='cursor-pointer'>
+									{" "}
+									<IoMdNotificationsOutline /> {ifSeen() && <NotificationDot />}
+								</span>
+								{showNotification && (
+									<span className='absolute top-8 -right-20'>
+										<Notifications
+											notifications={user.notifications}
+											mutate={mutate}
+											setShowNotification={setShowNotification}
+										/>
+									</span>
+								)}
+							</div>
 
 							<div className='w-[1px] h-[30px] rounded-md bg-stroke-blue'></div>
 							<AvatarGroup header user={user} avatarUrl={user.avatar?.url} />
@@ -63,3 +74,5 @@ export default function Header() {
 		</div>
 	);
 }
+
+Header.auth = true;

@@ -1,4 +1,6 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import TicketModal from "../../modal/TicketModal";
 import {
 	TicketPercentage,
 	TicketPriority,
@@ -6,9 +8,11 @@ import {
 	TicketStatus,
 } from "./TicketsItem";
 
-export default function TicketsTable({ ticket }) {
+export default function TicketsTable({ ticket, setModal }) {
 	return (
-		<tr className='hover:bg-blue-600 cursor-pointer rounded-md'>
+		<tr
+			onClick={() => setModal({ state: true, data: ticket })}
+			className='hover:bg-blue-600 cursor-pointer rounded-md '>
 			<TicketsTableItem>{ticket.attributes.identifier} </TicketsTableItem>
 			<TicketsTableItem>
 				<TicketStatus
@@ -25,8 +29,14 @@ export default function TicketsTable({ ticket }) {
 				{" "}
 				{ticket.attributes.assigned.data.attributes.username}{" "}
 			</TicketsTableItem>
-			<TicketsTableItem> {ticket.attributes.estimated_time} </TicketsTableItem>
-			<TicketsTableItem> {ticket.attributes.realized_time} </TicketsTableItem>
+			<TicketsTableItem time>
+				{" "}
+				{ticket.attributes.estimated_time}{" "}
+			</TicketsTableItem>
+			<TicketsTableItem time>
+				{" "}
+				{ticket.attributes.realized_time}{" "}
+			</TicketsTableItem>
 			<TicketsTableItem>
 				{" "}
 				<TicketPercentage

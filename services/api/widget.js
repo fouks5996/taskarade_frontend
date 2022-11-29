@@ -25,17 +25,3 @@ export function useCurrentWidget(jwt, id) {
 		mutate: mutate,
 	};
 }
-
-export function useCurrentProjectWidget(jwt, id) {
-	const { data, error, mutate } = useSWR(
-		[path("current_project_widget", id), jwt],
-		currentFetcher
-	);
-
-	return {
-		widget: data,
-		isLoading: !error && !data,
-		isError: error,
-		mutate: mutate,
-	};
-}

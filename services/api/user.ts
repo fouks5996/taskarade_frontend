@@ -15,3 +15,12 @@ export function useCurrentUser(jwt: string) {
     mutate: mutate,
   };
 }
+
+export async function getUsers(jwt: string, value: string) {
+  
+  const data = await currentFetcher(path('getUsers', value), jwt)
+
+  return {
+    users: data,
+  };
+}

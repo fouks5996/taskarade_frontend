@@ -11,6 +11,8 @@ function Button({
 	tooltipLabel,
 	onclick,
 	disabled,
+	color,
+	form,
 }) {
 	const [showTooltip, setShowTooltip] = useState(false);
 
@@ -19,14 +21,22 @@ function Button({
 		if (width === false || width === undefined) return "w-full";
 	};
 
+	const ColorButton = () => {
+		if (color === "red") return "bg-red";
+		if (color === "blue") return "bg-blue-400 hover:bg-blue-700";
+	};
+
 	return (
 		<>
 			{principal ? (
 				<button
+					form={form}
 					type={submit && "submit"}
 					onClick={() => !disabled && onclick()}
-					className={` bg-blue-400 hover:bg-blue-700
-           z-50  cursor-pointer rounded-md  flex items-center justify-center gap-1 px-5 py-2.5  text-grey-text-active text-14 font-medium ${inputWidth()}`}>
+					className={` ${ColorButton()}
+           z-50  cursor-pointer rounded-md  flex items-center justify-center gap-1 ${
+							icon ? "p-2 pr-1" : "px-4 py-2"
+						}   text-grey-text-active text-14 font-medium ${inputWidth()}`}>
 					{children}
 					{icon && <span className='z-10 text-24 font-bold'> {icon} </span>}
 				</button>
@@ -53,6 +63,8 @@ Button.defaultProps = {
 	onclick: () => {},
 	disabled: false,
 	icon: false,
+	color: "blue",
+	form: "",
 };
 
 export default Button;

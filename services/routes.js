@@ -7,20 +7,22 @@ export const path = (name, argument, argument2) => {
 			return `${root}/api/auth/local/register`;
 		case "forgot-password":
 			return `${root}/api/auth/forgot-password`;
-		case "current_widget1":
-			return `${root}/api/project-widgets/${argument}?fields=name&populate[widget][fields]=id`;
+		case "getUsers":
+			return `${root}/api/users?filters[$or][0][username][$contains]=${argument}&filters[$or][1][email][$contains]=${argument}&populate=avatar`;
+		case "CREATE_collaboration":
+			return `${root}/api/collaborations`;
 		case "current_widget":
 			return `${root}/api/project-widgets/${argument}?populate=notes, widget`;
 		case "current_project_widget":
 			return `${root}/api/project-widgets/${argument}?populate=notes, tasks, widget, tickets`;
+		case "CREATE_project":
+			return `${root}/api/projects`;
 		case "current_project":
-			return `${root}/api/projects/${argument}?populate=project_widgets.widget, project_widgets.notes, project_widgets.tasks, project_widgets.tickets, project_widgets.tickets.ticket_status,project_widgets.tickets.ticket_priority, project_widgets.tickets.assigned, collaborations.collaborator, collaborations.collaborator.avatar.url, creator.avatar.url`;
+			return `${root}/api/projects/${argument}?populate=project_widgets.widget, project_widgets.notes, project_widgets.tasks,project_widgets.tasks.task_status, project_widgets.tickets, project_widgets.tickets.ticket_status,project_widgets.tickets.ticket_priority, project_widgets.tickets.assigned, project_widgets.tickets.ticket_owner, collaborations.collaborator, collaborations.collaborator.avatar.url, creator.avatar.url`;
+		case "current_project_collab":
+			return `${root}/api/projects/${argument}?populate=collaborations.collaborator`;
 		case "current_user":
-			return `${root}/api/users/me?populate[project][populate]=project_widgets.widget&populate[collaborations][populate]=project.project_widgets.widget&populate[avatar][fields][1]=url`;
-		case "HP_single_type":
-			return `${root}/api/page?populate=hero_content, meta_title`;
-		case "BLOG_single_type":
-			return `${root}/api/page?populate=hero_content, meta_title`;
+			return `${root}/api/users/me?populate[project][populate]=project_widgets.widget&populate[collaborations][populate]=project.project_widgets.widget&populate[avatar][fields][1]=url&populate[notifications][populate]=project, sender.avatar.url`;
 		case "GET_widgets":
 			return `${root}/api/widgets`;
 		case "UPDATE_widget":
@@ -43,5 +45,27 @@ export const path = (name, argument, argument2) => {
 			return `${root}/api/ticket-priorities`;
 		case "CREATE_ticket":
 			return `${root}/api/tickets`;
+		case "DELETE_ticket":
+			return `${root}/api/tickets/${argument}`;
+		case "UPDATE_ticket":
+			return `${root}/api/tickets/${argument}`;
+		case "ticket_comments":
+			return `${root}/api/ticket-comments?filters[ticket][id][$eq]=${argument}&populate=author.avatar.url`;
+		case "CREATE_comment":
+			return `${root}/api/ticket-comments`;
+		case "notification":
+			return `${root}/api/notifications?filters[recipient][id][$eq]=${argument}`;
+		case "CREATE_notif":
+			return `${root}/api/notifications`;
+		case "UPDATE_notification":
+			return `${root}/api/notifications/${argument}`;
+		case "task_status":
+			return `${root}/api/task-statuses?populate=tasks, tasks.task_status`;
+		case "CREATE_task":
+			return `${root}/api/tasks`;
+		case "UPDATE_task":
+			return `${root}/api/tasks/${argument}`;
+		case "DELETE_task":
+			return `${root}/api/tasks/${argument}`;
 	}
 };

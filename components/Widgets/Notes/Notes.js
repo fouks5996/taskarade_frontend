@@ -63,6 +63,7 @@ export default function Notes({ maxId }) {
 		<WidgetWrapper>
 			<WidgetHeader
 				name={widget?.attributes.name}
+				widgetID={widget?.attributes.widget.data.id}
 				type={"note"}
 				onclick={() => createNote()}
 				icon={<BsPlus />}

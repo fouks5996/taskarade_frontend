@@ -23,7 +23,7 @@ export default function ListNotes({ notes, active, setActive, mutate }) {
 
 	return (
 		<div className='min-w-[242px] h-full flex flex-col gap-1 pr-5 border-r border-stroke-blue'>
-			{notes.data.map((note) => (
+			{notes?.data.map((note) => (
 				<div
 					key={note.id}
 					className={`py-2 px-3 ${

@@ -21,3 +21,17 @@ export function useTicketPriority() {
 		isError: error,
 	};
 }
+
+export function useTicketComments(jwt, id) {
+	const { data, error, mutate } = useSWR(
+		[path("ticket_comments", id), jwt],
+		currentFetcher
+	);
+
+	return {
+		comments: data,
+		isLoading: !error && !data,
+		isError: error,
+		mutate: mutate,
+	};
+}

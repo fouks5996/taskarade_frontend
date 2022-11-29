@@ -13,16 +13,18 @@ function Input({
   register,
   validationsSchema,
   errors,
-  textarea
+  textarea,
+  id
 }: InputProps) {
 
   if (!textarea) return (
-    <div className="flex flex-col gap-1.5 w-[320px] z-50">
+    <div className="flex flex-col gap-1.5 w-full z-50">
       <Text medium size="14">
         <span className={` transition-all`}>{label}</span>
       </Text>
       <div className="relative">
         <input
+        id={id}
           name={name}
           {...register(name, validationsSchema)}
           defaultValue={defaultValue && defaultValue}
@@ -46,7 +48,7 @@ function Input({
       className={` ${errorInput(
         errors,
         name
-      )} block focus:ring-2 bg-blue-600 focus:ring-stroke-blue w-full h-[130px] p-4 resize-none rounded-md text-grey-text-active text-14 placeholder:text focus:outline-none placeholder:font-regular placeholder:text-14 placeholder:text-grey-text-placeholder`}
+      )} block focus:ring-2 bg-blue-600 focus:ring-stroke-blue w-full h-[200px] p-4 resize-none rounded-md text-grey-text-active text-14 placeholder:text focus:outline-none placeholder:font-regular placeholder:text-14 placeholder:text-grey-text-placeholder`}
       placeholder={placeholder}
       {...register(name, validationsSchema)}
       />
@@ -66,6 +68,7 @@ export interface InputProps {
   validationsSchema?: Object;
   errors?: UseFormSetError<any>;
   textarea?: boolean;
+  id?: any;
 }
 
 export default Input;

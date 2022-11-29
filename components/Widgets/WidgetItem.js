@@ -8,12 +8,25 @@ import { useSession } from "next-auth/react";
 import { path } from "../../services/routes";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import string_to_slug from "../functions/Slugify";
+import getMinId from "../functions/GetMinId";
+import Alert from "../modal/Alert";
 
-export default function WidgetItem({ widget, getId, setGetId, mutate }) {
+export default function WidgetItem({
+	widgets,
+	widget,
+	getId,
+	setGetId,
+	mutate,
+}) {
 	const { data: session } = useSession();
 	const [active, setActive] = useState(false);
 	const router = useRouter();
-	const { id } = router.query;
+	const { id, q } = router.query;
+	const [alert, setAlert] = useState({
+		active: false,
+		content: "",
+	});
 
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget/${widget.id}`)) {
@@ -42,9 +55,14 @@ export default function WidgetItem({ widget, getId, setGetId, mutate }) {
 		}
 	}
 
-	function deleteWidget() {
-		remove(path("DELETE_widget", widget.id), mutate, session.jwt);
-		router.push(`/project/${id}`);
+	async function deleteWidget() {
+		if (widgets.data.length !== 1) {
+			await remove(path("DELETE_widget", widget.id), mutate, session.jwt);
+			const minId = getMinId(widgets.data);
+			return router.push(`/project/${id}/widget/${minId}`);
+		} else {
+			setAlert({ active: true, content: "Minimum 1 widget" });
+		}
 	}
 
 	return (
@@ -78,18 +96,14 @@ export default function WidgetItem({ widget, getId, setGetId, mutate }) {
 						active
 							? "bg-blue-500 border border-stroke-blue"
 							: "bg-transparent hover:bg-blue-900 border border-transparent"
-					} group   flex items-center justify-between  bg-transparent group  py-2 px-2 rounded-md`}>
+					} group max-h-[38px] min-h-[38px] flex items-center justify-between  bg-transparent group  py-1.5 px-2 rounded-md`}>
 					<Link
-						href={`/project/${id}/widget/${
-							widget.id
-						}?q=${widget.attributes.name.toLowerCase()}`}>
+						href={`/project/${id}/widget/${widget.id}`}
+						as={`/project/${id}/widget/${widget.id}?q=${string_to_slug(
+							widget.attributes.name
+						)}`}>
 						<div className='flex items-center gap-2 w-full'>
-							<p
-								className={`group-hover:text-grey-text-active ${
-									active ? "text-grey-text-active" : "text-grey-text-inactive"
-								}  text-20`}>
-								{getIcon(widget.attributes.widget.data.id)}
-							</p>
+							{getIcon(widget.attributes.widget.data.id)}
 
 							<p
 								className={`${
@@ -111,6 +125,7 @@ export default function WidgetItem({ widget, getId, setGetId, mutate }) {
 					</div>
 				</div>
 			)}
+			<Alert alert={alert} setAlert={setAlert} />
 		</>
 	);
 }

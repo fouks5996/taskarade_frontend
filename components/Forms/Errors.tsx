@@ -38,10 +38,19 @@ export const errorMessageValues = {
       message: "L'email que vous avez saisi n'est pas valide",
     },
   },
+
+  timeError: "Realized Time cannot be greather than estimated Time",
   
   subject: {
     required: "Required",
   },
+
+  comments: {
+	maxLength: {
+      value: 150,
+      message: "Le commentaire doit faire maximum 150 caractères",
+    },
+ },
 
   description: {
     required: "Required",
@@ -93,3 +102,203 @@ export const errorMessageValues = {
       "An error has occurred, the email you entered may already exist",
   },
 };
+
+export function verifyTimeValue(
+	estimatedValue,
+	estimatedFormat,
+	realizedValue,
+	realizedFormat
+) {
+	let estimated = estimatedValue + estimatedFormat;
+	let realized = realizedValue + realizedFormat;
+	let success = true;
+	let error = true;
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+	if (
+		realized.includes("min") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("d") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+  if (
+		realized.includes("h") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) === parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+  if (
+		realized.includes("min") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) === parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+  if (
+		realized.includes("d") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) === parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) === parseInt(realizedValue)
+	) {
+		console.log(" c'est ok !");
+		return { ok: success };
+	}
+
+	if (
+		realized.includes("d") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("d") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("d") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) > parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("min") &&
+		estimated.includes("min") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("h") &&
+		estimated.includes("h") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+
+	if (
+		realized.includes("d") &&
+		estimated.includes("d") &&
+		parseInt(estimatedValue) < parseInt(realizedValue)
+	) {
+		console.log("erreur !");
+		return { error: error };
+	}
+}
