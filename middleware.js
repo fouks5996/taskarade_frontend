@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+/* import { NextResponse } from "next/server";
 
 export default function middleware(req) {
 	let verify = req.cookies.get("next-auth.session-token");
@@ -22,4 +22,4 @@ export default function middleware(req) {
 
 export const config = {
 	matcher: ["/", "/project/:path*", "/widget/:path*"],
-};
+}; */
