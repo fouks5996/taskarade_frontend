@@ -23,7 +23,6 @@ export default NextAuth({
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				console.log(credentials);
 				const { user, jwt } = await signIn({
 					email: credentials.email,
 					password: credentials.password,

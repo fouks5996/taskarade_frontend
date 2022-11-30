@@ -41,9 +41,11 @@ export default function SignIn({ providers }) {
 			password: data.password,
 		});
 
-		console.log(result);
+		console.log("result", result);
 		if (result.ok) {
-			router.replace("/");
+			setTimeout(() => {
+				router.replace("/");
+			}, 2000);
 		} else {
 			await createServerError(
 				setServerError,
