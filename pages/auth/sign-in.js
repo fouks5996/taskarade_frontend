@@ -23,6 +23,7 @@ import logo from "../../assets/Logo.png";
 import Heading from "../../components/Typography/Heading";
 import Button from "../../components/actions/Button";
 import Text from "../../components/Typography/Text";
+import { getRoot } from "../../services/config";
 
 export default function SignIn({ providers }) {
 	const router = useRouter();
@@ -43,8 +44,9 @@ export default function SignIn({ providers }) {
 
 		console.log("result", result);
 		if (result.ok) {
+			console.log(getRoot().FRONT_URL);
 			setTimeout(() => {
-				router.replace("/");
+				router.push(getRoot().FRONT_URL);
 			}, 2000);
 		} else {
 			await createServerError(

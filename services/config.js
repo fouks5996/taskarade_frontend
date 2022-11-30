@@ -7,7 +7,7 @@ export const getRoot = () => {
 	} else {
 		return {
 			API_URL: "https://strapi-7t0n.onrender.com",
-			FRONT_URL: "",
+			FRONT_URL: "https://taskarade-frontend.vercel.app",
 		};
 	}
 };
