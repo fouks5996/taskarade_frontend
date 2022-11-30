@@ -46,7 +46,7 @@ export default function Header() {
 									<IoMdNotificationsOutline /> {ifSeen() && <NotificationDot />}
 								</span>
 								{showNotification && (
-									<span className='absolute top-8 -right-20'>
+									<span className='absolute top-8 z-50 -right-20'>
 										<Notifications
 											notifications={user.notifications}
 											mutate={mutate}

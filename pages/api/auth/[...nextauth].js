@@ -3,6 +3,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signIn } from "../../../services/auth/auth";
+const strapiUrl = process.env.STRAPI_URL;
 
 export default NextAuth({
 	secret: process.env.NEXTAUTH_SECRET,
@@ -53,7 +54,7 @@ export default NextAuth({
 					}
 					default: {
 						const response = await fetch(
-							`http://localhost:1337/api/auth/${account.provider}/callback?access_token=${account?.access_token}`
+							`${strapiUrl}/api/auth/${account.provider}/callback?access_token=${account?.access_token}`
 						);
 						const data = await response.json();
 						token.jwt = data.jwt;

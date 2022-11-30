@@ -7,7 +7,7 @@ export function useTaskStatus(jwt) {
 
 	return {
 		taskStatus: data,
-		isLoading: !error && !data,
+		taskLoading: !error && !data,
 		isError: error,
 	};
 }

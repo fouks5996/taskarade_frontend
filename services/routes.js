@@ -60,7 +60,7 @@ export const path = (name, argument, argument2) => {
 		case "UPDATE_notification":
 			return `${root}/api/notifications/${argument}`;
 		case "task_status":
-			return `${root}/api/task-statuses?populate=tasks, tasks.task_status`;
+			return `${root}/api/task-statuses?populate=tasks, tasks.task_status, tasks.project_widget`;
 		case "CREATE_task":
 			return `${root}/api/tasks`;
 		case "UPDATE_task":

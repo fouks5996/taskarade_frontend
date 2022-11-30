@@ -22,7 +22,7 @@ export default function Task({
 	async function updateTask(e) {
 		e.preventDefault();
 
-		const value = e.target.task.value;
+		/* 		const value = e.target.task.value;
 
 		const getColIndex = () => {
 			if (e.target.task.id === "3") return 2;
@@ -40,7 +40,7 @@ export default function Task({
 
 		data[getColIndex()].attributes.tasks.data = taskToAdd;
 
-		setData(data);
+		setData(data); */
 
 		const body = {
 			data: { title: e.target.task.value },
@@ -56,8 +56,7 @@ export default function Task({
 	}
 
 	function deleteTask(colId) {
-		console.log(colId);
-		const getColIndex = () => {
+		/* 		const getColIndex = () => {
 			if (colId === 3) return 2;
 			if (colId === 2) return 1;
 			if (colId === 1) return 0;
@@ -68,7 +67,7 @@ export default function Task({
 			(t) => parseInt(t.id) !== parseInt(task.id)
 		);
 		data[ColIndex].attributes.tasks.data = NewCol;
-		setData(data);
+		setData(data); */
 		return remove(path("DELETE_task", task.id), mutate, jwt);
 	}
 
@@ -82,7 +81,7 @@ export default function Task({
 				...provided.draggableProps.style,
 			}}
 			className={`p-3 flex group relative flex-col ${
-				snapshot.isDragging ? "opacity-70" : "opacity-100"
+				snapshot.isDragging ? "opacity-50" : "opacity-100"
 			} bg-blue-500 rounded-md cursor-pointer hover:scale-[1.02] transition-all`}>
 			<div className='flex justify-between'>
 				{getId === task.id ? (

@@ -6,7 +6,7 @@ export const getRoot = () => {
 		};
 	} else {
 		return {
-			API_URL: "https://strapi-3rnl.onrender.com",
+			API_URL: "https://strapi-7t0n.onrender.com",
 			FRONT_URL: "",
 		};
 	}
