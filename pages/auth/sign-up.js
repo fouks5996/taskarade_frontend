@@ -64,6 +64,7 @@ export default function SignUp({ providers }) {
 					<Heading size='28'> Create an account. </Heading>
 
 					<form
+						id={"signup"}
 						onSubmit={handleSubmit(onSubmit)}
 						className='flex flex-col gap-7 mt-4'>
 						<div className='flex flex-col gap-4'>
@@ -108,7 +109,7 @@ export default function SignUp({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button submit principal>
+							<Button form={"signup"} submit principal>
 								Create my account
 							</Button>
 						</div>
