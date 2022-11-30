@@ -40,6 +40,8 @@ export default function SignIn({ providers }) {
 			email: data.email,
 			password: data.password,
 		});
+
+		console.log(result);
 		if (result.ok) {
 			router.replace("/");
 		} else {
