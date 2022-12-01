@@ -76,6 +76,7 @@ export default function WidgetItem({
 							{getIcon(widget.attributes.widget.data.id)}
 						</p>
 						<input
+							onFocus={(e) => e.target.select()}
 							name='widget'
 							className='italic bg-transparent focus:outline-none text-grey-text-inactive text-13'
 							autoFocus={true}

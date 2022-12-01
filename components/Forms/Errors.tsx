@@ -39,6 +39,13 @@ export const errorMessageValues = {
     },
   },
 
+  tag:{
+	maxLength: {
+      value: 14,
+      message: "14 chars max",
+    },
+  },
+
   timeError: "Realized Time cannot be greather than estimated Time",
   
   subject: {

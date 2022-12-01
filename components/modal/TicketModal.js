@@ -29,6 +29,7 @@ import Input from "../Forms/Input";
 import { errorMessageValues, verifyTimeValue } from "../Forms/Errors";
 import Tab from "../Tab/Tab";
 import TicketComment from "../Widgets/Tickets/TicketComment";
+import ModalHeader from "./ModalHeader";
 
 export default function TicketModal({ ticket, setModal, mutate }) {
 	const {
@@ -57,8 +58,12 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 		id: ticket.attributes.ticket_priority.data.id,
 	});
 	const [assigned, setAssigned] = useState({
-		username: ticket.attributes.assigned.data.attributes.username,
-		id: ticket.attributes.assigned.data.id,
+		username: ticket.attributes.assigned.data
+			? ticket.attributes.assigned.data.attributes.username
+			: "No assignation",
+		id: ticket.attributes.assigned.data
+			? ticket.attributes.assigned.data.id
+			: 0,
 	});
 
 	const [estimated, setEstimated] = useState(ticket.attributes.estimated_time);
@@ -135,249 +140,216 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 
 	return (
 		<ModalLayout setModal={setModal}>
-			<div className='p-7 pr-28'>
-				<div className='flex items-center justify-between'>
-					<div>
-						<Heading size={"20"}>
-							#{ticket.attributes.identifier} - {ticket.attributes.subject}
-						</Heading>
-						<Text regular color={"inactive"} size='14'>
-							Created at
-							{new Date(ticket.attributes.createdAt).toLocaleDateString(
-								"fr-FR",
-								{
-									hour: "2-digit",
-									minute: "2-digit",
-								}
-							)}{" "}
-							by{" "}
-							<span className='text-14 font-regular text-grey-text-active'>
-								{" "}
-								{ticket.attributes.ticket_owner.data.attributes.username}{" "}
-							</span>
-						</Text>
-					</div>
-					<div className='flex  justify-between gap-2'>
-						<Button submit form={"myform"} principal icon color={"blue"}>
-							<span className='text-grey-text-active text-20'>
-								<AiOutlineSave />
-							</span>
-						</Button>
-						<Button onclick={() => deleteTicket()} principal icon color={"red"}>
-							<span className='text-grey-text-inactive text-20'>
-								<FiTrash2 />
-							</span>
-						</Button>
-					</div>
-				</div>
-				<form id='myform' onSubmit={handleSubmit(onSubmit)}>
-					<div className='flex justify-between items-start flex-wrap gap-3 mt-10 pb-8 border-b border-stroke-blue'>
-						<div className='flex flex-col justify-start gap-3'>
-							<AttributesWrapper>
-								<AttributesLabel label={"Status :"} />
-								<EditWrapperButton
-									getter={editPanel}
-									setter={SetEditPanel}
-									item={<TicketStatus status={status.attributes} fit />}
-								/>
-								{editPanel && (
-									<EditDropdown>
-										{ticketStatus.data.map((status) => (
-											<EditItem
-												key={status.id}
-												setterState={setStatus}
-												setterPanel={SetEditPanel}
-												data={status}
-												item={
-													<TicketStatus status={status.attributes} />
-												}></EditItem>
-										))}
-									</EditDropdown>
-								)}
-							</AttributesWrapper>
-							<AttributesWrapper>
-								<AttributesLabel label={"Priority :"} />
-
-								<EditWrapperButton
-									getter={editPanelPrio}
-									setter={SetEditPanelPrio}
-									item={
-										<TicketPriority priority={priority.attributes} fit big />
-									}
-								/>
-								{editPanelPrio && (
-									<EditDropdown>
-										{ticketPriority.data.map((priority) => (
-											<EditItem
-												key={priority.id}
-												setterState={setPriority}
-												setterPanel={SetEditPanelPrio}
-												data={priority}
-												item={
-													<TicketPriority big priority={priority.attributes} />
-												}></EditItem>
-										))}
-									</EditDropdown>
-								)}
-							</AttributesWrapper>
-							<AttributesWrapper>
-								<AttributesLabel label={"Assigned :"} />
-								<EditWrapperButton
-									getter={editPanelAssigned}
-									setter={SetEditPanelAssigned}
-									item={<Text size={"13"}> {assigned.username}</Text>}
-								/>
-								{editPanelAssigned && (
-									<EditDropdown>
-										{project_collab.data.attributes.collaborations.data.map(
-											(user) => (
-												<span
-													onClick={() => {
-														setAssigned({
-															username:
-																user.attributes.collaborator.data.attributes
-																	.username,
-															id: user.attributes.collaborator.data.id,
-														});
-														SetEditPanelAssigned(false);
-													}}
-													className='cursor-pointer text-14 font-regular'
-													key={user.attributes.collaborator.data.id}>
-													{
-														user.attributes.collaborator.data.attributes
-															.username
-													}
-												</span>
-											)
-										)}
-									</EditDropdown>
-								)}
-							</AttributesWrapper>
-						</div>
-						<div className='flex flex-col justify-start gap-3'>
-							<AttributesWrapper>
-								<AttributesLabel label={"Start date :"} />
-								<DatePicker
-									selected={startDate}
-									onChange={(date) => setStartDate(date)}
-									dateFormat='d MMMM yyyy'
-									locale='fr'
-									minDate={new Date()}
-									placeholderText='Choisir la date'
-									customInput={<CustomInput />}
-								/>
-							</AttributesWrapper>
-							<AttributesWrapper>
-								<AttributesLabel label={"End date :"} />
-								<DatePicker
-									selected={endDate}
-									onChange={(date) => setEndDate(date)}
-									dateFormat='d MMMM yyyy'
-									locale='fr'
-									minDate={new Date()}
-									placeholderText='Choisir la date'
-									customInput={<CustomInput />}
-								/>
-							</AttributesWrapper>
-							<AttributesWrapper>
-								<AttributesLabel label={"Review date :"} />
-								<DatePicker
-									selected={reviewDate}
-									onChange={(date) => setReviewDate(date)}
-									dateFormat='d MMMM yyyy'
-									locale='fr'
-									minDate={new Date()}
-									placeholderText='Choisir la date'
-									customInput={<CustomInput />}
-								/>
-							</AttributesWrapper>
-						</div>
-						<div className='flex flex-col gap-6 justify-start'>
-							<AttributesWrapper>
-								<AttributesLabel label={"Estimated time :"} />
-								<div className='flex items-center relative max-w-[100px] max-h-[30px]'>
-									<Input
-										placeholder='Ex: 34'
-										type={"text"}
-										name={"estimated_time_value"}
-										defaultValue={deleteFormat(estimated)}
-										register={register}
-										errors={errors}
-										validationsSchema={errorMessageValues.estimated_time}
-									/>
-									<select
-										value={deleteTime(estimated)}
-										onChange={(e) => setEstimated(e.target.value)}
-										className={`${"absolute  z-50 top-2 right-2 text-14 "} bg-transparent rounded-md text-grey-text-active  cursor-pointer font-regular hover:bg-blue-700  focus:outline-none`}>
-										{timeFormat?.data.map((r) => {
-											return (
-												<option key={r.id} value={r.id}>
-													{r.attributes.label}
-												</option>
-											);
-										})}
-									</select>
-								</div>
-							</AttributesWrapper>
-							<AttributesWrapper>
-								<AttributesLabel label={"Realized time :"} />
-								<div className='flex items-center relative max-w-[100px] max-h-[30px]'>
-									<Input
-										placeholder='Ex: 34'
-										type={"text"}
-										name={"realized_time_value"}
-										defaultValue={deleteFormat(realized)}
-										register={register}
-										errors={errors}
-										validationsSchema={errorMessageValues.estimated_time}
-									/>
-									<select
-										value={deleteTime(realized)}
-										onChange={(e) => setRealized(e.target.value)}
-										className={`${"absolute  z-50 top-2 right-2 text-14 "} bg-transparent rounded-md text-grey-text-active  cursor-pointer font-regular hover:bg-blue-700  focus:outline-none`}>
-										{timeFormat?.data.map((r) => {
-											return (
-												<option key={r.id} value={r.id}>
-													{r.attributes.label}
-												</option>
-											);
-										})}
-									</select>
-								</div>
-							</AttributesWrapper>
-							{timeError && (
-								<span className='text-red text-13 text-end mt-2 max-w-[200px] font-regular'>
-									{errorMessageValues.timeError}
-								</span>
+			<ModalHeader
+				title={ticket.attributes.subject}
+				id={ticket.attributes.identifier}
+				created={ticket.attributes.createdAt}
+				createdBy={ticket.attributes.ticket_owner.data.attributes.username}
+				edit='myform'
+				handleDelete={deleteTicket}
+			/>
+			<form id='myform' onSubmit={handleSubmit(onSubmit)}>
+				<div className='flex justify-between items-start flex-wrap gap-3 mt-10 pb-8 border-b border-stroke-blue'>
+					<div className='flex flex-col justify-start gap-3'>
+						<AttributesWrapper>
+							<AttributesLabel label={"Status :"} />
+							<EditWrapperButton
+								getter={editPanel}
+								setter={SetEditPanel}
+								item={<TicketStatus status={status.attributes} fit />}
+							/>
+							{editPanel && (
+								<EditDropdown>
+									{ticketStatus.data.map((status) => (
+										<EditItem
+											key={status.id}
+											setterState={setStatus}
+											setterPanel={SetEditPanel}
+											data={status}
+											item={
+												<TicketStatus status={status.attributes} />
+											}></EditItem>
+									))}
+								</EditDropdown>
 							)}
-						</div>
+						</AttributesWrapper>
+						<AttributesWrapper>
+							<AttributesLabel label={"Priority :"} />
+
+							<EditWrapperButton
+								getter={editPanelPrio}
+								setter={SetEditPanelPrio}
+								item={<TicketPriority priority={priority.attributes} fit big />}
+							/>
+							{editPanelPrio && (
+								<EditDropdown>
+									{ticketPriority.data.map((priority) => (
+										<EditItem
+											key={priority.id}
+											setterState={setPriority}
+											setterPanel={SetEditPanelPrio}
+											data={priority}
+											item={
+												<TicketPriority big priority={priority.attributes} />
+											}></EditItem>
+									))}
+								</EditDropdown>
+							)}
+						</AttributesWrapper>
+						<AttributesWrapper>
+							<AttributesLabel label={"Assigned :"} />
+							<EditWrapperButton
+								getter={editPanelAssigned}
+								setter={SetEditPanelAssigned}
+								item={<Text size={"13"}> {assigned.username}</Text>}
+							/>
+							{editPanelAssigned && (
+								<EditDropdown>
+									{project_collab.data.attributes.collaborations.data.map(
+										(user) => (
+											<span
+												onClick={() => {
+													setAssigned({
+														username:
+															user.attributes.collaborator.data.attributes
+																.username,
+														id: user.attributes.collaborator.data.id,
+													});
+													SetEditPanelAssigned(false);
+												}}
+												className='cursor-pointer text-14 font-regular'
+												key={user.attributes.collaborator.data.id}>
+												{user.attributes.collaborator.data.attributes.username}
+											</span>
+										)
+									)}
+								</EditDropdown>
+							)}
+						</AttributesWrapper>
 					</div>
-					<div className='mt-8'>
-						<Input
-							defaultValue={ticket.attributes.description}
-							placeholder='Describe your ticket ...'
-							textarea
-							name={"description"}
-							register={register}
-							errors={errors}
-							validationsSchema={errorMessageValues.description}
-						/>
+					<div className='flex flex-col justify-start gap-3'>
+						<AttributesWrapper>
+							<AttributesLabel label={"Start date :"} />
+							<DatePicker
+								selected={startDate}
+								onChange={(date) => setStartDate(date)}
+								dateFormat='d MMMM yyyy'
+								locale='fr'
+								minDate={new Date()}
+								placeholderText='Choisir la date'
+								customInput={<CustomInput />}
+							/>
+						</AttributesWrapper>
+						<AttributesWrapper>
+							<AttributesLabel label={"End date :"} />
+							<DatePicker
+								selected={endDate}
+								onChange={(date) => setEndDate(date)}
+								dateFormat='d MMMM yyyy'
+								locale='fr'
+								minDate={new Date()}
+								placeholderText='Choisir la date'
+								customInput={<CustomInput />}
+							/>
+						</AttributesWrapper>
+						<AttributesWrapper>
+							<AttributesLabel label={"Review date :"} />
+							<DatePicker
+								selected={reviewDate}
+								onChange={(date) => setReviewDate(date)}
+								dateFormat='d MMMM yyyy'
+								locale='fr'
+								minDate={new Date()}
+								placeholderText='Choisir la date'
+								customInput={<CustomInput />}
+							/>
+						</AttributesWrapper>
 					</div>
-				</form>
-				<div className='mt-8'>
-					<Tab
-						active={activeTab}
-						setActive={setActiveTab}
-						tabs={["Comments", "History"]}
-					/>
-					{activeTab === "Comments" && (
-						<TicketComment
-							ticketID={ticket.id}
-							ticketOwner={ticket.attributes.ticket_owner.data.id}
-							ticketName={ticket.attributes.subject}
-						/>
-					)}
+					<div className='flex flex-col gap-6 justify-start'>
+						<AttributesWrapper>
+							<AttributesLabel label={"Estimated time :"} />
+							<div className='flex items-center relative max-w-[100px] max-h-[30px]'>
+								<Input
+									placeholder='Ex: 34'
+									type={"text"}
+									name={"estimated_time_value"}
+									defaultValue={deleteFormat(estimated)}
+									register={register}
+									errors={errors}
+									validationsSchema={errorMessageValues.estimated_time}
+								/>
+								<select
+									value={deleteTime(estimated)}
+									onChange={(e) => setEstimated(e.target.value)}
+									className={`${"absolute  z-50 top-2 right-2 text-14 "} bg-transparent rounded-md text-grey-text-active  cursor-pointer font-regular hover:bg-blue-700  focus:outline-none`}>
+									{timeFormat?.data.map((r) => {
+										return (
+											<option key={r.id} value={r.id}>
+												{r.attributes.label}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+						</AttributesWrapper>
+						<AttributesWrapper>
+							<AttributesLabel label={"Realized time :"} />
+							<div className='flex items-center relative max-w-[100px] max-h-[30px]'>
+								<Input
+									placeholder='Ex: 34'
+									type={"text"}
+									name={"realized_time_value"}
+									defaultValue={deleteFormat(realized)}
+									register={register}
+									errors={errors}
+									validationsSchema={errorMessageValues.estimated_time}
+								/>
+								<select
+									value={deleteTime(realized)}
+									onChange={(e) => setRealized(e.target.value)}
+									className={`${"absolute  z-50 top-2 right-2 text-14 "} bg-transparent rounded-md text-grey-text-active  cursor-pointer font-regular hover:bg-blue-700  focus:outline-none`}>
+									{timeFormat?.data.map((r) => {
+										return (
+											<option key={r.id} value={r.id}>
+												{r.attributes.label}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+						</AttributesWrapper>
+						{timeError && (
+							<span className='text-red text-13 text-end mt-2 max-w-[200px] font-regular'>
+								{errorMessageValues.timeError}
+							</span>
+						)}
+					</div>
 				</div>
+				<div className='mt-8'>
+					<Input
+						defaultValue={ticket.attributes.description}
+						placeholder='Describe your ticket ...'
+						textarea
+						name={"description"}
+						register={register}
+						errors={errors}
+						validationsSchema={errorMessageValues.description}
+					/>
+				</div>
+			</form>
+			<div className='mt-8'>
+				<Tab
+					active={activeTab}
+					setActive={setActiveTab}
+					tabs={["Comments", "History"]}
+				/>
+				{activeTab === "Comments" && (
+					<TicketComment
+						ticketID={ticket.id}
+						ticketOwner={ticket.attributes.ticket_owner.data.id}
+						ticketName={ticket.attributes.subject}
+					/>
+				)}
 			</div>
 		</ModalLayout>
 	);

@@ -1,6 +1,4 @@
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import TicketModal from "../../modal/TicketModal";
+import React from "react";
 import {
 	TicketPercentage,
 	TicketPriority,
@@ -27,7 +25,9 @@ export default function TicketsTable({ ticket, setModal }) {
 			<TicketsTableItem>{ticket.attributes.subject} </TicketsTableItem>
 			<TicketsTableItem>
 				{" "}
-				{ticket.attributes.assigned.data.attributes.username}{" "}
+				{!ticket.attributes.assigned.data
+					? "-"
+					: ticket.attributes.assigned.data.attributes.username}{" "}
 			</TicketsTableItem>
 			<TicketsTableItem time>
 				{" "}

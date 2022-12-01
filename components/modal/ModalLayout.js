@@ -17,7 +17,7 @@ export default function ModalLayout({ children, setModal }) {
 				ref={ref}
 				className='h-screen overflow-y-scroll border-l border-stroke-blue w-[65%] max-screen:w-[50%] bg-blue-700'>
 				{" "}
-				{children}{" "}
+				<div className='p-7 pr-28'>{children} </div>
 			</div>
 		</div>
 	);

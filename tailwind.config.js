@@ -10,7 +10,9 @@ module.exports = {
 			"max-screen": "1700px",
 		},
 		borderRadius: {
+			xs: "4px",
 			md: "8px",
+			lg: "16px",
 			full: "100%",
 		},
 		colors: {

@@ -23,11 +23,9 @@ export default function Tickets() {
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
 	if (isLoading)
 		return (
-			<Layout>
-				<div className='flex h-full justify-center items-center'>
-					<Loader type='spin' height={40} width={40} />
-				</div>
-			</Layout>
+			<div className='flex h-full justify-center items-center'>
+				<Loader type='spin' height={40} width={40} />
+			</div>
 		);
 
 	const widget = project.data?.attributes.project_widgets.data.find(

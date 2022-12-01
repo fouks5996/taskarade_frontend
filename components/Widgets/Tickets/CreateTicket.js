@@ -47,25 +47,50 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 		);
 
 	const onSubmit = async (data) => {
-		const body = {
-			data: {
-				subject: data.subject,
-				description: data.description,
-				estimated_time: `${data.estimated_time_value}${data.estimated_time_format}`,
-				realized_time: "0min",
-				ticket_priority: data.ticket_priority
-					? parseInt(data.ticket_priority)
-					: 1,
-				ticket_status: data.ticket_status ? parseInt(data.ticket_status) : 1,
-				assigned: parseInt(data.assigned),
-				Start_date: startDate,
-				end_date: endDate,
-				review_date: reviewDate,
-				project_widget: parseInt(pid),
-				identifier: Math.floor(Math.random() * 100),
-				ticket_owner: session.id,
-			},
-		};
+		const body = {};
+
+		if (data.assigned !== "") {
+			body = {
+				data: {
+					subject: data.subject,
+					description: data.description,
+					estimated_time: `${data.estimated_time_value}${data.estimated_time_format}`,
+					realized_time: "0min",
+					ticket_priority: data.ticket_priority
+						? parseInt(data.ticket_priority)
+						: 1,
+					ticket_status: data.ticket_status ? parseInt(data.ticket_status) : 1,
+					assigned: data.assigned && parseInt(data.assigned),
+					Start_date: startDate,
+					end_date: endDate,
+					review_date: reviewDate,
+					project_widget: parseInt(pid),
+					identifier: Math.floor(Math.random() * 100),
+					ticket_owner: session.id,
+				},
+			};
+		} else {
+			body = {
+				data: {
+					subject: data.subject,
+					description: data.description,
+					estimated_time: `${data.estimated_time_value}${data.estimated_time_format}`,
+					realized_time: "0min",
+					ticket_priority: data.ticket_priority
+						? parseInt(data.ticket_priority)
+						: 1,
+					ticket_status: data.ticket_status ? parseInt(data.ticket_status) : 1,
+					Start_date: startDate,
+					end_date: endDate,
+					review_date: reviewDate,
+					project_widget: parseInt(pid),
+					identifier: Math.floor(Math.random() * 100),
+					ticket_owner: session.id,
+				},
+			};
+		}
+
+		console.log(body);
 
 		/* 		let formData = new FormData();
 		formData.append("files.file", data.file[0]);

@@ -60,12 +60,24 @@ export const path = (name, argument, argument2) => {
 		case "UPDATE_notification":
 			return `${root}/api/notifications/${argument}`;
 		case "task_status":
-			return `${root}/api/task-statuses?populate=tasks, tasks.task_status, tasks.project_widget`;
+			return `${root}/api/task-statuses?populate=tasks, tasks.task_status, tasks.project_widget, tasks.task_owner`;
+		case "current_tasks":
+			return `${root}/api/current-tasks/${argument}`;
 		case "CREATE_task":
 			return `${root}/api/tasks`;
 		case "UPDATE_task":
 			return `${root}/api/tasks/${argument}`;
 		case "DELETE_task":
 			return `${root}/api/tasks/${argument}`;
+		case "CREATE_task-tag":
+			return `${root}/api/task-tags`;
+		case "DELETE_task-tag":
+			return `${root}/api/task-tags/${argument}`;
+		case "UPDATE_task-tag":
+			return `${root}/api/task-tags/${argument}`;
+		case "tag_bg":
+			return `${root}/api/tag-bgs`;
+		case "UPDATE_tag_bg":
+			return `${root}/api/tag-bgs/${argument}`;
 	}
 };

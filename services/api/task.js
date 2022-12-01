@@ -11,3 +11,28 @@ export function useTaskStatus(jwt) {
 		isError: error,
 	};
 }
+
+export function useCurrentTasks(jwt, projectWidgetID) {
+	const { data, error, mutate } = useSWR(
+		[path("current_tasks", projectWidgetID), jwt],
+		currentFetcher
+	);
+
+	return {
+		current_tasks: data,
+		taskLoading1: !error && !data,
+		isError: error,
+		mutateTask: mutate,
+	};
+}
+
+export function useTagBg() {
+	const { data, error, mutate } = useSWR([path("tag_bg")], fetcher);
+
+	return {
+		tag_bg: data,
+		taskLoading1: !error && !data,
+		isError: error,
+		mutateTag: mutate,
+	};
+}

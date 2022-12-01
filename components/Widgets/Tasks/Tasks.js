@@ -7,23 +7,26 @@ import Loader from "../../Loader/Loader";
 import WidgetHeader from "../WidgetHeader";
 import WidgetWrapper from "../WidgetWrapper";
 import { BsPlus } from "react-icons/bs";
-import { useTaskStatus } from "../../../services/api/task";
+import { useCurrentTasks, useTaskStatus } from "../../../services/api/task";
 import Task from "./Task";
 import Text from "../../Typography/Text";
 import { post, update } from "../../../services/config";
 import { path } from "../../../services/routes";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { RiSearchLine } from "react-icons/ri";
+import TicketModal from "../../modal/TicketModal";
+import TaskModal from "../../modal/TaskModal";
 
 export default function Tasks() {
 	const router = useRouter();
 	const { pid, id } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
+	const { data: session } = useSession();
+	const jwt = session?.jwt;
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
-	const { taskStatus, taskLoading } = useTaskStatus(jwt);
+	const { current_tasks, taskLoading1, mutateTask } = useCurrentTasks(jwt, pid);
 	const [getId, setGetId] = useState(null);
-	if (isLoading && taskLoading)
+	const [modal, setModal] = useState({ state: false, data: null });
+	if (isLoading && taskLoading1)
 		return (
 			<Layout>
 				<div className='flex h-full justify-center items-center'>
@@ -46,7 +49,7 @@ export default function Tasks() {
 			jwt
 		);
 		if (success) {
-			mutate();
+			mutateTask();
 		}
 	};
 
@@ -62,49 +65,49 @@ export default function Tasks() {
 			/>
 			{
 				<DragDropContext onDragEnd={(result) => onDragEvent(result)}>
-					<div className='flex gap-14 mt-6 max-w-[1200px]'>
-						{taskStatus?.data
-							.sort((a, b) => a.id - b.id)
-							.map((status) => (
-								<Droppable key={status.id} droppableId={`${status.id}`}>
-									{(provided, snapshot) => {
-										return (
-											<TaskStatusWrapper
-												provided={provided}
-												snapshot={snapshot}
-												mutate={mutate}
-												jwt={jwt}
-												status={status}>
-												{widget?.attributes.tasks?.data
-													.filter(
-														(task) =>
-															task.attributes.task_status.data.id === status.id
-													)
-													.map((task, index) => (
-														<Draggable
-															index={index}
-															key={task.id}
-															draggableId={`${task.id}`}>
-															{(provided, snapshot) => {
-																return (
-																	<Task
-																		provided={provided}
-																		snapshot={snapshot}
-																		getId={getId}
-																		setGetId={setGetId}
-																		task={task}
-																		mutate={mutate}
-																	/>
-																);
-															}}
-														</Draggable>
-													))}
-												{provided.placeholder}
-											</TaskStatusWrapper>
-										);
-									}}
-								</Droppable>
-							))}
+					<div className='flex gap-4 mt-6 max-w-[1200px]'>
+						{current_tasks &&
+							current_tasks
+								.sort((a, b) => a.id - b.id)
+								.map((status) => (
+									<Droppable key={status.id} droppableId={`${status.id}`}>
+										{(provided, snapshot) => {
+											return (
+												<TaskStatusWrapper
+													provided={provided}
+													snapshot={snapshot}
+													mutateTask={mutateTask}
+													session={session}
+													status={status}>
+													<>
+														{status.tasks?.map((task, index) => (
+															<Draggable
+																index={index}
+																key={task.id}
+																draggableId={`${task.id}`}>
+																{(provided, snapshot) => {
+																	return (
+																		<Task
+																			provided={provided}
+																			snapshot={snapshot}
+																			setModal={setModal}
+																			modal={modal}
+																			getId={getId}
+																			setGetId={setGetId}
+																			task={task}
+																			mutateTask={mutateTask}
+																		/>
+																	);
+																}}
+															</Draggable>
+														))}
+													</>
+													{provided.placeholder}
+												</TaskStatusWrapper>
+											);
+										}}
+									</Droppable>
+								))}
 					</div>
 				</DragDropContext>
 			}
@@ -223,10 +226,10 @@ export default function Tasks() {
 export function TaskStatusWrapper({
 	status,
 	children,
-	jwt,
-	mutate,
+	session,
 	provided,
 	snapshot,
+	mutateTask,
 	data,
 	setData,
 }) {
@@ -238,9 +241,14 @@ export function TaskStatusWrapper({
 				title: "New task ...",
 				task_status: statusID,
 				project_widget: parseInt(pid),
+				task_owner: session.id,
 			},
 		};
-		const { success, error } = await post(path("CREATE_task"), body, jwt);
+		const { success, error } = await post(
+			path("CREATE_task"),
+			body,
+			session.jwt
+		);
 		if (success) {
 			/* 			const colIndex = statusID - 1;
 			const newTask = {
@@ -253,7 +261,7 @@ export function TaskStatusWrapper({
 			};
 			data[colIndex].attributes.tasks.data.push(newTask);
 			setData(data); */
-			mutate();
+			mutateTask();
 		} else {
 			console.log(error);
 		}
@@ -266,24 +274,21 @@ export function TaskStatusWrapper({
 			style={{
 				background: snapshot.isDraggingOver ? "transparent" : "transparent",
 			}}
-			className='flex flex-col  gap-2 w-full overflow-y-scroll min-h-[68%] max-h-[700px] min-w-[280px]'>
+			className='flex flex-col gap-2 w-full  min-w-[280px]'>
 			<div className='flex items-center px-2 justify-between  pr-2'>
 				<div
 					style={{
-						backgroundColor: status.attributes.bg_color,
-						color: status.attributes.text_color,
+						backgroundColor: status.bg_color,
+						color: status.text_color,
 					}}
 					className='py-1 px-2 font-medium text-14 rounded-md w-fit '>
-					{status.attributes.label}
+					{status.label}
 				</div>
 				<p className='text-20 cursor-pointer hover:text-grey-text-active text-grey-text-placeholder peer-focus:text-grey-text-active'>
 					<RiSearchLine />
 				</p>
 			</div>
-			<div className='mt-3 px-2 overflow-y-scroll  max-h-[68%] flex flex-col gap-2'>
-				{" "}
-				{children}{" "}
-			</div>
+			<div className='mt-3 px-2   flex flex-col gap-2'> {children} </div>
 			<div
 				onClick={() => createTask(status.id)}
 				className='flex items-center gap-1 cursor-pointer'>
