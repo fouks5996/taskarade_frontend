@@ -1,21 +1,19 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useCurrentProject } from "../../../services/api/project";
 import Layout from "../../Layout/Layout";
 import Loader from "../../Loader/Loader";
 import WidgetHeader from "../WidgetHeader";
 import WidgetWrapper from "../WidgetWrapper";
 import { BsPlus } from "react-icons/bs";
-import { useCurrentTasks, useTaskStatus } from "../../../services/api/task";
+import { useCurrentTasks } from "../../../services/api/task";
 import Task from "./Task";
 import Text from "../../Typography/Text";
 import { post, update } from "../../../services/config";
 import { path } from "../../../services/routes";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { RiSearchLine } from "react-icons/ri";
-import TicketModal from "../../modal/TicketModal";
-import TaskModal from "../../modal/TaskModal";
+import Search from "../../Search/Search";
 
 export default function Tasks() {
 	const router = useRouter();
@@ -25,7 +23,12 @@ export default function Tasks() {
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
 	const { current_tasks, taskLoading1, mutateTask } = useCurrentTasks(jwt, pid);
 	const [getId, setGetId] = useState(null);
+	const [taskFilter, setTaskFilter] = useState({
+		value: null,
+		statusID: null,
+	});
 	const [modal, setModal] = useState({ state: false, data: null });
+
 	if (isLoading && taskLoading1)
 		return (
 			<Layout>
@@ -34,6 +37,9 @@ export default function Tasks() {
 				</div>
 			</Layout>
 		);
+	if (current_tasks?.error?.status === 404) {
+		router.push("/404?error=not_found");
+	}
 
 	const widget = project?.data?.attributes.project_widgets.data.find(
 		(widget) => widget.id === parseInt(pid)
@@ -78,29 +84,39 @@ export default function Tasks() {
 													snapshot={snapshot}
 													mutateTask={mutateTask}
 													session={session}
-													status={status}>
+													status={status}
+													setTaskFilter={setTaskFilter}>
 													<>
-														{status.tasks?.map((task, index) => (
-															<Draggable
-																index={index}
-																key={task.id}
-																draggableId={`${task.id}`}>
-																{(provided, snapshot) => {
-																	return (
-																		<Task
-																			provided={provided}
-																			snapshot={snapshot}
-																			setModal={setModal}
-																			modal={modal}
-																			getId={getId}
-																			setGetId={setGetId}
-																			task={task}
-																			mutateTask={mutateTask}
-																		/>
-																	);
-																}}
-															</Draggable>
-														))}
+														{status.tasks
+															?.filter((task) =>
+																taskFilter.value !== "" &&
+																taskFilter.colID === status.id
+																	? task.title
+																			.toLowerCase()
+																			.match(taskFilter.value.toLowerCase())
+																	: task
+															)
+															.map((task, index) => (
+																<Draggable
+																	index={index}
+																	key={task.id}
+																	draggableId={`${task.id}`}>
+																	{(provided, snapshot) => {
+																		return (
+																			<Task
+																				provided={provided}
+																				snapshot={snapshot}
+																				setModal={setModal}
+																				modal={modal}
+																				getId={getId}
+																				setGetId={setGetId}
+																				task={task}
+																				mutateTask={mutateTask}
+																			/>
+																		);
+																	}}
+																</Draggable>
+															))}
 													</>
 													{provided.placeholder}
 												</TaskStatusWrapper>
@@ -230,6 +246,7 @@ export function TaskStatusWrapper({
 	provided,
 	snapshot,
 	mutateTask,
+	setTaskFilter,
 	data,
 	setData,
 }) {
@@ -267,6 +284,10 @@ export function TaskStatusWrapper({
 		}
 	}
 
+	function searchTask(Fvalue) {
+		setTaskFilter({ value: Fvalue, colID: status.id });
+	}
+
 	return (
 		<div
 			{...provided.droppableProps}
@@ -284,9 +305,7 @@ export function TaskStatusWrapper({
 					className='py-1 px-2 font-medium text-14 rounded-md w-fit '>
 					{status.label}
 				</div>
-				<p className='text-20 cursor-pointer hover:text-grey-text-active text-grey-text-placeholder peer-focus:text-grey-text-active'>
-					<RiSearchLine />
-				</p>
+				<Search onchange={searchTask} label={"a task"} />
 			</div>
 			<div className='mt-3 px-2   flex flex-col gap-2'> {children} </div>
 			<div

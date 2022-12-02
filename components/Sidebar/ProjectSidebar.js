@@ -11,13 +11,16 @@ import { BsPlus } from "react-icons/bs";
 import { post } from "../../services/config";
 import { path } from "../../services/routes";
 import getMinId from "../functions/GetMinId";
+import string_to_slug from "../functions/Slugify";
+import Loader from "../Loader/Loader";
+import Alert from "../modal/Alert";
 
 export default function ProjectSidebar() {
 	const router = useRouter();
 	const { data } = useSession();
 	const jwt = data?.jwt;
-	const { user, isLoading, mutate } = useCurrentUser(jwt);
-	if (isLoading) return <ProjectSidebarSkeleton />;
+	const { user, isUserLoading, mutateUser } = useCurrentUser(jwt);
+	if (isUserLoading) return <ProjectSidebarSkeleton />;
 
 	return (
 		<div className='w-[80px] text-grey-text-active flex px-4 flex-col items-center pt-6 gap-4 h-screen border-r border-stroke-blue'>
@@ -48,19 +51,23 @@ export default function ProjectSidebar() {
 				{user.collaborations?.map((collab) => (
 					<SidebarElement
 						key={collab.id}
-						name={collab.project.name}
-						id={collab.project.id}
-						project_widget={collab.project.project_widgets}
+						name={collab.project?.name}
+						id={collab.project?.id}
+						project_widget={collab.project?.project_widgets}
 					/>
 				))}
 			</div>
-			<CreateProject jwt={jwt} projectCreator={data.id} mutate={mutate} />
+			<CreateProject jwt={jwt} projectCreator={data.id} mutate={mutateUser} />
 		</div>
 	);
 }
 
 export function CreateProject({ jwt, projectCreator, mutate }) {
+	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
+
 	async function createProject() {
+		setIsLoading(true);
 		const body = { data: { name: "New Project", creator: projectCreator } };
 		const { success, error } = await post(path("CREATE_project"), body, jwt);
 		if (success) {
@@ -79,6 +86,13 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 			);
 			if (res) {
 				mutate();
+				setIsLoading(false);
+				console.log(success, res);
+				router.push(
+					`/project/${success.data?.id}/widget/${
+						res.data?.id
+					}?q=${string_to_slug(res.data?.attributes.name)}`
+				);
 			} else {
 				console.log("error");
 			}
@@ -91,7 +105,7 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 		<div
 			onClick={() => createProject()}
 			className={`flex cursor-pointer text-24 text-grey-text-active hover:bg-blue-400   justify-center items-center h-12 w-12  rounded-full relative`}>
-			<BsPlus />{" "}
+			{isLoading ? <Loader type='spin' height={17} width={17} /> : <BsPlus />}{" "}
 		</div>
 	);
 }
@@ -99,7 +113,11 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 export function SidebarElement({ name, id, project_widget }) {
 	const router = useRouter();
 	const [active, setActive] = useState(false);
-	const minId = getMinId(project_widget);
+	const [alert, setAlert] = useState({
+		active: false,
+		content: "",
+	});
+
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget`)) {
 			setActive(true);
@@ -109,18 +127,28 @@ export function SidebarElement({ name, id, project_widget }) {
 	}, [router, setActive, id]);
 
 	return (
-		<Link
-			href={`/project/${id}/widget/${minId}`}
-			as={`/project/${id}/widget/${minId}`}>
-			<div
-				className={`flex cursor-pointer hover:scale-105 ${
-					active ? "border-2 border-white" : "border-none"
-				} justify-center items-center h-12 w-12 bg-blue-400  rounded-full relative`}>
-				<Text color='inactive' bold>
-					{name?.charAt(0).toUpperCase()}
-				</Text>
-			</div>
-		</Link>
+		<>
+			<Link
+				href={`/project/${id}/widget/${project_widget[0]?.id}`}
+				as={`/project/${id}/widget/${project_widget[0]?.id}?q=${string_to_slug(
+					project_widget[0]?.name
+				)}`}>
+				<div
+					className={`flex cursor-pointer hover:scale-105 ${
+						active ? "border-2 border-white" : "border-none"
+					} justify-center items-center h-12 w-12 bg-blue-400  rounded-full relative`}>
+					<Text color='inactive' bold>
+						{name?.charAt(0).toUpperCase()}
+					</Text>
+				</div>
+			</Link>
+			<Alert
+				alert={alert}
+				setAlert={setAlert}
+				color='bg-blue-600'
+				duration={"800"}
+			/>
+		</>
 	);
 }
 

@@ -21,12 +21,17 @@ export default function Tickets() {
 	const [statusFilter, setStatusFilter] = useState(false);
 	const [modal, setModal] = useState({ state: false, data: null });
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
+
 	if (isLoading)
 		return (
 			<div className='flex h-full justify-center items-center'>
 				<Loader type='spin' height={40} width={40} />
 			</div>
 		);
+
+	if (project.error?.status === 404) {
+		router.push("/404?error=not_found");
+	}
 
 	const widget = project.data?.attributes.project_widgets.data.find(
 		(widget) => widget.id === parseInt(pid)

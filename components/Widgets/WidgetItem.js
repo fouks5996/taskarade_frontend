@@ -58,8 +58,11 @@ export default function WidgetItem({
 	async function deleteWidget() {
 		if (widgets.data.length !== 1) {
 			await remove(path("DELETE_widget", widget.id), mutate, session.jwt);
-			const minId = getMinId(widgets.data);
-			return router.push(`/project/${id}/widget/${minId}`);
+			return router.push(
+				`/project/${id}/widget/${
+					widgets.data[widget.id === widgets.data[0].id ? 1 : 0].id
+				}`
+			);
 		} else {
 			setAlert({ active: true, content: "Minimum 1 widget" });
 		}

@@ -11,10 +11,10 @@ import HeaderSkeleton from "../Skeleton/HeaderSkeleton";
 export default function Header() {
 	const { data: session } = useSession();
 	const jwt = session?.jwt;
-	const { user, isLoading, mutate } = useCurrentUser(jwt);
+	const { user, isUserLoading, mutateUser } = useCurrentUser(jwt);
 	const [showNotification, setShowNotification] = useState(false);
 
-	if (isLoading) return <HeaderSkeleton />;
+	if (isUserLoading) return <HeaderSkeleton />;
 
 	function ifSeen() {
 		return user?.notifications?.some(
@@ -49,7 +49,7 @@ export default function Header() {
 									<span className='absolute top-8 z-50 -right-20'>
 										<Notifications
 											notifications={user.notifications}
-											mutate={mutate}
+											mutate={mutateUser}
 											setShowNotification={setShowNotification}
 										/>
 									</span>

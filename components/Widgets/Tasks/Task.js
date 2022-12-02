@@ -124,7 +124,6 @@ export default function Task({
 								</div>
 								<div className='flex items-center gap-2 mt-5'>
 									{task.task_tags.map((tag) => {
-										console.log(tag);
 										return (
 											<TaskTag
 												id={tag.id}

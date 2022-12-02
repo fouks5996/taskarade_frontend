@@ -24,6 +24,7 @@ export default function Notes({ maxId }) {
 	const { data } = useSession();
 	const jwt = data?.jwt;
 	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
+
 	if (isLoading)
 		return (
 			<Layout>
@@ -32,6 +33,9 @@ export default function Notes({ maxId }) {
 				</div>
 			</Layout>
 		);
+	if (project.error?.status === 404) {
+		router.push("/404?error=not_found");
+	}
 
 	const widget = project.data?.attributes.project_widgets.data.find(
 		(widget) => widget.id === parseInt(pid)

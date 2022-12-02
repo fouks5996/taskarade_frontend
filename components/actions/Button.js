@@ -23,7 +23,7 @@ function Button({
 
 	const ColorButton = () => {
 		if (color === "red") return "bg-red";
-		if (color === "blue") return "bg-blue-400 hover:bg-blue-700";
+		if (color === "blue") return "bg-blue-400 hover:bg-blue-600";
 	};
 
 	return (

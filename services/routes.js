@@ -17,12 +17,20 @@ export const path = (name, argument, argument2) => {
 			return `${root}/api/project-widgets/${argument}?populate=notes, tasks, widget, tickets`;
 		case "CREATE_project":
 			return `${root}/api/projects`;
+		case "UPDATE_project":
+			return `${root}/api/projects/${argument}`;
+		case "DELETE_project":
+			return `${root}/api/projects/${argument}`;
+		case "UPDATE_project":
+			return `${root}/api/projects/${argument}`;
 		case "current_project":
-			return `${root}/api/projects/${argument}?populate=project_widgets.widget, project_widgets.notes, project_widgets.tasks,project_widgets.tasks.task_status, project_widgets.tickets, project_widgets.tickets.ticket_status,project_widgets.tickets.ticket_priority, project_widgets.tickets.assigned, project_widgets.tickets.ticket_owner, collaborations.collaborator, collaborations.collaborator.avatar.url, creator.avatar.url`;
+			return `${root}/api/projects/${argument}?populate=project_widgets.widget, project_widgets.notes, project_widgets.tickets, project_widgets.tickets.ticket_status,project_widgets.tickets.ticket_priority, project_widgets.tickets.assigned, project_widgets.tickets.ticket_owner, collaborations.collaborator, collaborations.collaborator.avatar.url, creator.avatar.url`;
 		case "current_project_collab":
 			return `${root}/api/projects/${argument}?populate=collaborations.collaborator`;
 		case "current_user":
 			return `${root}/api/users/me?populate[project][populate]=project_widgets.widget&populate[collaborations][populate]=project.project_widgets.widget&populate[avatar][fields][1]=url&populate[notifications][populate]=project, sender.avatar.url`;
+		case "UPDATE_user":
+			return `${root}/api/users/${argument}`;
 		case "GET_widgets":
 			return `${root}/api/widgets`;
 		case "UPDATE_widget":

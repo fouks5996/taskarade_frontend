@@ -24,6 +24,10 @@ export default function Index() {
 			</Layout>
 		);
 
+	if (widget.error?.status === 404) {
+		router.push("/404?error=not_found");
+	}
+
 	switch (widget.data?.attributes.widget.data.id) {
 		case 1:
 			if (widget.data?.attributes.notes.data.length !== 0) {
@@ -36,26 +40,26 @@ export default function Index() {
 				);
 
 				return (
-					<Layout>
+					<Layout title={widget.data?.attributes.name}>
 						<Notes maxId={closest.id} />
 					</Layout>
 				);
 			} else {
 				return (
-					<Layout>
+					<Layout title={widget.data?.attributes.name}>
 						<Notes maxId={0} />
 					</Layout>
 				);
 			}
 		case 2:
 			return (
-				<Layout>
+				<Layout title={widget.data?.attributes.name}>
 					<Tasks />
 				</Layout>
 			);
 		case 3:
 			return (
-				<Layout>
+				<Layout title={widget.data?.attributes.name}>
 					<Tickets />
 				</Layout>
 			);

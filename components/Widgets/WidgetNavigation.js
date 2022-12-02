@@ -19,11 +19,20 @@ export default function WidgetNavigation({
 	collaborator = false,
 	mutate,
 	widgetOwner,
+	setItemFilter,
 }) {
 	const [active, setActive] = useState(false);
+
 	const { data } = useSession();
 	const jwt = data?.jwt;
 	const { widgets } = useWidgets(jwt);
+
+	function searchItem(data, Fitem) {
+		setItemFilter({
+			value: data,
+			item: Fitem,
+		});
+	}
 
 	return (
 		<div className='relative flex flex-col items-start gap-3 border-b border-stroke-blue py-2 my-3'>
@@ -38,7 +47,7 @@ export default function WidgetNavigation({
 					</IconWrapper>
 				)}
 			</div>
-			<Search label={label} />
+			<Search label={label} onchange={searchItem} />
 			{active && !collaborator && (
 				<Wrapper setActive={setActive}>
 					<GetWidgets

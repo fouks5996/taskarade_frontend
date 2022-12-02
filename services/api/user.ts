@@ -10,9 +10,9 @@ export function useCurrentUser(jwt: string) {
 
   return {
     user: data,
-    isLoading: !error && !data,
+    isUserLoading: !error && !data,
     isError: error,
-    mutate: mutate,
+    mutateUser: mutate,
   };
 }
 
