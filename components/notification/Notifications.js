@@ -102,7 +102,7 @@ export function Notification({ notification, setShowNotification }) {
 						}}
 						className='underline cursor-pointer'>
 						{" "}
-						{notification.project.name}{" "}
+						{notification.project?.name}{" "}
 					</span>{" "}
 				</Text>
 				<Text size={"12"} color={"placeholder"}>

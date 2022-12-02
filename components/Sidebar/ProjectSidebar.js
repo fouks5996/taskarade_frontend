@@ -87,7 +87,6 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 			if (res) {
 				mutate();
 				setIsLoading(false);
-				console.log(success, res);
 				router.push(
 					`/project/${success.data?.id}/widget/${
 						res.data?.id
