@@ -14,20 +14,6 @@ import AvatarGroup from "../Avatar/AvatarGroup";
 import Button from "../actions/Button";
 import { useOnClickOutside } from "usehooks-ts";
 
-export interface sessionProp {
-	readonly data: null | undefined | sessionProps,
-	readonly status: "loading" | "authenticated" | "unauthenticated",
-}
-
-export interface sessionProps {
-	expires: string,
-	id: number,
-	jwt: string,
-	user:{
-		email: string
-	}
-}
-
 export default function WidgetNavigation({
 	label,
 	collaborator = false,
@@ -37,7 +23,7 @@ export default function WidgetNavigation({
 }) {
 	const [active, setActive] = useState(false);
 	const { data } = useSession();
-	const { widgets } = useWidgets();	
+	const { widgets } = useWidgets();
 
 	function searchItem(data, Fitem) {
 		setItemFilter({
@@ -45,7 +31,6 @@ export default function WidgetNavigation({
 			item: Fitem,
 		});
 	}
-
 
 	return (
 		<div className='relative flex flex-col items-start gap-3 border-b border-stroke-blue py-2 my-3'>
@@ -112,7 +97,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 		return array;
 	}
 
-	async function searchCollab(value: string) {		
+	async function searchCollab(value) {
 		const res = await getUsers(value.toLowerCase());
 		if (value.length === 0) {
 			setCollaborators([]);
@@ -123,10 +108,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 
 	async function addCollaboration(userID) {
 		const body = { data: { project: id, collaborator: userID } };
-		const { success, error } = await post(
-			path("CREATE_collaboration"),
-			body
-		);
+		const { success, error } = await post(path("CREATE_collaboration"), body);
 		if (success) {
 			mutate();
 			setActive(false);
@@ -160,8 +142,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 							/>
 							<Button
 								onclick={() => addCollaboration(collaborator.id)}
-								width="fit"
-								>
+								width='fit'>
 								Add
 							</Button>
 						</div>
