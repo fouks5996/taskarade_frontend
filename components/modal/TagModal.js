@@ -20,8 +20,6 @@ export default function TagModal({
 	task,
 }) {
 	const [optionsModal, setOptionsModal] = useState(false);
-	const { data: session } = useSession();
-	const jwt = session?.jwt;
 	const router = useRouter();
 	const { pid } = router.query;
 	const { tag_bg, isLoading } = useTagBg();
@@ -54,7 +52,7 @@ export default function TagModal({
 				project_widget: parseInt(pid),
 			},
 		};
-		const { success, error } = await post(path("CREATE_task-tag"), body, jwt);
+		const { success, error } = await post(path("CREATE_task-tag"), body);
 		if (success) {
 			mutateTask();
 			emptyInput();
@@ -67,11 +65,7 @@ export default function TagModal({
 		const tagToAdd = tags.filter((tag) => tag.id === id);
 		const allTags = [...tagsState, tagToAdd[0]];
 		const body = { data: { task_tags: allTags } };
-		const { success, error } = await update(
-			path("UPDATE_task", task.id),
-			body,
-			jwt
-		);
+		const { success, error } = await update(path("UPDATE_task", task.id), body);
 		if (success) {
 			setTagsState([...tagsState, tagToAdd[0]]);
 			mutateTask();
@@ -82,11 +76,7 @@ export default function TagModal({
 
 	async function EditTagColor(bgID, tagbgID) {
 		const body = { data: { tag_bg: bgID } };
-		const { success } = await update(
-			path("UPDATE_task-tag", tagbgID),
-			body,
-			jwt
-		);
+		const { success } = await update(path("UPDATE_task-tag", tagbgID), body);
 		if (success) {
 			mutateTask();
 		} else {
@@ -97,11 +87,7 @@ export default function TagModal({
 	const onSubmit = async (e, tagbgID) => {
 		e.preventDefault();
 		const body = { data: { label: e.target.task_tag.value } };
-		const { success } = await update(
-			path("UPDATE_task-tag", tagbgID),
-			body,
-			jwt
-		);
+		const { success } = await update(path("UPDATE_task-tag", tagbgID), body);
 		if (success) {
 			mutateTask();
 			setOptionsModal(false);
@@ -111,7 +97,7 @@ export default function TagModal({
 	};
 
 	const deleteTag = async (tagID) => {
-		await remove(path("DELETE_task-tag", tagID), mutateTask, jwt);
+		await remove(path("DELETE_task-tag", tagID), mutateTask);
 	};
 
 	return (

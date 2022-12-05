@@ -20,8 +20,8 @@ export default function Tasks() {
 	const { pid, id } = router.query;
 	const { data: session } = useSession();
 	const jwt = session?.jwt;
-	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
-	const { current_tasks, taskLoading1, mutateTask } = useCurrentTasks(jwt, pid);
+	const { project, isLoading, mutate } = useCurrentProject(id);
+	const { current_tasks, taskLoading1, mutateTask } = useCurrentTasks(pid);
 	const [getId, setGetId] = useState(null);
 	const [taskFilter, setTaskFilter] = useState({
 		value: null,
@@ -51,8 +51,7 @@ export default function Tasks() {
 		const body = { data: { task_status: parseInt(destination.droppableId) } };
 		const { success } = await update(
 			path("UPDATE_task", parseInt(draggableId)),
-			body,
-			jwt
+			body
 		);
 		if (success) {
 			mutateTask();
@@ -261,11 +260,7 @@ export function TaskStatusWrapper({
 				task_owner: session.id,
 			},
 		};
-		const { success, error } = await post(
-			path("CREATE_task"),
-			body,
-			session.jwt
-		);
+		const { success, error } = await post(path("CREATE_task"), body);
 		if (success) {
 			/* 			const colIndex = statusID - 1;
 			const newTask = {

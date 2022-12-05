@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { currentFetcher, fetcher } from "../config";
 
 export function useTicketstatus() {
-	const { data, error } = useSWR([path("ticket_status")], fetcher);
+	const { data, error } = useSWR([path("ticket_status")], currentFetcher);
 
 	return {
 		ticketStatus: data,
@@ -13,7 +13,7 @@ export function useTicketstatus() {
 }
 
 export function useTicketPriority() {
-	const { data, error } = useSWR([path("ticket_priority")], fetcher);
+	const { data, error } = useSWR([path("ticket_priority")], currentFetcher);
 
 	return {
 		ticketPriority: data,
@@ -22,9 +22,9 @@ export function useTicketPriority() {
 	};
 }
 
-export function useTicketComments(jwt, id) {
+export function useTicketComments(id) {
 	const { data, error, mutate } = useSWR(
-		[path("ticket_comments", id), jwt],
+		[path("ticket_comments", id)],
 		currentFetcher
 	);
 

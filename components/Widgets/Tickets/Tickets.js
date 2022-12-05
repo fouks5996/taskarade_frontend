@@ -15,12 +15,10 @@ import TicketModal from "../../modal/TicketModal";
 export default function Tickets() {
 	const router = useRouter();
 	const { pid, id } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
 	const [createTicket, setCreateTicket] = useState(false);
 	const [statusFilter, setStatusFilter] = useState(false);
 	const [modal, setModal] = useState({ state: false, data: null });
-	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
+	const { project, isLoading, mutate } = useCurrentProject(id);
 
 	if (isLoading)
 		return (

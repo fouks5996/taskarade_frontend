@@ -22,10 +22,8 @@ export default function WidgetNavigation({
 	setItemFilter,
 }) {
 	const [active, setActive] = useState(false);
-
 	const { data } = useSession();
-	const jwt = data?.jwt;
-	const { widgets } = useWidgets(jwt);
+	const { widgets } = useWidgets();
 
 	function searchItem(data, Fitem) {
 		setItemFilter({
@@ -50,12 +48,7 @@ export default function WidgetNavigation({
 			<Search label={label} onchange={searchItem} />
 			{active && !collaborator && (
 				<Wrapper setActive={setActive}>
-					<GetWidgets
-						widgets={widgets}
-						jwt={jwt}
-						mutate={mutate}
-						setActive={setActive}
-					/>
+					<GetWidgets widgets={widgets} mutate={mutate} setActive={setActive} />
 				</Wrapper>
 			)}
 			{active && collaborator && (
@@ -165,7 +158,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 	);
 }
 
-export function GetWidgets({ widgets, jwt, mutate, setActive }) {
+export function GetWidgets({ widgets, mutate, setActive }) {
 	const router = useRouter();
 	const { id } = router.query;
 
@@ -177,7 +170,7 @@ export function GetWidgets({ widgets, jwt, mutate, setActive }) {
 				name: widget.attributes.name,
 			},
 		};
-		const { success, error } = await post(path("CREATE_widget"), body, jwt);
+		const { success, error } = await post(path("CREATE_widget"), body);
 		if (success) {
 			mutate();
 			setActive(false);

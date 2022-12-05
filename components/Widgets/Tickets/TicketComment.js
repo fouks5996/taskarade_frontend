@@ -17,10 +17,7 @@ import Text from "../../Typography/Text";
 
 export default function TicketComment({ ticketID, ticketName, ticketOwner }) {
 	const { data: session } = useSession();
-	const router = useRouter();
-	const { id, pid } = router.query;
-	const jwt = session?.jwt;
-	const { comments, isLoading, mutate } = useTicketComments(jwt, ticketID);
+	const { comments, isLoading, mutate } = useTicketComments(ticketID);
 	const measuredRef = useCallback((node) => {
 		if (node !== null) {
 			node.scrollTop = node.scrollHeight;
@@ -78,7 +75,6 @@ export default function TicketComment({ ticketID, ticketName, ticketOwner }) {
 			)}
 
 			<CreateComment
-				token={jwt}
 				mutate={mutate}
 				ticketID={ticketID}
 				userID={session.id}
@@ -90,7 +86,6 @@ export default function TicketComment({ ticketID, ticketName, ticketOwner }) {
 }
 
 export function CreateComment({
-	token,
 	mutate,
 	ticketID,
 	userID,
@@ -115,11 +110,7 @@ export function CreateComment({
 			},
 		};
 
-		const { success, error } = await post(
-			path("CREATE_comment"),
-			bodyToSend,
-			token
-		);
+		const { success, error } = await post(path("CREATE_comment"), bodyToSend);
 
 		if (success) {
 			mutate();
@@ -130,8 +121,7 @@ export function CreateComment({
 				ticketOwner,
 				id,
 				data.body,
-				`/project/${id}/widget/${pid}`,
-				token
+				`/project/${id}/widget/${pid}`
 			);
 
 			if (!ok) {

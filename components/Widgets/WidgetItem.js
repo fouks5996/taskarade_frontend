@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { getIcon } from "../Icons/GetIcon";
 import { FiTrash2 } from "react-icons/fi";
 import { FiEdit2 } from "react-icons/fi";
-import Input from "../Forms/Input";
-import { getRoot, remove, update } from "../../services/config";
+import { remove, update } from "../../services/config";
 import { useSession } from "next-auth/react";
 import { path } from "../../services/routes";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import string_to_slug from "../functions/Slugify";
-import getMinId from "../functions/GetMinId";
 import Alert from "../modal/Alert";
 
 export default function WidgetItem({
@@ -41,11 +39,7 @@ export default function WidgetItem({
 		const body = {
 			data: { name: e.target.widget.value },
 		};
-		const { success } = await update(
-			path("UPDATE_widget", widget.id),
-			body,
-			session.jwt
-		);
+		const { success } = await update(path("UPDATE_widget", widget.id), body);
 
 		if (success) {
 			await mutate();
@@ -57,7 +51,7 @@ export default function WidgetItem({
 
 	async function deleteWidget() {
 		if (widgets.data.length !== 1) {
-			await remove(path("DELETE_widget", widget.id), mutate, session.jwt);
+			await remove(path("DELETE_widget", widget.id), mutate);
 			return router.push(
 				`/project/${id}/widget/${
 					widgets.data[widget.id === widgets.data[0].id ? 1 : 0].id

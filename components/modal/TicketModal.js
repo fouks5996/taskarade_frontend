@@ -4,11 +4,7 @@ import React, { forwardRef, useState } from "react";
 import ModalLayout from "./ModalLayout";
 import { remove, update } from "../../services/config";
 import { path } from "../../services/routes";
-import Heading from "../Typography/Heading";
 import Text from "../Typography/Text";
-import Button from "../actions/Button";
-import { AiOutlineSave } from "react-icons/ai";
-import { FiTrash2 } from "react-icons/fi";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
@@ -71,10 +67,9 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 	const router = useRouter();
 	const { id, pid } = router.query;
 	const { data: session } = useSession();
-	const jwt = session?.jwt;
 	const { ticketStatus, isLoading } = useTicketstatus();
 	const { ticketPriority, isLoading2 } = useTicketPriority();
-	const { project_collab, isLoading3 } = useProjectCollab(id, jwt);
+	const { project_collab, isLoading3 } = useProjectCollab(id);
 	if (isLoading && isLoading2 && isLoading3)
 		return (
 			<div className='flex h-full justify-center items-center'>
@@ -82,7 +77,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 			</div>
 		);
 	function deleteTicket() {
-		remove(path("DELETE_ticket", ticket.id), mutate, jwt);
+		remove(path("DELETE_ticket", ticket.id), mutate);
 		setModal({ state: false, data: null });
 	}
 
@@ -124,11 +119,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 			},
 		};
 
-		const { success } = await update(
-			path("UPDATE_ticket", ticket.id),
-			body,
-			jwt
-		);
+		const { success } = await update(path("UPDATE_ticket", ticket.id), body);
 
 		if (success) {
 			mutate();

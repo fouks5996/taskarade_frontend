@@ -3,16 +3,13 @@ import Heading from "../../Typography/Heading";
 import { BsArrowLeft } from "react-icons/bs";
 import Input from "../../Forms/Input";
 import { useForm } from "react-hook-form";
-import { errorMessage, errorMessageValues } from "../../Forms/Errors";
+import { errorMessageValues } from "../../Forms/Errors";
 import { useSession } from "next-auth/react";
-import Layout from "../../Layout/Layout";
 import Loader from "../../Loader/Loader";
-import { useCurrentWidget } from "../../../services/api/widget";
 import {
 	useTicketPriority,
 	useTicketstatus,
 } from "../../../services/api/ticket";
-import Text from "../../Typography/Text";
 import Button from "../../actions/Button";
 import DatePicker from "react-datepicker";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
@@ -37,8 +34,6 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 	const router = useRouter();
 	const { pid } = router.query;
 	const { data: session } = useSession();
-
-	const jwt = session?.jwt;
 	if (isLoading && isLoading2)
 		return (
 			<div className='flex h-full justify-center items-center'>
@@ -90,15 +85,13 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 			};
 		}
 
-		console.log(body);
-
 		/* 		let formData = new FormData();
 		formData.append("files.file", data.file[0]);
 		formData.append("data", body);
 
 		console.log(formData); */
 
-		const { success, error } = await post(path("CREATE_ticket"), body, jwt);
+		const { success, error } = await post(path("CREATE_ticket"), body);
 
 		if (success) {
 			mutate();
@@ -247,12 +240,7 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 						{...register("file")}
 					/>
 				</div>
-				<Button
-					color={"blue"}
-					principal
-					type='submit'
-					form={"create"}
-					width={"fit"}>
+				<Button type='submit' form='create' width={"fit"}>
 					Submit
 				</Button>
 			</form>

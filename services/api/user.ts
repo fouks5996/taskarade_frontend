@@ -1,12 +1,16 @@
 import { path } from "../routes";
 import useSWR from "swr";
-import { currentFetcher } from "../config";
+import { currentFetcher, fetcher } from "../config";
 
 export function useCurrentUser(jwt: string) {
-  const { data, error, mutate } = useSWR(
-    [path("current_user"), jwt],
-    currentFetcher
-  );
+  let options = {	
+    method: "GET",
+    headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${jwt}`,
+    },
+  }   
+  const { data, error, mutate } = useSWR([path("current_user"), options], fetcher);
 
   return {
     user: data,
@@ -16,9 +20,9 @@ export function useCurrentUser(jwt: string) {
   };
 }
 
-export async function getUsers(jwt: string, value: string) {
+export async function getUsers(value: string) {
   
-  const data = await currentFetcher(path('getUsers', value), jwt)
+  const data = await currentFetcher(path('getUsers', value))
 
   return {
     users: data,

@@ -5,9 +5,6 @@ import { path } from "../../../services/routes";
 import Text from "../../Typography/Text";
 
 export default function ContentNotes({ activeNote, mutate }) {
-	const { data } = useSession();
-	const jwt = data?.jwt;
-
 	if (!activeNote)
 		return (
 			<div className=''>
@@ -21,8 +18,7 @@ export default function ContentNotes({ activeNote, mutate }) {
 
 		const { success, error } = await update(
 			path("UPDATE_note", activeNote.id),
-			body,
-			jwt
+			body
 		);
 
 		if (success) return mutate();

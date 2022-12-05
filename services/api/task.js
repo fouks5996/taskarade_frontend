@@ -2,8 +2,8 @@ import useSWR from "swr";
 import { currentFetcher, fetcher } from "../config";
 import { path } from "../routes";
 
-export function useTaskStatus(jwt) {
-	const { data, error } = useSWR([path("task_status"), jwt], currentFetcher);
+export function useTaskStatus() {
+	const { data, error } = useSWR([path("task_status")], currentFetcher);
 
 	return {
 		taskStatus: data,
@@ -12,9 +12,9 @@ export function useTaskStatus(jwt) {
 	};
 }
 
-export function useCurrentTasks(jwt, projectWidgetID) {
+export function useCurrentTasks(projectWidgetID) {
 	const { data, error, mutate } = useSWR(
-		[path("current_tasks", projectWidgetID), jwt],
+		[path("current_tasks", projectWidgetID)],
 		currentFetcher
 	);
 
@@ -27,7 +27,7 @@ export function useCurrentTasks(jwt, projectWidgetID) {
 }
 
 export function useTagBg() {
-	const { data, error, mutate } = useSWR([path("tag_bg")], fetcher);
+	const { data, error, mutate } = useSWR([path("tag_bg")], currentFetcher);
 
 	return {
 		tag_bg: data,

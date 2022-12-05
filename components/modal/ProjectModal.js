@@ -12,10 +12,8 @@ import Text from "../Typography/Text";
 export default function ProjectModal({ setIsOpen }) {
 	const router = useRouter();
 	const { id } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
-	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
-	const { user, isUserLoading, mutateUser } = useCurrentUser(jwt);
+	const { project, isLoading, mutate } = useCurrentProject(id);
+	const { user, isUserLoading, mutateUser } = useCurrentUser();
 	const [active, setActive] = useState("Account");
 
 	if (isLoading && isUserLoading) return <p> Loading ... </p>;
@@ -31,7 +29,6 @@ export default function ProjectModal({ setIsOpen }) {
 			<ProjectModalContent
 				mutateUser={mutateUser}
 				mutate={mutate}
-				jwt={jwt}
 				active={active}
 				project={project}
 				user={user}
@@ -45,7 +42,6 @@ export function ProjectModalContent({
 	active,
 	project,
 	user,
-	jwt,
 	mutateUser,
 	mutate,
 	setIsOpen,
@@ -58,7 +54,7 @@ export function ProjectModalContent({
 			email: e.target.email.value,
 			username: e.target.username.value,
 		};
-		const { success } = await update(path("UPDATE_user", user.id), body, jwt);
+		const { success } = await update(path("UPDATE_user", user.id), body);
 		if (success) return mutateUser();
 	}
 
@@ -71,8 +67,7 @@ export function ProjectModalContent({
 		};
 		const { success } = await update(
 			path("UPDATE_project", project.data.id),
-			body,
-			jwt
+			body
 		);
 		if (success) return mutate(), mutateUser();
 	}
@@ -80,7 +75,7 @@ export function ProjectModalContent({
 	async function deleteProject() {
 		setIsOpen(false);
 		router.push("/");
-		await remove(path("DELETE_project", project.data.id), mutateUser, jwt);
+		await remove(path("DELETE_project", project.data.id), mutateUser);
 	}
 
 	if (active === "Account")

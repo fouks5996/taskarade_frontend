@@ -10,7 +10,6 @@ import ProjectSidebarSkeleton from "../Skeleton/ProjectSidebarSkeleton";
 import { BsPlus } from "react-icons/bs";
 import { post } from "../../services/config";
 import { path } from "../../services/routes";
-import getMinId from "../functions/GetMinId";
 import string_to_slug from "../functions/Slugify";
 import Loader from "../Loader/Loader";
 import Alert from "../modal/Alert";
@@ -57,19 +56,19 @@ export default function ProjectSidebar() {
 					/>
 				))}
 			</div>
-			<CreateProject jwt={jwt} projectCreator={data.id} mutate={mutateUser} />
+			<CreateProject projectCreator={data.id} mutate={mutateUser} />
 		</div>
 	);
 }
 
-export function CreateProject({ jwt, projectCreator, mutate }) {
+export function CreateProject({ projectCreator, mutate }) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 
 	async function createProject() {
 		setIsLoading(true);
 		const body = { data: { name: "New Project", creator: projectCreator } };
-		const { success, error } = await post(path("CREATE_project"), body, jwt);
+		const { success, error } = await post(path("CREATE_project"), body);
 		if (success) {
 			mutate();
 			const Widgetbody = {
@@ -79,11 +78,7 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 					name: "Prise de note",
 				},
 			};
-			const { success: res } = await post(
-				path("CREATE_widget"),
-				Widgetbody,
-				jwt
-			);
+			const { success: res } = await post(path("CREATE_widget"), Widgetbody);
 			if (res) {
 				mutate();
 				setIsLoading(false);

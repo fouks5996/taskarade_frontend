@@ -21,9 +21,7 @@ export default function Notes({ maxId }) {
 	const [active, setActive] = useState(maxId);
 	const router = useRouter();
 	const { pid, id } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
-	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
+	const { project, isLoading, mutate } = useCurrentProject(id);
 
 	if (isLoading)
 		return (
@@ -50,7 +48,7 @@ export default function Notes({ maxId }) {
 		const body = {
 			data: { title: "New note", project_widget: parseInt(pid) },
 		};
-		const { success } = await post(path("CREATE_note"), body, jwt);
+		const { success } = await post(path("CREATE_note"), body);
 
 		if (success) {
 			mutate();

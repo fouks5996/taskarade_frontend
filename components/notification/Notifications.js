@@ -8,8 +8,6 @@ import { useOnClickOutside } from "usehooks-ts";
 import { useRouter } from "next/router";
 
 export function Notifications({ notifications, mutate, setShowNotification }) {
-	const { data: session } = useSession();
-	const jwt = session?.jwt;
 	const ref = useRef(null);
 
 	const handleClickOutside = () => {
@@ -22,8 +20,7 @@ export function Notifications({ notifications, mutate, setShowNotification }) {
 			const body = { data: { seen: true } };
 			const { success } = await update(
 				path("UPDATE_notification", notification.id),
-				body,
-				jwt
+				body
 			);
 			if (success) {
 				mutate();

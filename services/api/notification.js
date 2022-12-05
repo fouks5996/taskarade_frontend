@@ -7,8 +7,7 @@ export async function createNotification(
 	recipient,
 	project,
 	comment,
-	linkTo,
-	jwt
+	linkTo
 ) {
 	const bodyNotif = {
 		data: {
@@ -21,7 +20,7 @@ export async function createNotification(
 		},
 	};
 
-	const { success } = await post(path("CREATE_notif"), bodyNotif, jwt);
+	const { success } = await post(path("CREATE_notif"), bodyNotif);
 
 	return {
 		ok: success,

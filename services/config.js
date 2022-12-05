@@ -14,6 +14,7 @@ export const getRoot = () => {
 
 export async function fetcher(url, options = {}) {
 	let response;
+
 	if (!options) {
 		response = await fetch(url);
 	} else {
@@ -23,16 +24,21 @@ export async function fetcher(url, options = {}) {
 	return data;
 }
 
-export async function currentFetcher(url, jwt) {
+export async function currentFetcher(url) {
+	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 	let response = await fetch(url, {
-		headers: { authorization: `Bearer ${jwt}` },
+		method: "GET",
+		headers: {
+			"content-type": "application/json",
+			Authorization: `Bearer ${jwt}`,
+		},
 	});
-
 	const data = await response.json();
 	return data;
 }
 
-export async function post(url, body, jwt = null) {
+export async function post(url, body) {
+	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 	let res;
 	if (jwt !== null) {
 		res = await fetcher(url, {
@@ -59,7 +65,8 @@ export async function post(url, body, jwt = null) {
 	};
 }
 
-export async function update(url, body, jwt) {
+export async function update(url, body) {
+	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 	let res = await fetcher(url, {
 		method: "PUT",
 		headers: {
@@ -75,7 +82,8 @@ export async function update(url, body, jwt) {
 	};
 }
 
-export async function remove(url, mutate, jwt) {
+export async function remove(url, mutate) {
+	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 	let res = await fetcher(url, {
 		method: "DELETE",
 		headers: {

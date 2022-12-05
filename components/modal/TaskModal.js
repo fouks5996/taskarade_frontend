@@ -16,8 +16,6 @@ import TagModal from "./TagModal";
 export default function TaskModal({ setModal, task, mutateTask }) {
 	const [tagsState, setTagsState] = useState(task.task_tags);
 	const [modalTag, setModalTag] = useState(false);
-	const { data: session } = useSession();
-	const jwt = session?.jwt;
 
 	const {
 		handleSubmit,
@@ -26,18 +24,14 @@ export default function TaskModal({ setModal, task, mutateTask }) {
 	} = useForm();
 
 	async function deleteTask() {
-		await remove(path("UPDATE_task", task.id), mutateTask, jwt);
+		await remove(path("UPDATE_task", task.id), mutateTask);
 		setModal(false);
 	}
 
 	async function handleDeleteTag(id) {
 		const tagTodelete = tagsState.filter((tag) => tag.id !== id);
 		const body = { data: { task_tags: tagTodelete } };
-		const { success, error } = await update(
-			path("UPDATE_task", task.id),
-			body,
-			jwt
-		);
+		const { success, error } = await update(path("UPDATE_task", task.id), body);
 		if (success) {
 			setTagsState(tagTodelete);
 			mutateTask();
@@ -52,7 +46,7 @@ export default function TaskModal({ setModal, task, mutateTask }) {
 
 	async function onSubmit(data) {
 		const body = { data: { body: data.body } };
-		const { success } = await update(path("UPDATE_task", task.id), body, jwt);
+		const { success } = await update(path("UPDATE_task", task.id), body);
 		if (success) {
 			setModal(false);
 			mutateTask();

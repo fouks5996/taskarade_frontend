@@ -21,7 +21,6 @@ export default function Task({
 	id,
 }) {
 	const { data: session } = useSession();
-	const jwt = session?.jwt;
 	const [modal, setModal] = useState({ state: false, data: null });
 
 	async function updateTask(e) {
@@ -50,7 +49,7 @@ export default function Task({
 		const body = {
 			data: { title: e.target.task.value },
 		};
-		const { success } = await update(path("UPDATE_task", task.id), body, jwt);
+		const { success } = await update(path("UPDATE_task", task.id), body);
 
 		if (success) {
 			await mutateTask();
@@ -73,7 +72,7 @@ export default function Task({
 		);
 		data[ColIndex].attributes.tasks.data = NewCol;
 		setData(data); */
-		return remove(path("DELETE_task", task.id), mutateTask, jwt);
+		return remove(path("DELETE_task", task.id), mutateTask);
 	}
 
 	return (

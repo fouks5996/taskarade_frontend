@@ -16,8 +16,6 @@ import ProjectModal from "../modal/ProjectModal";
 export default function WidgetSidebar() {
 	const router = useRouter();
 	const { id } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
 	const [getId, setGetId] = useState(null);
 	const [modalIsOpen, setIsOpen] = useState(false);
 	const [itemFilter, setItemFilter] = useState({
@@ -25,7 +23,7 @@ export default function WidgetSidebar() {
 		item: null,
 	});
 
-	const { project, isLoading, mutate } = useCurrentProject(jwt, id);
+	const { project, isLoading, mutate } = useCurrentProject(id);
 	if (isLoading) return <WidgetSidebarSkeleton />;
 
 	function closeModal() {

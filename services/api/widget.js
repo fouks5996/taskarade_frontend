@@ -2,8 +2,8 @@ import { path } from "../routes";
 import useSWR from "swr";
 import { currentFetcher, fetcher } from "../config";
 
-export function useWidgets(jwt) {
-	const { data, error } = useSWR([path("GET_widgets"), jwt], currentFetcher);
+export function useWidgets() {
+	const { data, error } = useSWR([path("GET_widgets")], currentFetcher);
 
 	return {
 		widgets: data,
@@ -12,9 +12,9 @@ export function useWidgets(jwt) {
 	};
 }
 
-export function useCurrentWidget(jwt, id) {
+export function useCurrentWidget(id) {
 	const { data, error, mutate } = useSWR(
-		[path("current_widget", id), jwt],
+		[path("current_widget", id)],
 		currentFetcher
 	);
 

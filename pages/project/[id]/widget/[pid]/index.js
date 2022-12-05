@@ -11,9 +11,7 @@ import { useCurrentWidget } from "../../../../../services/api/widget";
 export default function Index() {
 	const router = useRouter();
 	const { pid } = router.query;
-	const { data } = useSession();
-	const jwt = data?.jwt;
-	const { widget, isLoading } = useCurrentWidget(jwt, parseInt(pid));
+	const { widget, isLoading } = useCurrentWidget(parseInt(pid));
 
 	if (isLoading)
 		return (

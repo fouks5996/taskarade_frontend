@@ -2,9 +2,9 @@ import { path } from "../routes";
 import useSWR from "swr";
 import { currentFetcher } from "../config";
 
-export function useCurrentProject(jwt, id) {
+export function useCurrentProject(id) {
 	const { data, error, mutate } = useSWR(
-		[path("current_project", id), jwt],
+		[path("current_project", id)],
 		currentFetcher
 	);
 
@@ -16,9 +16,9 @@ export function useCurrentProject(jwt, id) {
 	};
 }
 
-export function useProjectCollab(id, jwt) {
+export function useProjectCollab(id) {
 	const { data, error, mutate } = useSWR(
-		[path("current_project_collab", id), jwt],
+		[path("current_project_collab", id)],
 		currentFetcher
 	);
 

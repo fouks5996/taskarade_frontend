@@ -8,10 +8,8 @@ import Button from "../../actions/Button";
 import { BsPlus } from "react-icons/bs";
 
 export default function ListNotes({ notes, active, setActive, mutate }) {
-	const { data: session } = useSession();
-
 	function deleteNote(id) {
-		remove(path("DELETE_note", id), mutate, session.jwt);
+		remove(path("DELETE_note", id), mutate);
 	}
 
 	if (notes?.data.length === 0)
