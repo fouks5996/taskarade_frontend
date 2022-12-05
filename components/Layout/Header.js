@@ -4,7 +4,7 @@ import { useCurrentUser } from "../../services/api/user";
 import AvatarGroup from "../Avatar/AvatarGroup";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import Search from "../Search/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NotificationDot, Notifications } from "../notification/Notifications";
 import HeaderSkeleton from "../Skeleton/HeaderSkeleton";
 
@@ -24,7 +24,7 @@ export default function Header() {
 
 	return (
 		<div
-			className={`flex  border-b border-stroke-blue justify-center px-[3%] py-5 items-center w-full`}>
+			className={`flex  border-b border-stroke-blue justify-center px-[3%] py-3 items-center w-full`}>
 			<div className={"flex justify-between w-full"}>
 				{session ? (
 					<div className='flex items-center justify-between w-full'>

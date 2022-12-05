@@ -109,8 +109,8 @@ export default function SignUp({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button form={"signup"} submit principal>
-								Create my account
+							<Button form='signup' type='submit'>
+								Login to your account
 							</Button>
 						</div>
 					</form>

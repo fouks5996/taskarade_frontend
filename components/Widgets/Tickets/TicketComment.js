@@ -161,8 +161,8 @@ export function CreateComment({
 				errors={errors}
 				validationsSchema={errorMessageValues.comments}
 			/>
-			<Button form={"comment"} principal color={"blue"} width={"fit"} submit>
-				post
+			<Button form='comment' width='fit' type='submit'>
+				Post
 			</Button>
 		</form>
 	);

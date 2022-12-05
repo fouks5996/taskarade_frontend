@@ -117,9 +117,9 @@ export function ProjectModalContent({
 						/>
 					</div>
 				</form>
-				<Button submit form={"editprofile"} principal>
-					{" "}
-					Save your changes{" "}
+
+				<Button form='editprofile' type='submit'>
+					Save your changes
 				</Button>
 			</div>
 		);
@@ -146,13 +146,11 @@ export function ProjectModalContent({
 					</div>
 				</form>
 				<div className='flex flex-col gap-4'>
-					<Button submit form={"editproject"} principal>
-						{" "}
-						Save your changes{" "}
+					<Button form='editproject' type='submit'>
+						Save your changes
 					</Button>
-					<Button color={"red"} onclick={deleteProject} principal>
-						{" "}
-						Delete your project{" "}
+					<Button attent='warning' onclick={deleteProject}>
+						Delete your project
 					</Button>
 				</div>
 			</div>

@@ -112,7 +112,7 @@ export default function SignIn({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button form={"signin"} submit principal>
+							<Button form='signin' type='submit'>
 								Login to your account
 							</Button>
 						</div>

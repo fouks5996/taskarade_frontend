@@ -12,6 +12,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.10.15",
+    "class-variance-authority": "^0.3.0",
     "cookies": "^0.8.0",
     "jotai": "^1.8.6",
     "js-cookie": "^3.0.1",

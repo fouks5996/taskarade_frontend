@@ -1,70 +1,64 @@
 import { useState } from "react";
-// import Tooltip from "../Modal./Tooltip";
+import { cva } from "class-variance-authority";
+
+const globalClasses = [
+	"rounded-md",
+	"font-medium",
+	"flex",
+	"items-center",
+	"justify-center",
+	"gap-1",
+	"text-grey-text-active",
+];
+
+const button = cva(globalClasses, {
+	variants: {
+		attent: {
+			primary: ["bg-blue-400 ", "hover:bg-blue-600"],
+			warning: ["bg-red", "hover:bg-red"],
+		},
+		size: {
+			small: ["text-12", "py-1", "px-2"],
+			medium: ["text-14", "py-2", "px-4"],
+			iconOnly: ["p-1.5"],
+		},
+		width: {
+			fit: "w-fit",
+			full: "w-full",
+		},
+	},
+	defaultVariants: {
+		attent: "primary",
+		size: "medium",
+		width: "full",
+	},
+});
 
 function Button({
-	children,
-	width,
-	principal,
-	showText,
+	className,
+	attent,
 	icon,
-	submit,
-	tooltipLabel,
+	size,
+	width,
+	children,
 	onclick,
-	disabled,
-	color,
-	form,
+	iconOnly,
+	...props
 }) {
-	const [showTooltip, setShowTooltip] = useState(false);
-
-	const inputWidth = () => {
-		if (width === "fit") return "w-fit";
-		if (width === false || width === undefined) return "w-full";
-	};
-
-	const ColorButton = () => {
-		if (color === "red") return "bg-red";
-		if (color === "blue") return "bg-blue-400 hover:bg-blue-600";
-	};
-
 	return (
-		<>
-			{principal ? (
-				<button
-					form={form}
-					type={submit && "submit"}
-					onClick={() => !disabled && onclick()}
-					className={` ${ColorButton()}
-           z-50  cursor-pointer rounded-md  flex items-center justify-center gap-1 ${
-							icon ? "p-2 pr-1" : "px-4 py-2"
-						}   text-grey-text-active text-14 font-medium ${inputWidth()}`}>
-					{children}
-					{icon && <span className='z-10 text-24 font-bold'> {icon} </span>}
-				</button>
-			) : (
-				<div
-					onMouseOver={() => tooltipLabel && setShowTooltip(true)}
-					onMouseOut={() => tooltipLabel && setShowTooltip(false)}
-					className='relative w-fit'>
-					<button
-						onClick={() => !disabled && onclick()}
-						className={` flex hover:bg-blue_dark items-center gap-2 rounded-lg bg-blue_hover text-xs text-grey_light font-normal py-2 px-2 w-fit`}>
-						{showText && children}
-						<span className='z-10'> {icon} </span>
-					</button>
-					{/*{<Tooltip tooltipLabel={tooltipLabel} showToolTip={showTooltip} />}*/}
-				</div>
-			)}
-		</>
+		<button
+			{...props}
+			onClick={() => onclick()}
+			className={button({ attent, size, className, width, iconOnly })}>
+			{children}
+			{icon && <span className='z-10 text-24 font-bold'> {icon} </span>}
+		</button>
 	);
 }
 
 Button.defaultProps = {
-	showText: true,
 	onclick: () => {},
-	disabled: false,
 	icon: false,
-	color: "blue",
-	form: "",
 };
 
 export default Button;

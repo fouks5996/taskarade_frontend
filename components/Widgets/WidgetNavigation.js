@@ -37,7 +37,7 @@ export default function WidgetNavigation({
 	return (
 		<div className='relative flex flex-col items-start gap-3 border-b border-stroke-blue py-2 my-3'>
 			<div className='flex items-center justify-between w-full'>
-				<Text color='inactive' regular size='14'>
+				<Text color='placeholder' regular size='12'>
 					{label.toUpperCase()}
 					{"S"}
 				</Text>

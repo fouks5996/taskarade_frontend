@@ -33,13 +33,13 @@ export default function ModalHeader({
 				</Text>
 			</div>
 			<div className='flex  justify-between gap-2'>
-				<Button submit form={edit} principal icon color={"blue"}>
+				<Button size='iconOnly' type='submit' form={edit}>
 					<span className='text-grey-text-active text-20'>
 						<AiOutlineSave />
 					</span>
 				</Button>
-				<Button onclick={() => handleDelete()} principal icon color={"red"}>
-					<span className='text-grey-text-inactive text-20'>
+				<Button size='iconOnly' onclick={() => handleDelete()} attent='warning'>
+					<span className='text-grey-text-inactive text-18'>
 						<FiTrash2 />
 					</span>
 				</Button>

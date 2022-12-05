@@ -28,7 +28,7 @@ export const Layout = ({ title, children }: Props) => {
       <div className="flex relative"> 
         <ProjectSidebar/>
         <div className="relative flex w-full"> 
-          {state && <div className="w-[270px] min-w-[270px] h-screen"> </div>}
+          {state && <div className="w-[260px] min-w-[260px] h-screen"> </div>}
           {state && <WidgetSidebar/>}
           <div className="w-full "> 
           <Header />

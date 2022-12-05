@@ -23,20 +23,20 @@ export default function ProjectSidebar() {
 	if (isUserLoading) return <ProjectSidebarSkeleton />;
 
 	return (
-		<div className='w-[80px] text-grey-text-active flex px-4 flex-col items-center pt-6 gap-4 h-screen border-r border-stroke-blue'>
+		<div className='w-[70px] text-grey-text-active flex flex-col items-center pt-6 gap-3 h-screen border-r border-stroke-blue'>
 			<span className='cursor-pointer' onClick={() => router.push("/")}>
 				{" "}
 				<Image
 					alt='logo'
 					src={logo}
 					layout='fixed'
-					width={43}
-					height={33}
+					width={38}
+					height={29}
 				/>{" "}
 			</span>
 
 			<div className='mt-1 h-[1px] w-full bg-stroke-blue'> </div>
-			<div className='flex flex-col gap-3'>
+			<div className='flex flex-col gap-2'>
 				{user.project?.map((proj) => (
 					<SidebarElement
 						key={proj.id}
@@ -103,7 +103,7 @@ export function CreateProject({ jwt, projectCreator, mutate }) {
 	return (
 		<div
 			onClick={() => createProject()}
-			className={`flex cursor-pointer text-24 text-grey-text-active hover:bg-blue-400   justify-center items-center h-12 w-12  rounded-full relative`}>
+			className={`flex cursor-pointer text-24 text-grey-text-active hover:bg-blue-400   justify-center items-center h-10 w-10  rounded-full relative`}>
 			{isLoading ? <Loader type='spin' height={17} width={17} /> : <BsPlus />}{" "}
 		</div>
 	);
@@ -135,8 +135,8 @@ export function SidebarElement({ name, id, project_widget }) {
 				<div
 					className={`flex cursor-pointer hover:scale-105 ${
 						active ? "border-2 border-white" : "border-none"
-					} justify-center items-center h-12 w-12 bg-blue-400  rounded-full relative`}>
-					<Text color='inactive' bold>
+					} justify-center items-center h-10 w-10 bg-blue-400  rounded-full relative`}>
+					<Text size='14' color='inactive' bold>
 						{name?.charAt(0).toUpperCase()}
 					</Text>
 				</div>

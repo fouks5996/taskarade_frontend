@@ -13,7 +13,7 @@ export default function Avatar({
 		return (
 			<div
 				className={`${minus && "h-6 w-6"} ${collaborator && "h-8 w-8"} ${
-					!minus && !collaborator && "h-10 w-10"
+					!minus && !collaborator && "h-8 w-8"
 				} border-2 border-white rounded-full relative`}>
 				<Image
 					src={getRoot().API_URL + avatarUrl}
@@ -30,7 +30,7 @@ export default function Avatar({
 				className={`flex justify-center items-center ${minus && "h-6 w-6"} ${
 					collaborator && "h-8 w-8"
 				} ${
-					!minus && !collaborator && "h-10 w-10"
+					!minus && !collaborator && "h-8 w-8"
 				} border-2 border-white bg-green rounded-full relative`}>
 				{minus ? (
 					<Text size={"12"} regular>
