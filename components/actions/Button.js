@@ -59,6 +59,11 @@ function Button({
 Button.defaultProps = {
 	onclick: () => {},
 	icon: false,
+	attent: "",
+	iconOnly: "",
+	width: "",
+	className: "",
+	children: "",
 };
 
 export default Button;

@@ -12,9 +12,10 @@ export const getRoot = () => {
 	}
 };
 
-export async function fetcher(url, options = {}) {
-	let response;
+let jwt: string = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
 
+export async function fetcher(url: string, options = {}) {
+	let response: any;
 	if (!options) {
 		response = await fetch(url);
 	} else {
@@ -24,8 +25,7 @@ export async function fetcher(url, options = {}) {
 	return data;
 }
 
-export async function currentFetcher(url) {
-	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
+export async function currentFetcher(url: string) {
 	let response = await fetch(url, {
 		method: "GET",
 		headers: {
@@ -37,9 +37,8 @@ export async function currentFetcher(url) {
 	return data;
 }
 
-export async function post(url, body) {
-	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
-	let res;
+export async function post(url: string, body: object) {
+	let res: any;
 	if (jwt !== null) {
 		res = await fetcher(url, {
 			method: "POST",
@@ -65,8 +64,7 @@ export async function post(url, body) {
 	};
 }
 
-export async function update(url, body) {
-	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
+export async function update(url: string, body: object) {
 	let res = await fetcher(url, {
 		method: "PUT",
 		headers: {
@@ -82,8 +80,7 @@ export async function update(url, body) {
 	};
 }
 
-export async function remove(url, mutate) {
-	let jwt = process.env.NEXT_PUBLIC_STRAPI_TOKEN;
+export async function remove(url: string, mutate: () => any) {
 	let res = await fetcher(url, {
 		method: "DELETE",
 		headers: {

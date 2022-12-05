@@ -19,13 +19,13 @@ function Heading({ children, size, center }: HeadingProps) {
 
 export interface HeadingProps {
   children?: ReactNode;
-  size: String;
-  center: Boolean;
+  size: string;
+  center: boolean;
 }
 
 Heading.defaultProps = {
-  title: "28",
   center: false,
+  size:"28"
 };
 
 export default Heading;

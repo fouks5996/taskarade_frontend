@@ -58,4 +58,5 @@ export default function AvatarGroup({
 AvatarGroup.defaultProps = {
 	header: false,
 	collaborator: false,
+	minus: false,
 };

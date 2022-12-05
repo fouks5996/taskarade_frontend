@@ -1,9 +1,10 @@
 import { path } from "../routes";
 import useSWR from "swr";
-import { currentFetcher, fetcher } from "../config";
+import { currentFetcher } from "../config";
+import { Widget, Widgets } from "next/app";
 
 export function useWidgets() {
-	const { data, error } = useSWR([path("GET_widgets")], currentFetcher);
+	const { data, error } = useSWR<Widgets>([path("GET_widgets")], currentFetcher);
 
 	return {
 		widgets: data,
@@ -12,8 +13,8 @@ export function useWidgets() {
 	};
 }
 
-export function useCurrentWidget(id) {
-	const { data, error, mutate } = useSWR(
+export function useCurrentWidget(id: number) {
+	const { data, error, mutate } = useSWR<Widget>(
 		[path("current_widget", id)],
 		currentFetcher
 	);
@@ -25,3 +26,5 @@ export function useCurrentWidget(id) {
 		mutate: mutate,
 	};
 }
+
+

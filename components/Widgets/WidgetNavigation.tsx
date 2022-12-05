@@ -9,10 +9,24 @@ import { getIcon } from "../Icons/GetIcon";
 import { post } from "../../services/config";
 import { path } from "../../services/routes";
 import { useRouter } from "next/router";
-import { getUsers, useUsers } from "../../services/api/user";
+import { getUsers } from "../../services/api/user";
 import AvatarGroup from "../Avatar/AvatarGroup";
 import Button from "../actions/Button";
 import { useOnClickOutside } from "usehooks-ts";
+
+export interface sessionProp {
+	readonly data: null | undefined | sessionProps,
+	readonly status: "loading" | "authenticated" | "unauthenticated",
+}
+
+export interface sessionProps {
+	expires: string,
+	id: number,
+	jwt: string,
+	user:{
+		email: string
+	}
+}
 
 export default function WidgetNavigation({
 	label,
@@ -23,7 +37,7 @@ export default function WidgetNavigation({
 }) {
 	const [active, setActive] = useState(false);
 	const { data } = useSession();
-	const { widgets } = useWidgets();
+	const { widgets } = useWidgets();	
 
 	function searchItem(data, Fitem) {
 		setItemFilter({
@@ -32,6 +46,7 @@ export default function WidgetNavigation({
 		});
 	}
 
+
 	return (
 		<div className='relative flex flex-col items-start gap-3 border-b border-stroke-blue py-2 my-3'>
 			<div className='flex items-center justify-between w-full'>
@@ -39,7 +54,7 @@ export default function WidgetNavigation({
 					{label.toUpperCase()}
 					{"S"}
 				</Text>
-				{parseInt(widgetOwner) === parseInt(data.id) && (
+				{parseInt(widgetOwner) === data.id && (
 					<IconWrapper onclick={() => setActive((active) => !active)}>
 						<BsPlus />{" "}
 					</IconWrapper>
@@ -97,8 +112,8 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 		return array;
 	}
 
-	async function searchCollab(value) {
-		const res = await getUsers(session.jwt, value.toLowerCase());
+	async function searchCollab(value: string) {		
+		const res = await getUsers(value.toLowerCase());
 		if (value.length === 0) {
 			setCollaborators([]);
 		} else {
@@ -110,8 +125,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 		const body = { data: { project: id, collaborator: userID } };
 		const { success, error } = await post(
 			path("CREATE_collaboration"),
-			body,
-			session.jwt
+			body
 		);
 		if (success) {
 			mutate();
@@ -146,10 +160,9 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 							/>
 							<Button
 								onclick={() => addCollaboration(collaborator.id)}
-								width={"fit"}
-								principal>
-								{" "}
-								Add{" "}
+								width="fit"
+								>
+								Add
 							</Button>
 						</div>
 					))}

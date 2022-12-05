@@ -21,9 +21,7 @@ export function useCurrentUser(jwt: string) {
 }
 
 export async function getUsers(value: string) {
-  
   const data = await currentFetcher(path('getUsers', value))
-
   return {
     users: data,
   };

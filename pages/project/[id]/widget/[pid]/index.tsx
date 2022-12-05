@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 import Layout from "../../../../../components/Layout/Layout";
@@ -8,14 +7,16 @@ import Tasks from "../../../../../components/Widgets/Tasks/Tasks";
 import Tickets from "../../../../../components/Widgets/Tickets/Tickets";
 import { useCurrentWidget } from "../../../../../services/api/widget";
 
+type queryType = string;
+
 export default function Index() {
 	const router = useRouter();
-	const { pid } = router.query;
+	const  pid  = router.query.pid as queryType;
 	const { widget, isLoading } = useCurrentWidget(parseInt(pid));
 
 	if (isLoading)
 		return (
-			<Layout>
+			<Layout title="Loading">
 				<div className='flex h-full justify-center items-center'>
 					<Loader type='spin' height={40} width={40} />{" "}
 				</div>
@@ -26,16 +27,17 @@ export default function Index() {
 		router.push("/404?error=not_found");
 	}
 
+	
 	switch (widget.data?.attributes.widget.data.id) {
 		case 1:
 			if (widget.data?.attributes.notes.data.length !== 0) {
 				const today = new Date();
-				const closest = widget.data?.attributes.notes.data.reduce((a, b) =>
-					new Date(a.attributes.updatedAt) - today >
-					new Date(b.attributes.updatedAt) - today
+				const closest: { id: number } = widget.data?.attributes.notes.data.reduce((a, b) =>
+					new Date(a.attributes.updatedAt).getTime() - today.getTime() >
+					new Date(b.attributes.updatedAt).getTime() - today.getTime()
 						? a
 						: b
-				);
+				);				
 
 				return (
 					<Layout title={widget.data?.attributes.name}>

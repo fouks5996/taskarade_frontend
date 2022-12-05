@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import React from "react";
 import Heading from "../components/Typography/Heading";
 import Text from "../components/Typography/Text";
 
 export default function Custom404() {
-	const router = useRouter();
+	const router: NextRouter = useRouter();
 
 	return (
 		<div className='flex relative items-center justify-center h-screen w-screen'>

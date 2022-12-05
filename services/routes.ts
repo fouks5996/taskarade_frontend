@@ -1,7 +1,7 @@
 import { getRoot } from "./config";
 
-export const path = (name, argument, argument2) => {
-	const root = getRoot().API_URL;
+export const path = (name: string, argument?: number | string) => {
+	const root: string = getRoot().API_URL;
 	switch (name) {
 		case "register":
 			return `${root}/api/auth/local/register`;
