@@ -14,9 +14,17 @@ import AvatarGroup from "../Avatar/AvatarGroup";
 import Button from "../actions/Button";
 import { useOnClickOutside } from "usehooks-ts";
 
+WidgetNavigation.defaultProps = {
+	label: "",
+	collaborator: false,
+	mutate: () => {},
+	widgetOwner: null,
+	setItemFilter: () => {},
+};
+
 export default function WidgetNavigation({
 	label,
-	collaborator = false,
+	collaborator,
 	mutate,
 	widgetOwner,
 	setItemFilter,

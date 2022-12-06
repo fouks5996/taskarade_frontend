@@ -1,9 +1,7 @@
-import { data } from "autoprefixer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { mutate } from "swr";
 import { createNotification } from "../../../services/api/notification";
 import { useTicketComments } from "../../../services/api/ticket";
 import { post } from "../../../services/config";

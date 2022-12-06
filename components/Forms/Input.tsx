@@ -1,7 +1,7 @@
 import Text from "../Typography/Text";
 import { errorInput, errorMessage } from "./Errors";
 import { ReactComponentElement } from "react";
-import { FieldValues, UseFormRegister, UseFormSetError } from "react-hook-form";
+import { FieldErrorsImpl, FieldValues, UseFormRegister, UseFormSetError } from "react-hook-form";
 
 function Input({
   label,
@@ -66,7 +66,7 @@ export interface InputProps {
   defaultValue?: string;
   register?: UseFormRegister<FieldValues>;
   validationsSchema?: Object;
-  errors?: UseFormSetError<any>;
+  errors?: any
   textarea?: boolean;
   id?: any;
 }

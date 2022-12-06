@@ -1,3 +1,5 @@
+import { CrudResponse } from "next/app";
+
 export const getRoot = () => {
 	if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 		return {
@@ -38,7 +40,7 @@ export async function currentFetcher(url: string) {
 }
 
 export async function post(url: string, body: object) {
-	let res: any;
+	let res: CrudResponse;
 	if (jwt !== null) {
 		res = await fetcher(url, {
 			method: "POST",
@@ -57,7 +59,6 @@ export async function post(url: string, body: object) {
 			body: JSON.stringify(body),
 		});
 	}
-
 	return {
 		success: res,
 		error: res.error,
@@ -65,7 +66,9 @@ export async function post(url: string, body: object) {
 }
 
 export async function update(url: string, body: object) {
-	let res = await fetcher(url, {
+	let res: CrudResponse
+	
+	res = await fetcher(url, {
 		method: "PUT",
 		headers: {
 			"content-type": "application/json",
@@ -80,7 +83,7 @@ export async function update(url: string, body: object) {
 	};
 }
 
-export async function remove(url: string, mutate: () => any) {
+export async function remove(url: string, mutate: () => {}) {
 	let res = await fetcher(url, {
 		method: "DELETE",
 		headers: {

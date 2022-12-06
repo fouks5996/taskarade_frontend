@@ -19,7 +19,6 @@ export default function Tasks() {
 	const router = useRouter();
 	const { pid, id } = router.query;
 	const { data: session } = useSession();
-	const jwt = session?.jwt;
 	const { project, isLoading, mutate } = useCurrentProject(id);
 	const { current_tasks, taskLoading1, mutateTask } = useCurrentTasks(pid);
 	const [getId, setGetId] = useState(null);
