@@ -12,8 +12,10 @@ import Text from "../Typography/Text";
 export default function ProjectModal({ setIsOpen }) {
 	const router = useRouter();
 	const { id } = router.query;
+	const { data: session } = useSession();
+	const jwt = session?.jwt;
 	const { project, isLoading, mutate } = useCurrentProject(id);
-	const { user, isUserLoading, mutateUser } = useCurrentUser();
+	const { user, isUserLoading, mutateUser } = useCurrentUser(jwt);
 	const [active, setActive] = useState("Account");
 
 	if (isLoading && isUserLoading) return <p> Loading ... </p>;
@@ -159,7 +161,7 @@ export function ProjectModalSidebar({ project, user, active, setActive }) {
 			<div className='flex flex-col gap-2'>
 				<Text size={"12"} color='placeholder'>
 					{" "}
-					{user.username.toUpperCase()}{" "}
+					{user?.username.toUpperCase()}{" "}
 				</Text>
 				<SideBarItem active={active} setActive={setActive} label={"Account"} />
 			</div>
