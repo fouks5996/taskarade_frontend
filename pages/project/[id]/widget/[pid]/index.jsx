@@ -30,7 +30,7 @@ export async function getServerSideProps(context) {
 		}
 	}
 
-	const dataP = await fetch(`http://localhost:1337/api/getssr-project/${projectID}`, options)
+	const dataP = await fetch(`${process.env.STRAPI_URL}/api/getssr-project/${projectID}`, options)
 	const resP = await dataP.json()
 	const dataW = await fetch(`${process.env.STRAPI_URL}/api/getssr-widget/${widgetID}`, options)
 	const resW = await dataW.json()
