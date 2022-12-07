@@ -23,6 +23,11 @@ export async function getServerSideProps(context) {
 	const widgetID = parseInt(context.params.pid);
 	const projectID = parseInt(context.params.id);
 
+	context.res.setHeader(
+		'Cache-Control',
+		'public, s-maxage=10, stale-while-revalidate=1'
+  )
+
 	const options= {
 		method: 'GET',
 		headers:{
