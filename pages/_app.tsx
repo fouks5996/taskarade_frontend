@@ -22,14 +22,7 @@ export default MyApp;
 
 function Auth({ children }: AuthProps) {
 	const { status } = useSession({ required: true });
-
-	function sleepFor(sleepDuration: number) {
-		let now: number = new Date().getTime();
-		while (new Date().getTime() < now + sleepDuration) {}
-	}
-
 	if (status === "loading") {
-		sleepFor(1000);
 		return (
 			<div className='flex relative items-center h-screen w-screen justify-center'>
 				<div className='flex flex-col items-center justify-center gap-4 bg-blue-600 rounded-md border border-stroke-blue py-4 px-5'>
