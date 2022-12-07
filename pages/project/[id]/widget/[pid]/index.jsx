@@ -13,7 +13,7 @@ import { useCurrentWidget } from "../../../../../services/api/widget";
 import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
 	const session = await unstable_getServerSession(
 		context.req,
 		context.res,
@@ -54,10 +54,13 @@ export async function getServerSideProps(context) {
 		);
 	}
 
-	return { props: {
-		widgetData: resW,
-		projectData: resP
-	} };
+	return { 
+		props: {
+			widgetData: resW,
+			projectData: resP
+		},
+		revalidate: 5, 
+	};
 }
 
 export default function Index({ widgetData, projectData }) {
