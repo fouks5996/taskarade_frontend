@@ -80,7 +80,7 @@ export default function Index({ widgetData, projectData }) {
 
 	switch (widgetData[0].widget.id) {
 		case 1:
-			if (widgetData[0].notes.length !== 0) {
+/* 			if (widgetData[0].notes.length !== 0) {
 				const today = new Date();
 				const closest =
 					widget.data?.attributes.notes.data.reduce((a, b) =>
@@ -95,13 +95,13 @@ export default function Index({ widgetData, projectData }) {
 						<Notes maxId={closest.id} />
 					</Layout>
 				);
-			} else {
+			} else { */
 				return (
 					<Layout title={"Notes"}>
 						<Notes maxId={0} />
 					</Layout>
 				);
-			}
+/* 			} */
 		case 2:
 			return (
 				<Layout title={"Tasks"}>
