@@ -11,14 +11,12 @@ import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
 export async function getServerSideProps(context) {
-
 	const session = await unstable_getServerSession(
 		context.req,
 		context.res,
 		authOptions
 	);
 	const currentUserID = session.id 
-
 	const options= {
 		method: 'GET',
 		headers:{
@@ -26,12 +24,6 @@ export async function getServerSideProps(context) {
 		}
 	}
 	const widgetID = parseInt(context.params.pid);
-
-	context.res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=10, stale-while-revalidate=60'
-  )
-
 	const dataP = await fetch(`${process.env.STRAPI_URL}/api/getssr-widget/${widgetID}`, options)
 	const resP = await dataP.json()
 
@@ -60,46 +52,13 @@ export async function getServerSideProps(context) {
 
 
 export default function Index({widgetData }) {
-/*  	const router = useRouter();
-	const { pid } = router.query ;
-	const { widget, isWidgetLoading } = useCurrentWidget(parseInt(pid)); */
-
-	console.log(widgetData);
-
-/*  
-	if (isWidgetLoading)
-		return (
-			<Layout title='Loading'>
-				<div className='flex h-full justify-center items-center'>
-					<Loader type='spin' height={40} width={40} />{" "}
-				</div>
-			</Layout>
-		);  */
-
 	switch (widgetData.widget.id) {
 		case 1:
-/*  			if (widget.data?.attributes.notes.data.length !== 0) {
-				const today = new Date();
-				const closest =
-					widget.data?.attributes.notes.data.reduce((a, b) =>
-						new Date(a.attributes.updatedAt).getTime() - today.getTime() >
-						new Date(b.attributes.updatedAt).getTime() - today.getTime()
-							? a
-							: b
-					);
-
-				return (
-					<Layout title={"Notes"}>
-						<Notes maxId={closest.id} />
-					</Layout>
-				);
-			} else {  */
 				return (
 					<Layout title={"Notes"}>
 						<Notes maxId={0} />
 					</Layout>
 				);
- 			/* }  */
 		case 2:
 			return (
 				<Layout title={"Tasks"}>
