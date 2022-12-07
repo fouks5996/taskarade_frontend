@@ -75,7 +75,7 @@ export interface ButtonProps {
 	width?: "fit" | "full";
 	children?: React.ReactNode;
 	onclick?: Function;
-	form?: "myform" | "signin";
+	form?: "myform" | "signin" | "signup";
 	type?: "submit";
 }
 

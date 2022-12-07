@@ -32,7 +32,10 @@ import { ServerErrorState, submitData } from "next-auth";
 
 export default function SignUp({ providers }) {
 	const router = useRouter();
-	const [serverError, setServerError] = useState<ServerErrorState>({ state: false, message: "" });
+	const [serverError, setServerError] = useState<ServerErrorState>({
+		state: false,
+		message: "",
+	});
 	const {
 		handleSubmit,
 		register,
@@ -40,7 +43,7 @@ export default function SignUp({ providers }) {
 	} = useForm();
 
 	const onSubmit = async (data: submitData) => {
-		const {success} = await post(path("register"), {
+		const { success } = await post(path("register"), {
 			email: data.email,
 			username: data.username,
 			password: data.password,
@@ -63,7 +66,7 @@ export default function SignUp({ providers }) {
 					<Heading size='28'> Create an account. </Heading>
 
 					<form
-						id={"signup"}
+						id='signup'
 						onSubmit={handleSubmit(onSubmit)}
 						className='flex flex-col gap-7 mt-4'>
 						<div className='flex flex-col gap-4'>
@@ -108,7 +111,9 @@ export default function SignUp({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button type='submit'>Login to your account</Button>
+							<Button form='signup' type='submit'>
+								Login to your account
+							</Button>
 						</div>
 					</form>
 					<div className='flex flex-col justify-center items-center gap-4  mt-10'>
