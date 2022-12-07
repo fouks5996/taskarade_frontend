@@ -12,26 +12,26 @@ import { useCurrentWidget } from "../../../../../services/api/widget";
 import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
-
 export async function getServerSideProps(context) {
-	const session = await unstable_getServerSession(
-		context.req,
-		context.res,
-		authOptions
-	);
-	const currentUserID = session.id 
-	const options= {
-		method: 'GET',
-		headers:{
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
-		}
-	}
-
-	const widgetID = parseInt(context.params.pid);
-	const resP = await GetProjectFromApi(widgetID, options)
-
+	console.log("first", context.query.q);
 	if (context.query.q){
-		console.log("je fais la fonction !");
+		console.log("je fais la fonction");
+		console.log("Second",context.query.q);
+		const session = await unstable_getServerSession(
+			context.req,
+			context.res,
+			authOptions
+		);
+		const currentUserID = session.id 
+		const options= {
+			method: 'GET',
+			headers:{
+				Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
+			}
+		}
+	
+		const widgetID = parseInt(context.params.pid);
+		const resP = await GetProjectFromApi(widgetID, options)
 		if ((resP[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resP.length === 0 )) {
 		  return {
 			  redirect:{
@@ -51,26 +51,30 @@ export async function getServerSideProps(context) {
 
 
 	return { 
-		props: {
-			widgetData: resP[0],
-		},
+		props: {},
 	};
 }
 
 
-export default function Index({widgetData}) {
+export default function Index() {
+	const router = useRouter();
+	const { pid } = router.query ;
+	const { widget, isWidgetLoading } = useCurrentWidget(parseInt(pid));
 
-/* 	const widgetData = {
-		widget:{
-			id: randomIntFromInterval(1, 3)
-		}
+	if (isWidgetLoading)
+		return (
+			<Layout title='Loading'>
+				<div className='flex h-full justify-center items-center'>
+					<Loader type='spin' height={40} width={40} />{" "}
+				</div>
+			</Layout>
+		);
+
+	if (widget.error?.status === 404) {
+		router.push("/404?error=not_found");
 	}
-
-	function randomIntFromInterval(min, max) { // min and max included 
-		return Math.floor(Math.random() * (max - min + 1) + min)
-	 } */
 	 
-	switch (widgetData.widget.id) {
+	switch (widget.data?.attributes.widget.data.id) {
 		case 1:
 				return (
 						<Layout title={"Notes"}>
