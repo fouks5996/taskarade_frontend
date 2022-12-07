@@ -39,20 +39,20 @@ export default function WidgetItem({
 
 	async function updateProject(e: React.SyntheticEvent) {
 		e.preventDefault();
-
 		const target = e.target as typeof e.target & {
 			widget: { value: string };
 		};
+		setNewData(target.widget.value);
 		const body = {
 			data: { name: target.widget.value },
 		};
 		const { success } = await update(path("UPDATE_widget", widget.id), body);
 
 		if (success) {
-			setNewData(target.widget.value);
 			await mutate();
 			setGetId(!widget.id);
 		} else {
+			setNewData(widget.attributes.name);
 			setAlert({
 				active: false,
 				content: "",
