@@ -76,6 +76,7 @@ export function CreateProject({ projectCreator, mutate }) {
 					widget: 1,
 					project: success.data.id,
 					name: "Prise de note",
+					widget_creator: projectCreator,
 				},
 			};
 			const { success: res } = await post(path("CREATE_widget"), Widgetbody);

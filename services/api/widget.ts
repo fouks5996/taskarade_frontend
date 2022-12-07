@@ -21,7 +21,7 @@ export function useCurrentWidget(id: number) {
 
 	return {
 		widget: data,
-		isLoading: !error && !data,
+		isWidgetLoading: !error && !data,
 		isError: error,
 		mutate: mutate,
 	};

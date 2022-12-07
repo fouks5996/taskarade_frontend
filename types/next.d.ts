@@ -2,22 +2,24 @@ import type { NextComponentType, NextPageContext } from "next"
 import type { Session } from "next-auth"
 
 declare module "next/app" {
-  type AppProps<P = Record<string, unknown>> = {
+/*   type AppProps<P = Record<string, unknown>> = {
     Component: NextComponentType<NextPageContext, any, P> & {
       auth: boolean
     },
     pageProps: P & {
       session: Session
     }
-  }
+  } */
 
   interface AuthProps {
 	children?: ReactNode;
  }
 
- interface RouterQProps{
-   pid: string,
-   id: string
+ interface SessionProps{
+   data: {
+		id: number
+		jwt: string
+	},
  }
 
  // ROUTER 
@@ -201,6 +203,7 @@ type CurrentProjectCollab = {
 			tickets: {data: {
 				filter(arg0: (ticket: Ticket) => boolean | Ticket): unknownTicket
 }}
+			widget_creator: UserTypes
 		}
 		id: number
 	},

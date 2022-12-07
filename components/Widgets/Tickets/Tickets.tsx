@@ -13,8 +13,6 @@ import CreateTicket from "./CreateTicket";
 import TicketModal from "../../modal/TicketModal";
 import { queryTypes, Ticket } from "next/app";
 
-type queryType = string;
-
 export default function Tickets() {
 	const router = useRouter();
 	const { id, pid } = router.query as queryTypes;

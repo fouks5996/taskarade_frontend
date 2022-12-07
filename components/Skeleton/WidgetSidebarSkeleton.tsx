@@ -5,7 +5,7 @@ import AvatarSkeletton from "./AvatarSkeletton";
 
 export default function WidgetSidebarSkeleton() {
 	return (
-		<div className='w-[270px] max-w-[270px] flex justify-center items-center p-5 absolute top-0 left-[0px] h-screen bg-blue-700'>
+		<div className='w-[260px] max-w-[260px] flex justify-center items-center p-5 absolute top-0 left-[0px] h-screen bg-blue-700'>
 			<div className='w-full h-full'>
 				<div className='flex items-center gap-3 '>
 					{/* 					<SidebarElement name={project.data?.attributes.name} /> */}

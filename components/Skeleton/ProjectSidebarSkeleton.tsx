@@ -8,7 +8,7 @@ export default function ProjectSidebarSkeleton() {
 	const router = useRouter();
 
 	return (
-		<div className='w-[80px] text-grey-text-active flex px-4 flex-col items-center pt-6 gap-4 h-screen border-r border-stroke-blue'>
+		<div className='w-[70px] text-grey-text-active flex flex-col items-center pt-6 gap-3 h-screen border-r border-stroke-blue'>
 			<span className='cursor-pointer' onClick={() => router.push("/")}>
 				{" "}
 				<Image

@@ -56,7 +56,12 @@ export default function WidgetNavigation({
 			<Search label={label} onchange={searchItem} />
 			{active && !collaborator && (
 				<Wrapper setActive={setActive}>
-					<GetWidgets widgets={widgets} mutate={mutate} setActive={setActive} />
+					<GetWidgets
+						widget_creator={data.id}
+						widgets={widgets}
+						mutate={mutate}
+						setActive={setActive}
+					/>
 				</Wrapper>
 			)}
 			{active && collaborator && (
@@ -160,7 +165,7 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 	);
 }
 
-export function GetWidgets({ widgets, mutate, setActive }) {
+export function GetWidgets({ widgets, mutate, setActive, widget_creator }) {
 	const router = useRouter();
 	const { id } = router.query;
 
@@ -170,6 +175,7 @@ export function GetWidgets({ widgets, mutate, setActive }) {
 				widget: widget.id,
 				project: id,
 				name: widget.attributes.name,
+				widget_creator: widget_creator,
 			},
 		};
 		const { success, error } = await post(path("CREATE_widget"), body);

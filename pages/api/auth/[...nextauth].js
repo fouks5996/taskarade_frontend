@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { signIn } from "../../../services/auth/auth";
 const strapiUrl = process.env.STRAPI_URL;
 
-export default NextAuth({
+export const authOptions = {
 	secret: process.env.NEXTAUTH_SECRET,
 	providers: [
 		GithubProvider({
@@ -70,4 +70,6 @@ export default NextAuth({
 			return Promise.resolve(session);
 		},
 	},
-});
+};
+
+export default NextAuth(authOptions);

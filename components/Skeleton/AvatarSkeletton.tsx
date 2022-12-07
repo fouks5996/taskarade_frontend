@@ -8,8 +8,8 @@ export default function AvatarSkeletton() {
 			<Skeleton
 				animation='wave'
 				variant='circular'
-				width={35}
-				height={35}
+				width={32}
+				height={32}
 				sx={{ bgcolor: "#252525" }}
 			/>
 			<div className='flex flex-col gap-1 justify-center'>

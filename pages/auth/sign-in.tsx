@@ -26,12 +26,13 @@ import Text from "../../components/Typography/Text";
 import { getRoot } from "../../services/config";
 import { ServerErrorState, submitData } from "next-auth";
 
-
-
 export default function SignIn({ providers }) {
 	const router = useRouter();
 
-	const [serverError, setServerError] = useState<ServerErrorState>({ state: false, message: "" });
+	const [serverError, setServerError] = useState<ServerErrorState>({
+		state: false,
+		message: "",
+	});
 	const {
 		handleSubmit,
 		register,
@@ -39,7 +40,6 @@ export default function SignIn({ providers }) {
 	} = useForm();
 
 	const onSubmit = async (data: submitData) => {
-	
 		const result = await signIn("credentials", {
 			redirect: false,
 			email: data.email,
@@ -47,9 +47,7 @@ export default function SignIn({ providers }) {
 		});
 
 		if (result.ok) {
-			setTimeout(() => {
-				router.push(getRoot().FRONT_URL);
-			}, 2000);
+			router.push(getRoot().FRONT_URL);
 		} else {
 			await createServerError(
 				setServerError,
@@ -65,7 +63,7 @@ export default function SignIn({ providers }) {
 				<div>
 					<Heading size='28'> Welcome Back. </Heading>
 					<form
-					id="signin"
+						id='signin'
 						onSubmit={handleSubmit(onSubmit)}
 						className='flex flex-col gap-7 mt-8'>
 						<div className='flex flex-col gap-4'>
@@ -111,7 +109,7 @@ export default function SignIn({ providers }) {
 									</Text>
 								)}{" "}
 							</div>
-							<Button form="signin" type='submit'>
+							<Button form='signin' type='submit'>
 								Login to your account
 							</Button>
 						</div>

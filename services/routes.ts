@@ -12,7 +12,7 @@ export const path = (name: string, argument?: number | string) => {
 		case "CREATE_collaboration":
 			return `${root}/api/collaborations`;
 		case "current_widget":
-			return `${root}/api/project-widgets/${argument}?populate=notes, widget`;
+			return `${root}/api/project-widgets/${argument}?populate=notes, widget, widget_creator`;
 		case "current_project_widget":
 			return `${root}/api/project-widgets/${argument}?populate=notes, tasks, widget, tickets`;
 		case "CREATE_project":
