@@ -27,44 +27,40 @@ export async function getServerSideProps(context) {
 		}
 	}
 
-
 	const widgetID = parseInt(context.params.pid);
 	const resP = await GetProjectFromApi(widgetID, options)
-/* 	const dataP = await fetch(`${process.env.STRAPI_URL}/api/getssr-widget/${widgetID}`, options)
-	const resP = await dataP.json() */
 
-	console.log(resP);
-
- 	if ((resP[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resP.length === 0 )) {
-		return {
-			redirect:{
-				destination: '/404',
-				permanent: false,
-			},
+	if (context.query.q){
+		console.log("je fais la fonction !");
+		if ((resP[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resP.length === 0 )) {
+		  return {
+			  redirect:{
+				  destination: '/404',
+				  permanent: false,
+			  },
+		  }
 		}
-	 }
+	
+	  function collaborationsIsTrue() {
+		  return resP[0]?.project.collaborations.some(
+			  (collaboration) =>
+				  collaboration.collaborator.id === currentUserID
+		  );
+	  } 
+	}
 
-	function collaborationsIsTrue() {
-		return resP[0]?.project.collaborations.some(
-			(collaboration) =>
-				collaboration.collaborator.id === currentUserID
-		);
-	} 
 
 	return { 
 		props: {
-			fallback: {
-				// unstable_serialize() array style key
-				[unstable_serialize(['api', 'getssr-widget', widgetID])]: resP[0],
-			 }
+			widgetData: resP[0],
 		},
 	};
 }
 
 
-export default function Index({fallback}) {
+export default function Index({widgetData}) {
 
-	const widgetData = {
+/* 	const widgetData = {
 		widget:{
 			id: randomIntFromInterval(1, 3)
 		}
@@ -72,18 +68,15 @@ export default function Index({fallback}) {
 
 	function randomIntFromInterval(min, max) { // min and max included 
 		return Math.floor(Math.random() * (max - min + 1) + min)
-	 }
+	 } */
 	 
-	
-
 	switch (widgetData.widget.id) {
 		case 1:
 				return (
-					<SWRConfig value={{ fallback }}>
 						<Layout title={"Notes"}>
 							<Notes maxId={0} />
 						</Layout>
-					</SWRConfig>
+
 				);
 		case 2:
 			return (

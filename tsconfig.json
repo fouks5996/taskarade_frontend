@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "components/Layout/Header.js", "components/Sidebar/ProjectSidebar.tsx", "components/Widgets/Tickets/TicketComment.js", "components/Widgets/WidgetNavigation.js", "components/Widgets/WidgetNavigation.js", "pages/project/[id]/widget/[pid]/index.jsx", "pages/api/auth/[...nextauth].js"  ],
+, "components/Layout/Header.js", "components/Sidebar/ProjectSidebar.tsx", "components/Widgets/Tickets/TicketComment.js", "components/Widgets/WidgetNavigation.js", "components/Widgets/WidgetNavigation.js", "pages/project/[id]/widget/[pid]/index.jsx", "pages/api/auth/[...nextauth].js", "pages/_app.jsx"  ],
   "exclude": [
     "node_modules"
   ]
