@@ -30,3 +30,9 @@ export function useProjectCollab(id: number) {
 		mutate: mutate,
 	};
 }
+
+export async function GetProjectFromApi(widgetID: number, options){
+	const dataP = await fetch(`${process.env.STRAPI_URL}/api/getssr-widget/${widgetID}`, options)
+	const resP = await dataP.json()
+	return resP
+}
