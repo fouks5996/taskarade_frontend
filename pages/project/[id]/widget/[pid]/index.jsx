@@ -13,10 +13,7 @@ import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
 export async function getServerSideProps(context) {
-	console.log("first", context.query.q);
 	if (context.query.q){
-		console.log("je fais la fonction");
-		console.log("Second",context.query.q);
 		const session = await unstable_getServerSession(
 			context.req,
 			context.res,
@@ -49,7 +46,6 @@ export async function getServerSideProps(context) {
 	  } 
 	}
 
-
 	return { 
 		props: {},
 	};
@@ -64,7 +60,7 @@ export default function Index() {
 	if (isWidgetLoading)
 		return (
 			<Layout title='Loading'>
-				<div className='flex h-full justify-center items-center'>
+				<div className='flex h-full  justify-center items-center'>
 					<Loader type='spin' height={40} width={40} />{" "}
 				</div>
 			</Layout>
@@ -76,12 +72,11 @@ export default function Index() {
 	 
 	switch (widget.data?.attributes.widget.data.id) {
 		case 1:
-				return (
-						<Layout title={"Notes"}>
-							<Notes maxId={0} />
-						</Layout>
-
-				);
+			return (
+				<Layout title={"Notes"}>
+					<Notes maxId={0} />
+				</Layout>
+			);
 		case 2:
 			return (
 				<Layout title={"Tasks"}>

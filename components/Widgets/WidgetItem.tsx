@@ -19,12 +19,15 @@ export default function WidgetItem({
 	mutate,
 }) {
 	const [active, setActive] = useState<boolean>(false);
+	const [newData, setNewData] = useState<string>(widget.attributes.name);
 	const router = useRouter();
 	const { id, pid } = router.query as queryTypes;
 	const [alert, setAlert] = useState<AlertTypes>({
 		active: false,
 		content: "",
 	});
+
+	console.log(newData);
 
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget/${widget.id}`)) {
@@ -36,6 +39,7 @@ export default function WidgetItem({
 
 	async function updateProject(e: React.SyntheticEvent) {
 		e.preventDefault();
+
 		const target = e.target as typeof e.target & {
 			widget: { value: string };
 		};
@@ -45,6 +49,7 @@ export default function WidgetItem({
 		const { success } = await update(path("UPDATE_widget", widget.id), body);
 
 		if (success) {
+			setNewData(target.widget.value);
 			await mutate();
 			setGetId(!widget.id);
 		} else {
@@ -83,7 +88,7 @@ export default function WidgetItem({
 							name='widget'
 							className='italic bg-transparent focus:outline-none text-grey-text-inactive text-13'
 							autoFocus={true}
-							defaultValue={widget.attributes.name}
+							defaultValue={newData}
 							type='text'
 						/>
 					</div>
@@ -113,7 +118,7 @@ export default function WidgetItem({
 								className={`${
 									active ? "text-grey-text-active" : "text-grey-text-inactive"
 								} font-regular text-14 w-full group-hover:text-grey-text-active `}>
-								{widget.attributes.name}
+								{newData}
 							</p>
 						</div>
 					</Link>
