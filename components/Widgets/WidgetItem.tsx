@@ -43,14 +43,14 @@ export default function WidgetItem({
 			widget: { value: string };
 		};
 		setNewData(target.widget.value);
+		setGetId(!widget.id);
 		const body = {
 			data: { name: target.widget.value },
 		};
 		const { success } = await update(path("UPDATE_widget", widget.id), body);
 
 		if (success) {
-			await mutate();
-			setGetId(!widget.id);
+			mutate();
 		} else {
 			setNewData(widget.attributes.name);
 			setAlert({
