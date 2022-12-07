@@ -43,10 +43,7 @@ export async function getServerSideProps(context) {
 
 	if ((resW[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resW.length === 0 || resP.length === 0)) {
 		return {
-		  redirect: {
-			 destination: '/404?error=not_found',
-			 permanent: false,
-		  },
+			notFound: true,
 		}
 	 }
 
@@ -57,14 +54,19 @@ export async function getServerSideProps(context) {
 		);
 	}
 
-	return { props: {} };
+	return { props: {
+		widgetData: resW,
+		projectData: resP
+	} };
 }
 
-export default function Index() {
-	const router = useRouter();
+export default function Index({ widgetData, projectData }) {
+/* 	const router = useRouter();
 	const { pid } = router.query ;
 	const { widget, isWidgetLoading } = useCurrentWidget(parseInt(pid));
+ */
 
+/* 
 	if (isWidgetLoading)
 		return (
 			<Layout title='Loading'>
@@ -72,17 +74,13 @@ export default function Index() {
 					<Loader type='spin' height={40} width={40} />{" "}
 				</div>
 			</Layout>
-		);
+		); */
 
+		console.log(widgetData);
 
-
-	if (widget.error?.status === 404) {
-		router.push("/404?error=not_found");
-	}
-
-	switch (widget.data?.attributes.widget.data.id) {
+	switch (widgetData[0].widget.id) {
 		case 1:
-			if (widget.data?.attributes.notes.data.length !== 0) {
+			if (widgetData[0].notes.length !== 0) {
 				const today = new Date();
 				const closest =
 					widget.data?.attributes.notes.data.reduce((a, b) =>
@@ -93,26 +91,26 @@ export default function Index() {
 					);
 
 				return (
-					<Layout title={widget.data?.attributes.name}>
+					<Layout title={"Notes"}>
 						<Notes maxId={closest.id} />
 					</Layout>
 				);
 			} else {
 				return (
-					<Layout title={widget.data?.attributes.name}>
+					<Layout title={"Notes"}>
 						<Notes maxId={0} />
 					</Layout>
 				);
 			}
 		case 2:
 			return (
-				<Layout title={widget.data?.attributes.name}>
+				<Layout title={"Tasks"}>
 					<Tasks />
 				</Layout>
 			);
 		case 3:
 			return (
-				<Layout title={widget.data?.attributes.name}>
+				<Layout title={"Tickets"}>
 					<Tickets />
 				</Layout>
 			);
