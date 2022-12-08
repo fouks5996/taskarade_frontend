@@ -26,6 +26,10 @@ export default function Notes({ maxId, widgetData }) {
 		setNoteData(widgetData);
 	}, [widgetData]);
 
+	noteData.sort((a, b) => b.updatedAt - a.updatedAt);
+
+	console.log(noteData);
+
 	if (isLoading)
 		return (
 			<Layout title='loading'>
@@ -42,12 +46,19 @@ export default function Notes({ maxId, widgetData }) {
 		(widget: { id: number }) => widget.id === parseInt(pid)
 	);
 
-	console.log(widget);
-	console.log(noteData);
-
 	const activeNote = noteData.find(
 		(activeNote: { id: number }) => activeNote.id === active
 	);
+
+	const onUpdateNote = (updatedNote) => {
+		const updatedNotesArray = noteData.map((note) => {
+			if (note.id === activeNote.id) {
+				return updatedNote;
+			}
+			return note;
+		});
+		setNoteData(updatedNotesArray);
+	};
 
 	async function createNote() {
 		const body = {
@@ -66,17 +77,6 @@ export default function Notes({ maxId, widgetData }) {
 		}
 	}
 
-	noteData.sort(
-		(
-			a: {
-				updatedAt: string | number | Date;
-			},
-			b: {
-				updatedAt: string | number | Date;
-			}
-		) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-	);
-
 	return (
 		<WidgetWrapper>
 			<WidgetHeader
@@ -94,7 +94,11 @@ export default function Notes({ maxId, widgetData }) {
 					setActive={setActive}
 					mutate={mutate}
 				/>
-				<ContentNotes activeNote={activeNote} mutate={mutate} />
+				<ContentNotes
+					activeNote={activeNote}
+					mutate={mutate}
+					onUpdateNote={onUpdateNote}
+				/>
 			</div>
 		</WidgetWrapper>
 	);

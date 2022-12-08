@@ -4,7 +4,7 @@ import { update } from "../../../services/config";
 import { path } from "../../../services/routes";
 import Text from "../../Typography/Text";
 
-export default function ContentNotes({ activeNote, mutate }) {
+export default function ContentNotes({ activeNote, mutate, onUpdateNote }) {
 	if (!activeNote)
 		return (
 			<div className=''>
@@ -14,8 +14,13 @@ export default function ContentNotes({ activeNote, mutate }) {
 		);
 
 	async function onEditField(target: string, value: string) {
-		const body = { data: { [target]: value } };
+		onUpdateNote({
+			...activeNote,
+			[target]: value,
+			updatedAt: Date.now(),
+		});
 
+		const body = { data: { [target]: value } };
 		const { success, error } = await update(
 			path("UPDATE_note", activeNote.id),
 			body

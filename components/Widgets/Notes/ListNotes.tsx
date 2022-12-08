@@ -28,45 +28,56 @@ export default function ListNotes({
 
 	return (
 		<div className='min-w-[242px] h-full flex flex-col gap-1 pr-5 border-r border-stroke-blue'>
-			{notes.map(
-				(note: {
-					id: number;
-					title: string;
-					updatedAt: string | number | Date;
-				}) => (
-					<div
-						key={note.id}
-						className={`py-2 px-3 ${
-							active === note.id
-								? "bg-blue-500 border border-stroke-blue"
-								: "hover:bg-blue-600 border border-transparent"
-						}  rounded-md cursor-pointer group`}>
-						<div className='flex items-center justify-between gap-1'>
-							<div
-								onClick={() => setActive(note.id)}
-								className='flex flex-col gap-1 w-full'>
-								<Text size={"14"} medium>
-									{" "}
-									{note.title.substr(0, 20) + "..."}{" "}
-								</Text>
-								<Text size={"12"} medium color={"inactive"}>
-									{" "}
-									{new Date(note.updatedAt).toLocaleDateString("fr-FR", {
-										hour: "2-digit",
-										minute: "2-digit",
-									})}
-								</Text>
-							</div>
-							<span
-								className='text-13 hidden text-grey-text-inactive group-hover:block'
-								onClick={() => deleteNote(note.id)}>
-								{" "}
-								<FiTrash2 />{" "}
-							</span>
-						</div>
-					</div>
+			{notes
+				.sort(
+					(
+						a: {
+							updatedAt: string | number | Date;
+						},
+						b: {
+							updatedAt: string | number | Date;
+						}
+					) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
 				)
-			)}
+				.map(
+					(note: {
+						id: number;
+						title: string;
+						updatedAt: string | number | Date;
+					}) => (
+						<div
+							key={note.id}
+							className={`py-2 px-3 ${
+								active === note.id
+									? "bg-blue-500 border border-stroke-blue"
+									: "hover:bg-blue-600 border border-transparent"
+							}  rounded-md cursor-pointer group`}>
+							<div className='flex items-center justify-between gap-1'>
+								<div
+									onClick={() => setActive(note.id)}
+									className='flex flex-col gap-1 w-full'>
+									<Text size={"14"} medium>
+										{" "}
+										{note.title.substr(0, 20) + "..."}{" "}
+									</Text>
+									<Text size={"12"} medium color={"inactive"}>
+										{" "}
+										{new Date(note.updatedAt).toLocaleDateString("fr-FR", {
+											hour: "2-digit",
+											minute: "2-digit",
+										})}
+									</Text>
+								</div>
+								<span
+									className='text-13 hidden text-grey-text-inactive group-hover:block'
+									onClick={() => deleteNote(note.id)}>
+									{" "}
+									<FiTrash2 />{" "}
+								</span>
+							</div>
+						</div>
+					)
+				)}
 		</div>
 	);
 }
