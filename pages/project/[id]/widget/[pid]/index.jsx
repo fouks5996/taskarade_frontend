@@ -13,6 +13,14 @@ import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
 export async function getServerSideProps(context) {
+	const options= {
+		method: 'GET',
+		headers:{
+			Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
+		}
+	}
+	const resP = await GetProjectFromApi(context.params.pid, options)
+
 	if (context.query.q){
 		const session = await unstable_getServerSession(
 			context.req,
@@ -20,15 +28,6 @@ export async function getServerSideProps(context) {
 			authOptions
 		);
 		const currentUserID = session.id 
-		const options= {
-			method: 'GET',
-			headers:{
-				Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
-			}
-		}
-	
-		const widgetID = parseInt(context.params.pid);
-		const resP = await GetProjectFromApi(widgetID, options)
 		if ((resP[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resP.length === 0 )) {
 		  return {
 			  redirect:{
@@ -47,12 +46,14 @@ export async function getServerSideProps(context) {
 	}
 
 	return { 
-		props: {},
+		props: {
+			widgetData: resP[0]
+		},
 	};
 }
 
 
-export default function Index() {
+export default function Index({widgetData}) {
 	const router = useRouter();
 	const { pid } = router.query ;
 	const { widget, isWidgetLoading } = useCurrentWidget(parseInt(pid));
@@ -74,7 +75,7 @@ export default function Index() {
 		case 1:
 			return (
 				<Layout title={"Notes"}>
-					<Notes maxId={0} />
+					<Notes maxId={0} widgetData={widgetData} />
 				</Layout>
 			);
 		case 2:

@@ -14,11 +14,12 @@ import { queryTypes } from "next/app";
 
 type queryType = string;
 
-export default function Notes({ maxId }) {
+export default function Notes({ maxId, widgetData }) {
 	const [active, setActive] = useState(maxId);
 	const router = useRouter();
 	const { id, pid } = router.query as queryTypes;
 	const { project, isLoading, mutate } = useCurrentProject(parseInt(id));
+	const [noteData, setNoteData] = useState(widgetData);
 
 	if (isLoading)
 		return (
@@ -35,6 +36,9 @@ export default function Notes({ maxId }) {
 	const widget = project.data?.attributes.project_widgets.data.find(
 		(widget: { id: number }) => widget.id === parseInt(pid)
 	);
+
+	console.log(widget);
+	console.log(noteData);
 
 	const activeNote = widget?.attributes.notes.data.find(
 		(activeNote: { id: number }) => activeNote.id === active

@@ -27,8 +27,6 @@ export default function WidgetItem({
 		content: "",
 	});
 
-	console.log(newData);
-
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget/${widget.id}`)) {
 			setActive(true);
