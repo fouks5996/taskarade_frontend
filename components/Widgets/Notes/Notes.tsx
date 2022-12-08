@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 
 type queryType = string;
 
-export default function Notes({ maxId, widgetData }) {
+export default function Notes({ maxId, widgetData, mutateNotes }) {
 	const [active, setActive] = useState(maxId);
 	const router = useRouter();
 	const { id, pid } = router.query as queryTypes;
@@ -27,8 +27,6 @@ export default function Notes({ maxId, widgetData }) {
 	}, [widgetData]);
 
 	noteData.sort((a, b) => b.updatedAt - a.updatedAt);
-
-	console.log(noteData);
 
 	if (isLoading)
 		return (
@@ -74,6 +72,7 @@ export default function Notes({ maxId, widgetData }) {
 			};
 			setNoteData([newNote, ...noteData]);
 			mutate();
+			mutateNotes();
 		}
 	}
 
@@ -93,6 +92,7 @@ export default function Notes({ maxId, widgetData }) {
 					active={active}
 					setActive={setActive}
 					mutate={mutate}
+					mutateNotes={mutateNotes}
 				/>
 				<ContentNotes
 					activeNote={activeNote}

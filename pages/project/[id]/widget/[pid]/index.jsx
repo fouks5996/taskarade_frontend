@@ -7,21 +7,22 @@ import Loader from "../../../../../components/Loader/Loader";
 import Notes from "../../../../../components/Widgets/Notes/Notes";
 import Tasks from "../../../../../components/Widgets/Tasks/Tasks";
 import Tickets from "../../../../../components/Widgets/Tickets/Tickets";
+import { useCurrentNotes } from "../../../../../services/api/note";
 import { GetProjectFromApi } from "../../../../../services/api/project";
 import { useCurrentWidget } from "../../../../../services/api/widget";
 import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
 export async function getServerSideProps(context) {
-	const options= {
-		method: 'GET',
-		headers:{
-			Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
-		}
-	}
-	const resP = await GetProjectFromApi(context.params.pid, options)
-
+	
 	if (context.query.q){
+		const options= {
+			method: 'GET',
+			headers:{
+				Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
+			}
+		}
+		const resP = await GetProjectFromApi(context.params.pid, options)
 		const session = await unstable_getServerSession(
 			context.req,
 			context.res,
@@ -47,18 +48,19 @@ export async function getServerSideProps(context) {
 
 	return { 
 		props: {
-			widgetData: resP[0]
+			
 		},
 	};
 }
 
 
-export default function Index({widgetData}) {
+export default function Index() {
 	const router = useRouter();
 	const { pid } = router.query ;
 	const { widget, isWidgetLoading } = useCurrentWidget(parseInt(pid));
+	const { current_notes, isNotesLoading, mutateNotes } = useCurrentNotes(parseInt(pid));
 
-	if (isWidgetLoading)
+	if (isWidgetLoading || isNotesLoading)
 		return (
 			<Layout title='Loading'>
 				<div className='flex h-full  justify-center items-center'>
@@ -75,7 +77,7 @@ export default function Index({widgetData}) {
 		case 1:
 			return (
 				<Layout title={"Notes"}>
-					<Notes maxId={0} widgetData={widgetData.notes} />
+					<Notes maxId={0} widgetData={current_notes} mutateNotes={mutateNotes} />
 				</Layout>
 			);
 		case 2:

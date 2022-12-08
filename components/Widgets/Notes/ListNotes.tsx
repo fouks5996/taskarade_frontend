@@ -10,13 +10,14 @@ export default function ListNotes({
 	setActive,
 	mutate,
 	setNoteData,
+	mutateNotes,
 }) {
 	function deleteNote(id: number) {
 		const notesFiltered = notes.filter(
 			(note: { id: number }) => note.id !== id
 		);
 		setNoteData(notesFiltered);
-		remove(path("DELETE_note", id), mutate);
+		remove(path("DELETE_note", id), mutateNotes);
 	}
 
 	if (notes.length === 0)

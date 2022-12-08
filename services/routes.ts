@@ -87,5 +87,7 @@ export const path = (name: string, argument?: number | string) => {
 			return `${root}/api/tag-bgs`;
 		case "UPDATE_tag_bg":
 			return `${root}/api/tag-bgs/${argument}`;
+		case "current_notes":
+			return `${root}/api/current-notes/${argument}`;
 	}
 };
