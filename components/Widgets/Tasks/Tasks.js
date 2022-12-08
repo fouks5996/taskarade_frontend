@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCurrentProject } from "../../../services/api/project";
 import Layout from "../../Layout/Layout";
 import Loader from "../../Loader/Loader";
@@ -14,6 +14,7 @@ import { post, update } from "../../../services/config";
 import { path } from "../../../services/routes";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Search from "../../Search/Search";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Tasks() {
 	const router = useRouter();
@@ -28,7 +29,7 @@ export default function Tasks() {
 	});
 	const [modal, setModal] = useState({ state: false, data: null });
 
-	if (isLoading && taskLoading1)
+	if (isLoading || taskLoading1)
 		return (
 			<Layout>
 				<div className='flex h-full justify-center items-center'>
@@ -44,7 +45,7 @@ export default function Tasks() {
 		(widget) => widget.id === parseInt(pid)
 	);
 
-	const onDragEvent = async (result) => {
+	/* 	const onDragEvent = async (result) => {
 		if (!result.destination) return;
 		const { destination, draggableId } = result;
 		const body = { data: { task_status: parseInt(destination.droppableId) } };
@@ -55,7 +56,7 @@ export default function Tasks() {
 		if (success) {
 			mutateTask();
 		}
-	};
+	}; */
 
 	return (
 		<WidgetWrapper>
@@ -67,7 +68,7 @@ export default function Tasks() {
 				onclick={() => setCreateTasks(true)}
 				icon={<BsPlus />}
 			/>
-			{
+			{/* 			{
 				<DragDropContext onDragEnd={(result) => onDragEvent(result)}>
 					<div className='flex gap-4 mt-6 max-w-[1200px]'>
 						{current_tasks &&
@@ -124,58 +125,61 @@ export default function Tasks() {
 								))}
 					</div>
 				</DragDropContext>
-			}
-			{/* 			<DndLogic
-				taskStatus={taskStatus?.data}
-				mutate={mutate}
-				jwt={jwt}
+			} */}
+			<DndLogic
+				taskStatus={current_tasks}
+				session={session}
+				mutateTask={mutateTask}
 				getId={getId}
 				setGetId={setGetId}
+				setTaskFilter={setTaskFilter}
+				taskFilter={taskFilter}
 				pid={pid}
-			/> */}
+			/>
 		</WidgetWrapper>
 	);
 }
 
-/* export function DndLogic({ taskStatus, mutate, jwt, setGetId, getId, pid }) {
-	const [data, setData] = useState();
+export function DndLogic({
+	taskStatus,
+	mutateTask,
+	setGetId,
+	getId,
+	setTaskFilter,
+	taskFilter,
+	session,
+}) {
+	const [taskdata, setTaskData] = useState(taskStatus);
 
 	useEffect(() => {
-		setData(taskStatus);
+		setTaskData(taskStatus);
 	}, [taskStatus]);
 
 	const onDragEnd = async (result) => {
 		if (!result.destination) return;
 		const { source, destination, draggableId } = result;
 		if (source.droppableId !== destination.droppableId) {
-			const sourceColIndex = data.findIndex(
-				(section) => parseInt(section.id + pid) === parseInt(source.droppableId)
-			);
-			const destinationColIndex = data.findIndex(
-				(section) =>
-					parseInt(section.id + pid) === parseInt(destination.droppableId)
-			);
-
-			const sourceCol = data[sourceColIndex];
-			const destinationCol = data[destinationColIndex];
-			const sourceTask = [...sourceCol.attributes.tasks.data];
-			const destinationTask = [...destinationCol.attributes.tasks.data];
-			const [removed] = sourceTask.splice(sourceColIndex, 1);
-			destinationTask.splice(destinationColIndex, 0, removed);
-			data[sourceColIndex].attributes.tasks.data = sourceTask;
-			data[destinationColIndex].attributes.tasks.data = destinationTask;
-			setData(data);
+			const sourceColumn = taskdata[parseInt(source.droppableId)];
+			const destColumn = taskdata[parseInt(destination.droppableId)];
+			const sourceItems = [...sourceColumn.tasks];
+			const destItems = [...destColumn.tasks];
+			const removed = sourceItems.splice(source.index, 1);
+			destItems.splice(destination.index, 0, removed[0]);
+			taskdata[parseInt(destination.droppableId)].tasks = destItems;
+			taskdata[parseInt(source.droppableId)].tasks = sourceItems;
+			setTaskData([...taskdata]);
 
 			const body = {
-				data: { task_status: parseInt(destination.droppableId.charAt(0)) },
+				data: { task_status: parseInt(destination.droppableId) + 1 },
 			};
-			const { success } = await update(
+			const { success, error } = await update(
 				path("UPDATE_task", parseInt(draggableId)),
-				body,
-				jwt
+				body
 			);
 			if (success) {
-				mutate();
+				mutateTask();
+			} else {
+				console.log("ERREUR");
 			}
 		}
 	};
@@ -183,59 +187,62 @@ export default function Tasks() {
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<div className='flex gap-14 mt-6 max-w-[1200px]'>
-				{data &&
-					data
-						.sort((a, b) => a.id - b.id)
-						.map((section) => (
-							<Droppable key={section.id} droppableId={`${section.id + pid}`}>
-								{(provided, snapshot) => {
-									return (
-										<TaskStatusWrapper
-											provided={provided}
-											snapshot={snapshot}
-											mutate={mutate}
-											jwt={jwt}
-											setData={setData}
-											data={data}
-											status={section}>
-											{section.attributes.tasks?.data
-												.filter(
-													(res) =>
-														res.attributes.project_widget.data?.id ===
-														parseInt(pid)
-												)
-												.map((task, index) => (
-													<Draggable
-														index={index}
-														key={task.id}
-														draggableId={`${task.id}`}>
-														{(provided, snapshot) => {
-															return (
-																<Task
-																	id={section.id}
-																	provided={provided}
-																	snapshot={snapshot}
-																	getId={getId}
-																	setGetId={setGetId}
-																	task={task}
-																	mutate={mutate}
-																	setData={setData}
-																	data={data}
-																/>
-															);
-														}}
-													</Draggable>
-												))}
-											{provided.placeholder}
-										</TaskStatusWrapper>
-									);
-								}}
-							</Droppable>
-						))}
+				{taskdata
+					.sort((a, b) => a.id - b.id)
+					.map((section) => (
+						<Droppable key={section.id} droppableId={`${section.id - 1}`}>
+							{(provided, snapshot) => {
+								return (
+									<TaskStatusWrapper
+										provided={provided}
+										snapshot={snapshot}
+										mutateTask={mutateTask}
+										setTaskData={setTaskData}
+										taskData={taskdata}
+										session={session}
+										setTaskFilter={setTaskFilter}
+										status={section}>
+										{section.tasks
+											.filter((task) =>
+												taskFilter.value !== "" &&
+												taskFilter.colID === section.id
+													? task.title
+															.toLowerCase()
+															.match(taskFilter.value.toLowerCase())
+													: task
+											)
+											.map((task, index) => (
+												<Draggable
+													index={index}
+													key={task.id}
+													draggableId={`${task.id}`}>
+													{(provided, snapshot) => {
+														return (
+															<Task
+																id={section.id}
+																provided={provided}
+																snapshot={snapshot}
+																getId={getId}
+																setGetId={setGetId}
+																task={task}
+																mutateTask={mutateTask}
+																setTaskData={setTaskData}
+																taskdata={taskdata}
+															/>
+														);
+													}}
+												</Draggable>
+											))}
+										{provided.placeholder}
+									</TaskStatusWrapper>
+								);
+							}}
+						</Droppable>
+					))}
 			</div>
 		</DragDropContext>
 	);
-} */
+}
 
 export function TaskStatusWrapper({
 	status,
@@ -245,11 +252,12 @@ export function TaskStatusWrapper({
 	snapshot,
 	mutateTask,
 	setTaskFilter,
-	data,
-	setData,
+	taskData,
+	setTaskData,
 }) {
 	const router = useRouter();
 	const { pid } = router.query;
+
 	async function createTask(statusID) {
 		const body = {
 			data: {
@@ -259,19 +267,19 @@ export function TaskStatusWrapper({
 				task_owner: session.id,
 			},
 		};
+
+		const colIndex = statusID - 1;
+		const newTask = {
+			title: "New task ...",
+			createdAt: new Date(),
+			project_widget: { data: { id: parseInt(pid) } },
+			id: uuidv4(),
+		};
+		taskData[colIndex].tasks.push(newTask);
+		setTaskData([...taskData]);
+
 		const { success, error } = await post(path("CREATE_task"), body);
 		if (success) {
-			/* 			const colIndex = statusID - 1;
-			const newTask = {
-				attributes: {
-					title: "New task ...",
-					createdAt: new Date(),
-					project_widget: { data: { id: parseInt(pid) } },
-				},
-				id: success.data.id,
-			};
-			data[colIndex].attributes.tasks.data.push(newTask);
-			setData(data); */
 			mutateTask();
 		} else {
 			console.log(error);
