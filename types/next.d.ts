@@ -46,6 +46,7 @@ declare module "next/app" {
  // CRUD
 
  type CrudResponse = {
+	data: any;
 	jwt?: string,
 	error?: {},
 	user?: {

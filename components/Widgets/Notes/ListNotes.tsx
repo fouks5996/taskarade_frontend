@@ -4,12 +4,22 @@ import { FiTrash2 } from "react-icons/fi";
 import { remove } from "../../../services/config";
 import { path } from "../../../services/routes";
 
-export default function ListNotes({ notes, active, setActive, mutate }) {
+export default function ListNotes({
+	notes,
+	active,
+	setActive,
+	mutate,
+	setNoteData,
+}) {
 	function deleteNote(id: number) {
+		const notesFiltered = notes.filter(
+			(note: { id: number }) => note.id !== id
+		);
+		setNoteData(notesFiltered);
 		remove(path("DELETE_note", id), mutate);
 	}
 
-	if (notes?.data.length === 0)
+	if (notes.length === 0)
 		return (
 			<div className='min-w-[242px] max-w-[242px] h-full  flex items-center flex-col gap-3 pr-5 border-r border-stroke-blue'>
 				<Text center> No notes </Text>
@@ -18,10 +28,11 @@ export default function ListNotes({ notes, active, setActive, mutate }) {
 
 	return (
 		<div className='min-w-[242px] h-full flex flex-col gap-1 pr-5 border-r border-stroke-blue'>
-			{notes?.data.map(
+			{notes.map(
 				(note: {
 					id: number;
-					attributes: { title: string; updatedAt: string | number | Date };
+					title: string;
+					updatedAt: string | number | Date;
 				}) => (
 					<div
 						key={note.id}
@@ -36,17 +47,14 @@ export default function ListNotes({ notes, active, setActive, mutate }) {
 								className='flex flex-col gap-1 w-full'>
 								<Text size={"14"} medium>
 									{" "}
-									{note.attributes.title.substr(0, 20) + "..."}{" "}
+									{note.title.substr(0, 20) + "..."}{" "}
 								</Text>
 								<Text size={"12"} medium color={"inactive"}>
 									{" "}
-									{new Date(note.attributes.updatedAt).toLocaleDateString(
-										"fr-FR",
-										{
-											hour: "2-digit",
-											minute: "2-digit",
-										}
-									)}
+									{new Date(note.updatedAt).toLocaleDateString("fr-FR", {
+										hour: "2-digit",
+										minute: "2-digit",
+									})}
 								</Text>
 							</div>
 							<span

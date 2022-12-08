@@ -26,10 +26,10 @@ export default function ContentNotes({ activeNote, mutate }) {
 	}
 
 	return (
-		<div key={`default:${activeNote.attributes.title}`} className='w-full'>
+		<div key={`default:${activeNote.title}`} className='w-full'>
 			<input
 				className='block text-20 font-sb text-grey-text-active w-full pl-2 bg-transparent focus:outline-none placeholder:font-regular placeholder:text-14 placeholder:text-grey-text-placeholder'
-				defaultValue={activeNote.attributes.title}
+				defaultValue={activeNote.title}
 				onChange={(e) => onEditField("title", e.target.value)}
 				placeholder='Votre titre ...'
 				onInput={(e: React.SyntheticEvent) => {
@@ -44,7 +44,7 @@ export default function ContentNotes({ activeNote, mutate }) {
 
 			<textarea
 				className='block w-full h-full p-2 resize-none bg-transparent text-grey-text-active text-14 placeholder:text focus:outline-none placeholder:font-regular placeholder:text-14 placeholder:text-grey-text-placeholder'
-				defaultValue={activeNote.attributes.content}
+				defaultValue={activeNote.content}
 				onChange={(e) => onEditField("content", e.target.value)}
 				placeholder='Laisser libre court à votre imagination ...'
 				autoFocus={false}

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCurrentProject } from "../../../services/api/project";
 import Layout from "../../Layout/Layout";
 import Loader from "../../Loader/Loader";
@@ -11,6 +11,7 @@ import { path } from "../../../services/routes";
 import { BsPlus } from "react-icons/bs";
 import WidgetWrapper from "../WidgetWrapper";
 import { queryTypes } from "next/app";
+import { v4 as uuidv4 } from "uuid";
 
 type queryType = string;
 
@@ -20,6 +21,10 @@ export default function Notes({ maxId, widgetData }) {
 	const { id, pid } = router.query as queryTypes;
 	const { project, isLoading, mutate } = useCurrentProject(parseInt(id));
 	const [noteData, setNoteData] = useState(widgetData);
+
+	useEffect(() => {
+		setNoteData(widgetData);
+	}, [widgetData]);
 
 	if (isLoading)
 		return (
@@ -40,7 +45,7 @@ export default function Notes({ maxId, widgetData }) {
 	console.log(widget);
 	console.log(noteData);
 
-	const activeNote = widget?.attributes.notes.data.find(
+	const activeNote = noteData.find(
 		(activeNote: { id: number }) => activeNote.id === active
 	);
 
@@ -49,19 +54,27 @@ export default function Notes({ maxId, widgetData }) {
 			data: { title: "New note", project_widget: parseInt(pid) },
 		};
 		const { success } = await post(path("CREATE_note"), body);
+
 		if (success) {
+			const newNote = {
+				title: "New note",
+				updatedAt: Date.now(),
+				id: success.data.id,
+			};
+			setNoteData([newNote, ...noteData]);
 			mutate();
-			console.log(success);
 		}
 	}
 
-	widget?.attributes.notes.data.sort(
+	noteData.sort(
 		(
-			a: { attributes: { updatedAt: string | number | Date } },
-			b: { attributes: { updatedAt: string | number | Date } }
-		) =>
-			new Date(b.attributes.updatedAt).getTime() -
-			new Date(a.attributes.updatedAt).getTime()
+			a: {
+				updatedAt: string | number | Date;
+			},
+			b: {
+				updatedAt: string | number | Date;
+			}
+		) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
 	);
 
 	return (
@@ -75,7 +88,8 @@ export default function Notes({ maxId, widgetData }) {
 			/>
 			<div className='flex gap-3 mt-6 h-full'>
 				<ListNotes
-					notes={widget?.attributes.notes}
+					notes={noteData}
+					setNoteData={setNoteData}
 					active={active}
 					setActive={setActive}
 					mutate={mutate}

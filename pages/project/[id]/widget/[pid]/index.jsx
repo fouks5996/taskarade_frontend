@@ -75,7 +75,7 @@ export default function Index({widgetData}) {
 		case 1:
 			return (
 				<Layout title={"Notes"}>
-					<Notes maxId={0} widgetData={widgetData} />
+					<Notes maxId={0} widgetData={widgetData.notes} />
 				</Layout>
 			);
 		case 2:
