@@ -16,8 +16,8 @@ export default function Task({
 	mutateTask,
 	provided,
 	snapshot,
-	setData,
-	data,
+	setTaskData,
+	taskdata,
 	id,
 }) {
 	const [modal, setModal] = useState<{ state: boolean; data: {} }>({
@@ -28,28 +28,21 @@ export default function Task({
 	async function updateTask(e: React.SyntheticEvent) {
 		e.preventDefault();
 		const target = e.target as typeof e.target & {
-			task: { value: string };
+			task: { value: string; id: number };
 		};
 
-		/* 		const value = e.target.task.value;
+		// Get Column
+		const colIndex = task.task_status.id - 1;
+		const finalCol = taskdata[colIndex];
 
-		const getColIndex = () => {
-			if (e.target.task.id === "3") return 2;
-			if (e.target.task.id === "2") return 1;
-			if (e.target.task.id === "1") return 0;
-		};
+		// Get Task in Column
+		const taskIndex = finalCol.tasks.findIndex((res) => res.id === task.id);
 
-		const colIndex = getColIndex();
-		const finalCol = data[colIndex];
+		// Change Value of the Task
+		finalCol.tasks[taskIndex].title = target.task.value;
+		setTaskData([...taskdata]);
 
-		const taskToAdd = [...finalCol.attributes.tasks.data];
-		const indexOfTask = taskToAdd.findIndex((res) => res.id === task.id);
-
-		taskToAdd[indexOfTask].attributes.title = value;
-
-		data[getColIndex()].attributes.tasks.data = taskToAdd;
-
-		setData(data); */
+		setGetId(!task.id);
 
 		const body = {
 			data: { title: target.task.value },
@@ -64,19 +57,13 @@ export default function Task({
 		}
 	}
 
-	function deleteTask() {
-		/* 		const getColIndex = () => {
-			if (colId === 3) return 2;
-			if (colId === 2) return 1;
-			if (colId === 1) return 0;
-		};
-
-		const ColIndex = getColIndex();
-		const NewCol = data[ColIndex].attributes.tasks.data.filter(
-			(t) => parseInt(t.id) !== parseInt(task.id)
+	function deleteTask(colId: number) {
+		const ColIndex = colId - 1;
+		const NewCol = taskdata[ColIndex].tasks.filter(
+			(t: { id: string }) => parseInt(t.id) !== parseInt(task.id)
 		);
-		data[ColIndex].attributes.tasks.data = NewCol;
-		setData(data); */
+		taskdata[ColIndex].tasks = NewCol;
+		setTaskData([...taskdata]);
 		return remove(path("DELETE_task", task.id), mutateTask);
 	}
 
@@ -127,7 +114,7 @@ export default function Task({
 									<div className=' block h-[29px] w-[54px]'> </div>
 								</div>
 								<div className='flex items-center gap-2 mt-5'>
-									{task.task_tags.map((tag) => {
+									{task.task_tags?.map((tag) => {
 										return (
 											<TaskTag
 												id={tag.id}
@@ -150,7 +137,7 @@ export default function Task({
 								</span>
 								<span
 									className='cursor-pointer hover:bg-status-in_progress_text p-2 rounded-full'
-									onClick={() => deleteTask()}>
+									onClick={() => deleteTask(task.task_status.id)}>
 									{" "}
 									<FiTrash2 />{" "}
 								</span>
