@@ -31,11 +31,9 @@ export default function Tasks() {
 
 	if (isLoading || taskLoading1)
 		return (
-			<Layout>
-				<div className='flex h-full justify-center items-center'>
-					<Loader type='spin' height={40} width={40} />
-				</div>
-			</Layout>
+			<div className='flex h-full justify-center items-center'>
+				<Loader type='spin' height={40} width={40} />
+			</div>
 		);
 	if (current_tasks?.error?.status === 404) {
 		router.push("/404?error=not_found");

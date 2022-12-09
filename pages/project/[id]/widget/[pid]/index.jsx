@@ -14,7 +14,6 @@ import { authOptions } from '../../../../api/auth/[...nextauth]'
 
 
 export async function getServerSideProps(context) {
-	
 	if (context.query.q){
 		const options= {
 			method: 'GET',
