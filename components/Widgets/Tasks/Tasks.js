@@ -66,64 +66,6 @@ export default function Tasks() {
 				onclick={() => setCreateTasks(true)}
 				icon={<BsPlus />}
 			/>
-			{/* 			{
-				<DragDropContext onDragEnd={(result) => onDragEvent(result)}>
-					<div className='flex gap-4 mt-6 max-w-[1200px]'>
-						{current_tasks &&
-							current_tasks
-								.sort((a, b) => a.id - b.id)
-								.map((status) => (
-									<Droppable key={status.id} droppableId={`${status.id}`}>
-										{(provided, snapshot) => {
-											return (
-												<TaskStatusWrapper
-													provided={provided}
-													snapshot={snapshot}
-													mutateTask={mutateTask}
-													session={session}
-													status={status}
-													setTaskFilter={setTaskFilter}>
-													<>
-														{status.tasks
-															?.filter((task) =>
-																taskFilter.value !== "" &&
-																taskFilter.colID === status.id
-																	? task.title
-																			.toLowerCase()
-																			.match(taskFilter.value.toLowerCase())
-																	: task
-															)
-															.map((task, index) => (
-																<Draggable
-																	index={index}
-																	key={task.id}
-																	draggableId={`${task.id}`}>
-																	{(provided, snapshot) => {
-																		return (
-																			<Task
-																				provided={provided}
-																				snapshot={snapshot}
-																				setModal={setModal}
-																				modal={modal}
-																				getId={getId}
-																				setGetId={setGetId}
-																				task={task}
-																				mutateTask={mutateTask}
-																			/>
-																		);
-																	}}
-																</Draggable>
-															))}
-													</>
-													{provided.placeholder}
-												</TaskStatusWrapper>
-											);
-										}}
-									</Droppable>
-								))}
-					</div>
-				</DragDropContext>
-			} */}
 			<DndLogic
 				taskStatus={current_tasks}
 				session={session}
