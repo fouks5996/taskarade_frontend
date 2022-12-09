@@ -39,7 +39,7 @@ export function TicketStatus({ status, fit = false }) {
 					color: status.text_color,
 					backgroundColor: status.bg_color,
 				}}
-				className={`py-1 px-3 text-13 self-center rounded-md`}>
+				className={`py-0.5 px-2 text-13 self-center rounded-md`}>
 				{status.label}
 			</p>
 		</div>

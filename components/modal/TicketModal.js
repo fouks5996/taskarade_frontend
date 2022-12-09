@@ -38,6 +38,8 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 	const [editPanel, SetEditPanel] = useState(false);
 	const [editPanelPrio, SetEditPanelPrio] = useState(false);
 	const [editPanelAssigned, SetEditPanelAssigned] = useState(false);
+	const [titleState, setTitleState] = useState(ticket.attributes.subject);
+
 	const [startDate, setStartDate] = useState(
 		new Date(ticket.attributes.Start_date)
 	);
@@ -104,6 +106,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 		setTimeError(false);
 		const body = {
 			data: {
+				subject: titleState,
 				description: data.description,
 				estimated_time: `${data.estimated_time_value}${deleteTime(estimated)}`,
 				realized_time: `${data.realized_time_value}${deleteTime(realized)}`,
@@ -137,6 +140,8 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 				created={ticket.attributes.createdAt}
 				createdBy={ticket.attributes.ticket_owner.data.attributes.username}
 				edit='myform'
+				setTitleState={setTitleState}
+				titleState={titleState}
 				handleDelete={deleteTicket}
 			/>
 			<form id='myform' onSubmit={handleSubmit(onSubmit)}>
@@ -370,10 +375,10 @@ export function deleteTime(time) {
 	}
 }
 
-export function EditButton({ getter, setter }) {
+export function EditButton({ setter }) {
 	return (
 		<p
-			className='text-14 cursor-pointer text-grey-text-active'
+			className='text-14 cursor-pointer hover:bg-blue-500 p-2 rounded-full text-grey-text-active'
 			onClick={() => setter((getter) => !getter)}>
 			{" "}
 			<FiEdit2 />{" "}

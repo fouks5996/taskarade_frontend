@@ -41,6 +41,7 @@ export default function TaskModal({
 }: TaskModalProps) {
 	const [tagsState, setTagsState] = useState(task.task_tags);
 	const [modalTag, setModalTag] = useState(false);
+	const [titleState, setTitleState] = useState(task.title);
 
 	const {
 		handleSubmit,
@@ -72,7 +73,7 @@ export default function TaskModal({
 	}, [tagsState]);
 
 	async function onSubmit(data) {
-		const body = { data: { body: data.body } };
+		const body = { data: { body: data.body, title: titleState } };
 		const { success, error } = await update(path("UPDATE_task", task.id), body);
 		if (success) {
 			setModal(false);
@@ -91,6 +92,8 @@ export default function TaskModal({
 				createdBy={task.task_owner.username}
 				edit='task-edit'
 				handleDelete={deleteTask}
+				setTitleState={setTitleState}
+				titleState={titleState}
 			/>
 			<div className='mt-6'>
 				<div className='flex items-center gap-2 mb-2'>
