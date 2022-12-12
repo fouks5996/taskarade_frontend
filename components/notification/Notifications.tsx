@@ -46,8 +46,8 @@ export function Notifications({
 	return (
 		<div
 			ref={ref}
-			className='bg-blue-600 rounded-md border border-stroke-blue py-4 px-4 min-w-[400px] w-fit max-h-[500px] overflow-y-scroll'>
-			<div className='flex justify-between items-center'>
+			className='bg-blue-600 rounded-md border border-stroke-blue py-4 px-2 min-w-[400px] w-fit max-h-[500px] overflow-y-scroll'>
+			<div className='flex justify-between items-center px-2'>
 				<Text sb size={"18"}>
 					{" "}
 					Notifications{" "}
@@ -86,7 +86,11 @@ export function Notifications({
 export function Notification({ notification, setShowNotification }) {
 	const router = useRouter();
 	return (
-		<div className='py-3 pt-4 px-1 relative'>
+		<div
+			onClick={() => {
+				router.push(notification.linkTo), setShowNotification(false);
+			}}
+			className='py-3 pt-4 px-3 relative hover:bg-blue-700 rounded-md cursor-pointer'>
 			<div className='flex flex-col relative'>
 				<div className='flex items-center  gap-1'>
 					<AvatarGroup
@@ -112,11 +116,7 @@ export function Notification({ notification, setShowNotification }) {
 			<div className='flex items-center justify-between ml-8 pt-1 '>
 				<Text size={"13"} color={"inactive"}>
 					In project{" "}
-					<span
-						onClick={() => {
-							router.push(notification.linkTo), setShowNotification(false);
-						}}
-						className='underline cursor-pointer'>
+					<span className='underline cursor-pointer'>
 						{" "}
 						{notification.project?.name}{" "}
 					</span>{" "}

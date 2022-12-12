@@ -132,11 +132,11 @@ export function GetCollaborators({ session, collaborator, mutate, setActive }) {
 
 	return (
 		<div className='flex flex-col p-1 min-w-[350px] max-h-[400px] overflow-y-scroll'>
-			<div className='h-full w-full bg-blue-500 mb-3 rounded-md py-2.5 px-3 text-grey-text-inactive text-14'>
+			<Search onchange={searchCollab} label={"a collaborator to add"} />
+			<div className='h-full w-full bg-blue-500 my-3 rounded-md py-2.5 px-3 text-grey-text-inactive text-14'>
 				{" "}
 				Collaborators must have an account to be added.{" "}
 			</div>
-			<Search onchange={searchCollab} label={"a collaborator to add"} />
 			<div
 				className={`flex flex-col gap-3 ${
 					collaborators.length > 0 ? "mt-4" : "mt-0"
