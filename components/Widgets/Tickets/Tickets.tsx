@@ -59,7 +59,10 @@ export default function Tickets() {
 						/>
 						<table className='w-full mt-5 min-w-[900px] overflow-x-scroll'>
 							<tbody>
-								<TicketsHeader setStatusFilter={setStatusFilter} />
+								<TicketsHeader
+									statusFilter={statusFilter}
+									setStatusFilter={setStatusFilter}
+								/>
 
 								{widget?.attributes.tickets.data
 									.filter((ticket: Ticket) =>

@@ -43,19 +43,6 @@ export default function Tasks() {
 		(widget) => widget.id === parseInt(pid)
 	);
 
-	/* 	const onDragEvent = async (result) => {
-		if (!result.destination) return;
-		const { destination, draggableId } = result;
-		const body = { data: { task_status: parseInt(destination.droppableId) } };
-		const { success } = await update(
-			path("UPDATE_task", parseInt(draggableId)),
-			body
-		);
-		if (success) {
-			mutateTask();
-		}
-	}; */
-
 	return (
 		<WidgetWrapper>
 			{" "}
@@ -63,7 +50,7 @@ export default function Tasks() {
 				name={widget?.attributes.name}
 				widgetID={widget?.attributes.widget.data.id}
 				type={"task"}
-				onclick={() => setCreateTasks(true)}
+				hideButton
 				icon={<BsPlus />}
 			/>
 			<DndLogic
@@ -95,6 +82,33 @@ export function DndLogic({
 		setTaskData(taskStatus);
 	}, [taskStatus]);
 
+	async function updateTask(taskID, body) {
+		const { success, error } = await update(
+			path("UPDATE_task", parseInt(taskID)),
+			body
+		);
+
+		if (success) {
+			mutateTask();
+		} else {
+			console.log("ERREUR");
+		}
+	}
+
+	function updateSiblingtasks(side, index, value) {
+		side.forEach((task) => {
+			if (task.index >= index) {
+				const body = {
+					data: {
+						index: task.index + value,
+					},
+				};
+				return updateTask(task.id, body);
+			}
+			return;
+		});
+	}
+
 	const onDragEnd = async (result) => {
 		if (!result.destination) return;
 		const { source, destination, draggableId } = result;
@@ -109,18 +123,24 @@ export function DndLogic({
 			taskdata[parseInt(source.droppableId)].tasks = sourceItems;
 			setTaskData([...taskdata]);
 
-			const body = {
-				data: { task_status: parseInt(destination.droppableId) + 1 },
-			};
-			const { success, error } = await update(
-				path("UPDATE_task", parseInt(draggableId)),
-				body
+			const DestitemsWithoutCurrent = destItems.filter(
+				(item) => item.id !== parseInt(draggableId)
 			);
-			if (success) {
-				mutateTask();
-			} else {
-				console.log("ERREUR");
-			}
+
+			const SourceitemsWithoutCurrent = sourceItems.filter(
+				(item) => item.id !== parseInt(draggableId)
+			);
+
+			updateSiblingtasks(SourceitemsWithoutCurrent, source.index, -1);
+			updateSiblingtasks(DestitemsWithoutCurrent, destination.index, 1);
+
+			const body = {
+				data: {
+					task_status: parseInt(destination.droppableId) + 1,
+					index: destination.index,
+				},
+			};
+			updateTask(parseInt(draggableId), body);
 		}
 	};
 
@@ -199,16 +219,18 @@ export function TaskStatusWrapper({
 	const { pid } = router.query;
 
 	async function createTask(statusID) {
+		const colIndex = statusID - 1;
+		const taskIndex = taskData[colIndex].tasks.length;
 		const body = {
 			data: {
 				title: "New task ...",
+				index: taskIndex,
 				task_status: statusID,
 				project_widget: parseInt(pid),
 				task_owner: session.id,
 			},
 		};
 
-		const colIndex = statusID - 1;
 		const newTask = {
 			title: "New task ...",
 			createdAt: new Date(),
@@ -254,12 +276,10 @@ export function TaskStatusWrapper({
 				onClick={() => createTask(status.id)}
 				className='flex items-center gap-1 cursor-pointer'>
 				<span className='text-20'>
-					{" "}
-					<BsPlus />{" "}
+					<BsPlus />
 				</span>
 				<Text hoverUnderline size={"14"}>
-					{" "}
-					New{" "}
+					New
 				</Text>
 			</div>
 		</div>

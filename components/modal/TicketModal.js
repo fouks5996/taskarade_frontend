@@ -26,6 +26,8 @@ import { errorMessageValues, verifyTimeValue } from "../Forms/Errors";
 import Tab from "../Tab/Tab";
 import TicketComment from "../Widgets/Tickets/TicketComment";
 import ModalHeader from "./ModalHeader";
+import { useRef } from "react";
+import { useOnClickOutside } from "usehooks-ts";
 
 export default function TicketModal({ ticket, setModal, mutate }) {
 	const {
@@ -155,7 +157,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 								item={<TicketStatus status={status.attributes} fit />}
 							/>
 							{editPanel && (
-								<EditDropdown>
+								<EditDropdown setModal={SetEditPanel}>
 									{ticketStatus.data.map((status) => (
 										<EditItem
 											key={status.id}
@@ -178,7 +180,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 								item={<TicketPriority priority={priority.attributes} fit big />}
 							/>
 							{editPanelPrio && (
-								<EditDropdown>
+								<EditDropdown setModal={SetEditPanelPrio}>
 									{ticketPriority.data.map((priority) => (
 										<EditItem
 											key={priority.id}
@@ -200,7 +202,7 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 								item={<Text size={"13"}> {assigned.username}</Text>}
 							/>
 							{editPanelAssigned && (
-								<EditDropdown>
+								<EditDropdown setModal={SetEditPanelAssigned}>
 									{project_collab.data.attributes.collaborations.data.map(
 										(user) => (
 											<span
@@ -395,9 +397,18 @@ export function EditWrapperButton({ getter, setter, item = false }) {
 	);
 }
 
-export function EditDropdown({ children }) {
+export function EditDropdown({ children, setModal }) {
+	const ref = useRef(null);
+
+	const handleClickOutside = () => {
+		setModal(false);
+	};
+	useOnClickOutside(ref, handleClickOutside);
+
 	return (
-		<div className='absolute bg-blue-500 flex flex-col gap-5 items-start py-4 px-5 z-50 rounded-md top-6 right-8'>
+		<div
+			ref={ref}
+			className='absolute bg-blue-500 flex flex-col gap-5 items-start py-4 px-5 z-50 rounded-md top-6 right-8'>
 			{children}
 		</div>
 	);

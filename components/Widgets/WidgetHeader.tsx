@@ -9,6 +9,7 @@ interface WidgetHeaderProps {
 	onclick: Function;
 	icon: any;
 	widgetID: number;
+	hideButton?: boolean;
 }
 
 export default function WidgetHeader({
@@ -17,15 +18,18 @@ export default function WidgetHeader({
 	onclick,
 	icon,
 	widgetID,
+	hideButton = false,
 }: WidgetHeaderProps) {
 	return (
 		<div className='flex items-center justify-between w-full '>
 			<Heading size={"20"}>
 				{getIcon(widgetID)} {"  " + name}
 			</Heading>
-			<Button icon={icon} onclick={() => onclick()} width='fit'>
-				Create a {type}
-			</Button>
+			{!hideButton && (
+				<Button icon={icon} onclick={() => onclick()} width='fit'>
+					Create a {type}
+				</Button>
+			)}
 		</div>
 	);
 }

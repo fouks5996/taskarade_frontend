@@ -160,7 +160,6 @@ export default function TaskModal({
 					name={"body"}
 					register={register}
 					errors={errors}
-					validationsSchema={errorMessageValues.description}
 				/>
 			</form>
 		</ModalLayout>

@@ -4,8 +4,9 @@ import { MdFilterList } from "react-icons/md";
 import { EditItem } from "../../modal/TicketModal";
 import { useTicketstatus } from "../../../services/api/ticket";
 import Loader from "../../Loader/Loader";
+import { NotificationDot } from "../../notification/Notifications";
 
-export function TicketsHeader({ setStatusFilter }) {
+export function TicketsHeader({ setStatusFilter, statusFilter }) {
 	const [filter, setFilter] = useState(false);
 
 	return (
@@ -16,7 +17,13 @@ export function TicketsHeader({ setStatusFilter }) {
 					getter={filter}
 					setter={setFilter}
 					label={"Status"}
-					component={<StatusFilter setStatusFilter={setStatusFilter} />}
+					statusFilter={statusFilter}
+					component={
+						<StatusFilter
+							statusFilter={statusFilter}
+							setStatusFilter={setStatusFilter}
+						/>
+					}
 				/>
 			</TicketsHeaderItem>
 			<TicketsHeaderItem> Priority </TicketsHeaderItem>
@@ -34,6 +41,7 @@ interface TicketItemFilterProps {
 	setter: Function;
 	label: string;
 	component: any;
+	statusFilter: any;
 }
 
 export function TicketItemFilter({
@@ -41,14 +49,25 @@ export function TicketItemFilter({
 	setter,
 	label,
 	component,
+	statusFilter,
 }: TicketItemFilterProps) {
 	return (
 		<div
 			onClick={() => setter((getter: any) => !getter)}
-			className='flex relative cursor-pointer  justify-center items-center gap-1 '>
-			<span> {label} </span> <MdFilterList />
+			className='flex relative cursor-pointer   justify-center items-center gap-1 '>
+			<span className='relative '>
+				{" "}
+				{label}{" "}
+				{statusFilter !== null && statusFilter !== false && (
+					<span className='absolute -right-7 top-2.5'>
+						{" "}
+						<NotificationDot />{" "}
+					</span>
+				)}{" "}
+			</span>{" "}
+			<MdFilterList />
 			{getter && (
-				<div className='bg-blue-600 border border-stroke-blue absolute top-6 z-50 right-18 rounded-md px-3 py-4'>
+				<div className='bg-blue-600 border border-stroke-blue absolute top-6 z-50 right-18 rounded-md px-3 py-3'>
 					{component}
 				</div>
 			)}
@@ -56,7 +75,7 @@ export function TicketItemFilter({
 	);
 }
 
-export function StatusFilter({ setStatusFilter }) {
+export function StatusFilter({ setStatusFilter, statusFilter }) {
 	const { ticketStatus, isLoading } = useTicketstatus();
 	if (isLoading)
 		return (
@@ -70,10 +89,15 @@ export function StatusFilter({ setStatusFilter }) {
 			{ticketStatus.data.map((status) => (
 				<span
 					onClick={() => setStatusFilter(status.id)}
-					className=''
+					className='relative '
 					key={status.id}>
 					{" "}
-					<TicketStatus fit status={status.attributes} />{" "}
+					<TicketStatus fit status={status.attributes} />
+					{statusFilter === status.id && (
+						<span className='absolute top-0 -left-1'>
+							<NotificationDot />
+						</span>
+					)}
 				</span>
 			))}
 			<p

@@ -255,6 +255,9 @@ export function SelectItem({
 	collab = false,
 	time = false,
 }) {
+	console.log(datas?.data);
+	console.log(label);
+
 	if (collab) {
 		return (
 			<select
@@ -275,6 +278,7 @@ export function SelectItem({
 	} else {
 		return (
 			<select
+				defaultValue={label === "ticket_status" && "2"}
 				name={"label"}
 				{...register(label)}
 				className={`${

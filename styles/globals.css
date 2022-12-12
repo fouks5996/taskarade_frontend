@@ -18,3 +18,13 @@ input:-webkit-autofill{
     -webkit-text-fill-color: #A5A8B2 !important;
 }
 
+.hide-scroll-bar::-webkit-scrollbar{
+  display: none !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scroll-bar{
+  -ms-overflow-style: none;
+  scrollbar-width: none
+}
