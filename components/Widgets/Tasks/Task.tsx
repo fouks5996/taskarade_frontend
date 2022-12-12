@@ -8,6 +8,7 @@ import TaskModal from "../../modal/TaskModal";
 import { useState } from "react";
 import TaskTag from "./TaskTag";
 import { v4 as uuidv4 } from "uuid";
+import { updateSiblingtasks } from "./Tasks";
 
 export default function Task({
 	task,
@@ -64,6 +65,9 @@ export default function Task({
 		);
 		taskdata[ColIndex].tasks = NewCol;
 		setTaskData([...taskdata]);
+
+		updateSiblingtasks(taskdata[ColIndex].tasks, task.index, -1, mutateTask);
+
 		return remove(path("DELETE_task", task.id), mutateTask);
 	}
 

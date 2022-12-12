@@ -67,6 +67,33 @@ export default function Tasks() {
 	);
 }
 
+export function updateSiblingtasks(side, index, value, mutateTask) {
+	side.forEach((task) => {
+		if (task.index >= index) {
+			const body = {
+				data: {
+					index: task.index + value,
+				},
+			};
+			return updateTask(task.id, body, mutateTask);
+		}
+		return;
+	});
+}
+
+async function updateTask(taskID, body, mutateTask) {
+	const { success, error } = await update(
+		path("UPDATE_task", parseInt(taskID)),
+		body
+	);
+
+	if (success) {
+		mutateTask();
+	} else {
+		console.log("ERREUR");
+	}
+}
+
 export function DndLogic({
 	taskStatus,
 	mutateTask,
@@ -82,40 +109,19 @@ export function DndLogic({
 		setTaskData(taskStatus);
 	}, [taskStatus]);
 
-	async function updateTask(taskID, body) {
-		const { success, error } = await update(
-			path("UPDATE_task", parseInt(taskID)),
-			body
-		);
-
-		if (success) {
-			mutateTask();
-		} else {
-			console.log("ERREUR");
-		}
-	}
-
-	function updateSiblingtasks(side, index, value) {
-		side.forEach((task) => {
-			if (task.index >= index) {
-				const body = {
-					data: {
-						index: task.index + value,
-					},
-				};
-				return updateTask(task.id, body);
-			}
-			return;
-		});
-	}
-
 	const onDragEnd = async (result) => {
 		if (!result.destination) return;
 		const { source, destination, draggableId } = result;
+
+		// Common variables
+		const sourceColumn = taskdata[parseInt(source.droppableId)];
+		const sourceItems = [...sourceColumn.tasks];
+		const SourceitemsWithoutCurrent = sourceItems.filter(
+			(item) => item.id !== parseInt(draggableId)
+		);
+
 		if (source.droppableId !== destination.droppableId) {
-			const sourceColumn = taskdata[parseInt(source.droppableId)];
 			const destColumn = taskdata[parseInt(destination.droppableId)];
-			const sourceItems = [...sourceColumn.tasks];
 			const destItems = [...destColumn.tasks];
 			const removed = sourceItems.splice(source.index, 1);
 			destItems.splice(destination.index, 0, removed[0]);
@@ -127,12 +133,18 @@ export function DndLogic({
 				(item) => item.id !== parseInt(draggableId)
 			);
 
-			const SourceitemsWithoutCurrent = sourceItems.filter(
-				(item) => item.id !== parseInt(draggableId)
+			updateSiblingtasks(
+				SourceitemsWithoutCurrent,
+				source.index,
+				-1,
+				mutateTask
 			);
-
-			updateSiblingtasks(SourceitemsWithoutCurrent, source.index, -1);
-			updateSiblingtasks(DestitemsWithoutCurrent, destination.index, 1);
+			updateSiblingtasks(
+				DestitemsWithoutCurrent,
+				destination.index,
+				1,
+				mutateTask
+			);
 
 			const body = {
 				data: {
@@ -140,7 +152,26 @@ export function DndLogic({
 					index: destination.index,
 				},
 			};
-			updateTask(parseInt(draggableId), body);
+			updateTask(parseInt(draggableId), body, mutateTask);
+		} else {
+			const removed = sourceItems.splice(source.index, 1);
+			sourceItems.splice(destination.index, 0, removed[0]);
+			taskdata[parseInt(source.droppableId)].tasks = sourceItems;
+			setTaskData([...taskdata]);
+
+			updateSiblingtasks(
+				SourceitemsWithoutCurrent,
+				destination.index,
+				1,
+				mutateTask
+			);
+
+			const body = {
+				data: {
+					index: destination.index,
+				},
+			};
+			updateTask(parseInt(draggableId), body, mutateTask);
 		}
 	};
 
