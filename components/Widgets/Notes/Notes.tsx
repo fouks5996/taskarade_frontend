@@ -12,6 +12,8 @@ import { BsPlus } from "react-icons/bs";
 import WidgetWrapper from "../WidgetWrapper";
 import { queryTypes } from "next/app";
 import { v4 as uuidv4 } from "uuid";
+import { useAtom, useSetAtom } from "jotai";
+import { alertAtom } from "../../../stores/alert";
 
 type queryType = string;
 
@@ -21,6 +23,7 @@ export default function Notes({ maxId, widgetData, mutateNotes }) {
 	const { id, pid } = router.query as queryTypes;
 	const { project, isLoading, mutate } = useCurrentProject(parseInt(id));
 	const [noteData, setNoteData] = useState(widgetData);
+	const setAlert = useSetAtom(alertAtom);
 
 	useEffect(() => {
 		setNoteData(widgetData);
@@ -65,6 +68,11 @@ export default function Notes({ maxId, widgetData, mutateNotes }) {
 		const { success } = await post(path("CREATE_note"), body);
 
 		if (success) {
+			setAlert({
+				content: "Note succesfully created 🎉",
+				active: true,
+				success: true,
+			});
 			const newNote = {
 				title: "New note",
 				updatedAt: Date.now(),
@@ -73,6 +81,11 @@ export default function Notes({ maxId, widgetData, mutateNotes }) {
 			setNoteData([newNote, ...noteData]);
 			mutate();
 			mutateNotes();
+		} else {
+			setAlert({
+				content: "Error occured, please try again",
+				active: true,
+			});
 		}
 	}
 

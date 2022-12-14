@@ -30,12 +30,17 @@ export const GetWeatherIcon = ({
 		.replace(/,/g, "");
 	const sunset = Date.parse(`${date} ${sunsetData} GMT+0100`);
 
-	if (cloudcover > 50 && datetime > sunset) {
-		return little ? <NightCloudyIcon little /> : <NightCloudyIcon />;
+	console.log(weather);
+
+	if (!little) {
+		if (cloudcover > 50 && datetime > sunset) {
+			return little ? <NightCloudyIcon little /> : <NightCloudyIcon />;
+		}
+		if (datetime > sunset) {
+			return little ? <NightIcon little /> : <NightIcon />;
+		}
 	}
-	if (datetime > sunset) {
-		return little ? <NightIcon little /> : <NightIcon />;
-	}
+
 	if (weather?.preciptype === null && cloudcover <= 25) {
 		return little ? <SunIcon little /> : <SunIcon />;
 	}

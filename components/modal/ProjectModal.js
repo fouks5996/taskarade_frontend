@@ -1,3 +1,4 @@
+import { useSetAtom } from "jotai";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -6,6 +7,7 @@ import { useCurrentProject } from "../../services/api/project";
 import { useCurrentUser } from "../../services/api/user";
 import { remove, update } from "../../services/config";
 import { path } from "../../services/routes";
+import { alertAtom } from "../../stores/alert";
 import Button from "../actions/Button";
 import Text from "../Typography/Text";
 
@@ -49,6 +51,7 @@ export function ProjectModalContent({
 	setIsOpen,
 }) {
 	const router = useRouter();
+	const setAlert = useSetAtom(alertAtom);
 
 	async function onSubmit(e) {
 		e.preventDefault();
@@ -57,7 +60,19 @@ export function ProjectModalContent({
 			username: e.target.username.value,
 		};
 		const { success } = await update(path("UPDATE_user", user.id), body);
-		if (success) return mutateUser();
+		if (success) {
+			setAlert({
+				content: "Account succesfully updated 🎉",
+				active: true,
+				success: true,
+			});
+			return mutateUser();
+		} else {
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
+		}
 	}
 
 	async function onSubmitProject(e) {
@@ -71,13 +86,30 @@ export function ProjectModalContent({
 			path("UPDATE_project", project.data.id),
 			body
 		);
-		if (success) return mutate(), mutateUser();
+		if (success) {
+			setAlert({
+				content: "Project succesfully updated 🎉",
+				active: true,
+				success: true,
+			});
+			return mutate(), mutateUser();
+		} else {
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
+		}
 	}
 
 	async function deleteProject() {
 		setIsOpen(false);
-		router.push("/");
+		router.push("/dashboard");
 		await remove(path("DELETE_project", project.data.id), mutateUser);
+		setAlert({
+			content: "Project succesfully destroy 🎉",
+			active: true,
+			success: true,
+		});
 	}
 
 	if (active === "Account")

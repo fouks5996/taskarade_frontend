@@ -12,6 +12,8 @@ import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import TagModal from "./TagModal";
+import { useSetAtom } from "jotai";
+import { alertAtom } from "../../stores/alert";
 
 interface TaskModalProps {
 	setModal: Function;
@@ -42,6 +44,7 @@ export default function TaskModal({
 	const [tagsState, setTagsState] = useState(task.task_tags);
 	const [modalTag, setModalTag] = useState(false);
 	const [titleState, setTitleState] = useState(task.title);
+	const setAlert = useSetAtom(alertAtom);
 
 	const {
 		handleSubmit,
@@ -64,7 +67,10 @@ export default function TaskModal({
 			setTagsState(tagTodelete);
 			mutateTask();
 		} else {
-			console.log(error);
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
 		}
 	}
 
@@ -77,9 +83,18 @@ export default function TaskModal({
 		const { success, error } = await update(path("UPDATE_task", task.id), body);
 		if (success) {
 			setModal(false);
+			setAlert({
+				content: "Task successfully updated 🎉",
+				active: true,
+				success: true,
+			});
 			mutateTask();
 		} else {
 			console.log(error);
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
 		}
 	}
 

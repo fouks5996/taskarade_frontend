@@ -88,7 +88,9 @@ interface SyntheticEvent {
 
  type AlertTypes = {
 		active: boolean, 
-		content: string
+		content: string,
+		success: boolean,
+		error: boolean,
 	}
 
  

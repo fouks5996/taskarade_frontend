@@ -3,8 +3,8 @@ import React from "react";
 export default function NightIcon({ little = false }) {
 	return (
 		<svg
-			width={little ? "90" : "140"}
-			height={little ? "60" : "90"}
+			width={little ? "70" : "140"}
+			height={little ? "46" : "90"}
 			viewBox='0 0 409 217'
 			fill='none'
 			xmlns='http://www.w3.org/2000/svg'>

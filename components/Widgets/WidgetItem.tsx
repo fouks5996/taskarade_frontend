@@ -22,11 +22,6 @@ export default function WidgetItem({
 	const [newData, setNewData] = useState<string>(widget.attributes.name);
 	const router = useRouter();
 	const { id, pid } = router.query as queryTypes;
-	const [alert, setAlert] = useState<AlertTypes>({
-		active: false,
-		content: "",
-	});
-
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget/${widget.id}`)) {
 			setActive(true);
@@ -51,10 +46,6 @@ export default function WidgetItem({
 			mutate();
 		} else {
 			setNewData(widget.attributes.name);
-			setAlert({
-				active: false,
-				content: "",
-			});
 		}
 	}
 
@@ -67,7 +58,6 @@ export default function WidgetItem({
 				}`
 			);
 		} else {
-			setAlert({ active: true, content: "Minimum 1 widget" });
 		}
 	}
 
@@ -132,7 +122,6 @@ export default function WidgetItem({
 					</div>
 				</div>
 			)}
-			<Alert alert={alert} setAlert={setAlert} />
 		</>
 	);
 }

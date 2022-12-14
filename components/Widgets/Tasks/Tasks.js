@@ -15,6 +15,8 @@ import { path } from "../../../services/routes";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Search from "../../Search/Search";
 import { v4 as uuidv4 } from "uuid";
+import { alertAtom } from "../../../stores/alert";
+import { useSetAtom } from "jotai";
 
 export default function Tasks() {
 	const router = useRouter();
@@ -248,6 +250,7 @@ export function TaskStatusWrapper({
 }) {
 	const router = useRouter();
 	const { pid } = router.query;
+	const setAlert = useSetAtom(alertAtom);
 
 	async function createTask(statusID) {
 		const colIndex = statusID - 1;
@@ -275,7 +278,10 @@ export function TaskStatusWrapper({
 		if (success) {
 			mutateTask();
 		} else {
-			console.log(error);
+			setAlert({
+				content: "Error occured, please try again",
+				active: true,
+			});
 		}
 	}
 

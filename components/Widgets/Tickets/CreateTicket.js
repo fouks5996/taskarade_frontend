@@ -19,6 +19,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from "next/router";
 import { post } from "../../../services/config";
 import { path } from "../../../services/routes";
+import { useSetAtom } from "jotai";
+import { alertAtom } from "../../../stores/alert";
 
 export default function CreateTicket({ setCreateTicket, project, mutate }) {
 	const {
@@ -31,6 +33,8 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 	const [reviewDate, setReviewDate] = useState(new Date());
 	const { ticketStatus, isLoading } = useTicketstatus();
 	const { ticketPriority, isLoading2 } = useTicketPriority();
+	const setAlert = useSetAtom(alertAtom);
+
 	const router = useRouter();
 	const { pid } = router.query;
 	const { data: session } = useSession();
@@ -94,9 +98,18 @@ export default function CreateTicket({ setCreateTicket, project, mutate }) {
 		const { success, error } = await post(path("CREATE_ticket"), body);
 
 		if (success) {
+			setAlert({
+				content: "Ticket succesfully created",
+				active: true,
+				success: true,
+			});
 			mutate();
 			setCreateTicket(false);
 		} else {
+			setAlert({
+				content: "Error occured, please try again",
+				active: true,
+			});
 			alert(JSON.stringify(error));
 		}
 	};
