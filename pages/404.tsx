@@ -12,7 +12,7 @@ export default function Custom404() {
 				<Heading size={"28"}>
 					404 Error, this page is no longer available
 				</Heading>
-				<Text pointer hoverUnderline onclick={() => router.push("/")}>
+				<Text pointer hoverUnderline onclick={() => router.push("/dashboard")}>
 					Go to home
 				</Text>
 			</div>

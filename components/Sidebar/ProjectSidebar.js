@@ -13,6 +13,8 @@ import { path } from "../../services/routes";
 import string_to_slug from "../functions/Slugify";
 import Loader from "../Loader/Loader";
 import Alert from "../modal/Alert";
+import { alertAtom } from "../../stores/alert";
+import { useSetAtom } from "jotai";
 
 export default function ProjectSidebar() {
 	const router = useRouter();
@@ -66,6 +68,7 @@ export default function ProjectSidebar() {
 export function CreateProject({ projectCreator, mutate }) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
+	const setAlert = useSetAtom(alertAtom);
 
 	async function createProject() {
 		setIsLoading(true);
@@ -81,6 +84,11 @@ export function CreateProject({ projectCreator, mutate }) {
 					widget_creator: projectCreator,
 				},
 			};
+			setAlert({
+				content: "Project succesfully created 🎉",
+				active: true,
+				success: true,
+			});
 			const { success: res } = await post(path("CREATE_widget"), Widgetbody);
 			if (res) {
 				mutate();
@@ -94,7 +102,10 @@ export function CreateProject({ projectCreator, mutate }) {
 				console.log("error");
 			}
 		} else {
-			console.log(error);
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
 		}
 	}
 
@@ -110,18 +121,27 @@ export function CreateProject({ projectCreator, mutate }) {
 export function SidebarElement({ name, id, project_widget }) {
 	const router = useRouter();
 	const [active, setActive] = useState(false);
-	const [alert, setAlert] = useState({
-		active: false,
-		content: "",
-	});
+	const setAlert = useSetAtom(alertAtom);
 
 	useEffect(() => {
 		if (router.asPath.includes(`/project/${id}/widget`)) {
+			setAlert({
+				content: "",
+				active: false,
+			});
 			setActive(true);
 		} else {
 			setActive(false);
 		}
-	}, [router, setActive, id]);
+	}, [router, setActive, id, setAlert]);
+
+	function setAlertFunc() {
+		setAlert({
+			content: "Your project is Loading ...",
+			active: true,
+			success: true,
+		});
+	}
 
 	return (
 		<>
@@ -131,6 +151,7 @@ export function SidebarElement({ name, id, project_widget }) {
 					project_widget[0]?.name
 				)}`}>
 				<div
+					onClick={() => setAlertFunc()}
 					className={`flex cursor-pointer hover:scale-105 ${
 						active ? "border-2 border-white" : "border-none"
 					} justify-center items-center h-10 w-10 bg-blue-400  rounded-full relative`}>
@@ -139,12 +160,6 @@ export function SidebarElement({ name, id, project_widget }) {
 					</Text>
 				</div>
 			</Link>
-			<Alert
-				alert={alert}
-				setAlert={setAlert}
-				color='bg-blue-600'
-				duration={"800"}
-			/>
 		</>
 	);
 }

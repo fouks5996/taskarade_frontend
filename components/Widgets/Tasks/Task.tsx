@@ -9,6 +9,8 @@ import { useState } from "react";
 import TaskTag from "./TaskTag";
 import { v4 as uuidv4 } from "uuid";
 import { updateSiblingtasks } from "./Tasks";
+import { useSetAtom } from "jotai";
+import { alertAtom } from "../../../stores/alert";
 
 export default function Task({
 	task,
@@ -25,6 +27,8 @@ export default function Task({
 		state: false,
 		data: null,
 	});
+
+	const setAlert = useSetAtom(alertAtom);
 
 	async function updateTask(e: React.SyntheticEvent) {
 		e.preventDefault();
@@ -53,8 +57,16 @@ export default function Task({
 		if (success) {
 			await mutateTask();
 			setGetId(!task.id);
+			setAlert({
+				content: "Task successfully updated 🎉",
+				active: true,
+				success: true,
+			});
 		} else {
-			alert("erreur");
+			setAlert({
+				content: "Error occured, please try again",
+				active: true,
+			});
 		}
 	}
 

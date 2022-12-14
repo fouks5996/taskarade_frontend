@@ -28,6 +28,8 @@ import TicketComment from "../Widgets/Tickets/TicketComment";
 import ModalHeader from "./ModalHeader";
 import { useRef } from "react";
 import { useOnClickOutside } from "usehooks-ts";
+import { useSetAtom } from "jotai";
+import { alertAtom } from "../../stores/alert";
 
 export default function TicketModal({ ticket, setModal, mutate }) {
 	const {
@@ -74,6 +76,8 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 	const { ticketStatus, isLoading } = useTicketstatus();
 	const { ticketPriority, isLoading2 } = useTicketPriority();
 	const { project_collab, isLoading3 } = useProjectCollab(id);
+	const setAlert = useSetAtom(alertAtom);
+
 	if (isLoading && isLoading2 && isLoading3)
 		return (
 			<div className='flex h-full justify-center items-center'>
@@ -129,8 +133,17 @@ export default function TicketModal({ ticket, setModal, mutate }) {
 		if (success) {
 			mutate();
 			setModal({ state: false, data: null });
+			setAlert({
+				content: "Ticket successfully updated 🎉",
+				active: true,
+				success: true,
+			});
 		} else {
 			console.log("erreur");
+			setAlert({
+				content: "An error occured, please try again",
+				active: true,
+			});
 		}
 	}
 

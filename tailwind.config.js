@@ -6,64 +6,66 @@ module.exports = {
 	],
 	plugins: [],
 	theme: {
-		screens: {
-			"max-screen": "1700px",
-		},
-		borderRadius: {
-			xs: "4px",
-			md: "8px",
-			lg: "16px",
-			full: "100%",
-		},
-		colors: {
-			status: {
-				in_progress_text: "#293057",
-				in_progress_bg: "#BEBEC1",
+		extend: {
+			screens: {
+				"max-screen": "1700px",
 			},
-			transparent: "transparent",
-			green: "#295E00",
-			yellow: "#E4BF5E",
-			white: "#FFFFFF",
-			red: "#D94B4B",
-			black: "#000000",
-			blue: {
-				900: "#0F141E",
-				800: "#0F141F",
-				700: "#131925",
-				600: "#1A1E2D",
-				500: "#232835",
-				400: "#1B2A48",
-				300: "#2E64CF",
+			borderRadius: {
+				xs: "4px",
+				md: "8px",
+				lg: "16px",
+				full: "100%",
 			},
-			grey: {
-				text: {
-					inactive: "#A5A8B2",
-					active: "#DADAE2",
-					placeholder: "#737681",
+			colors: {
+				status: {
+					in_progress_text: "#293057",
+					in_progress_bg: "#BEBEC1",
+				},
+				transparent: "transparent",
+				green: "#295E00",
+				yellow: "#E4BF5E",
+				white: "#FFFFFF",
+				red: "#D94B4B",
+				black: "#000000",
+				blue: {
+					900: "#0F141E",
+					800: "#0F141F",
+					700: "#131925",
+					600: "#1A1E2D",
+					500: "#232835",
+					400: "#1B2A48",
+					300: "#2E64CF",
+				},
+				grey: {
+					text: {
+						inactive: "#A5A8B2",
+						active: "#DADAE2",
+						placeholder: "#737681",
+					},
+				},
+				stroke: {
+					grey: "#252525",
+					blue: "#2D343F",
 				},
 			},
-			stroke: {
-				grey: "#252525",
-				blue: "#2D343F",
+			fontFamily: {
+				black: ["BRHendrix-Black", "sans-serif"],
+				bold: ["BR Hendrix Bold", "sans-serif"],
+				sb: ["BRHendrix-SemiBold", "sans-serif"],
+				medium: ["BRHendrix-Medium", "sans-serif"],
+				medium_italic: ["BRHendrix-MediumItalic", "sans-serif"],
+				regular: ["BRHendrix-Regular", "sans-serif"],
 			},
-		},
-		fontFamily: {
-			black: ["BRHendrix-Black", "sans-serif"],
-			bold: ["BR Hendrix Bold", "sans-serif"],
-			sb: ["BRHendrix-SemiBold", "sans-serif"],
-			medium: ["BRHendrix-Medium", "sans-serif"],
-			medium_italic: ["BRHendrix-MediumItalic", "sans-serif"],
-			regular: ["BRHendrix-Regular", "sans-serif"],
-		},
-		fontSize: {
-			12: "0.75rem",
-			13: "0.813rem",
-			14: "0.875rem",
-			16: "1rem",
-			18: "1.125rem",
-			20: "1.25rem",
-			24: "1.50rem",
-			28: "1.75rem",
+			fontSize: {
+				12: "0.75rem",
+				13: "0.813rem",
+				14: "0.875rem",
+				16: "1rem",
+				18: "1.125rem",
+				20: "1.25rem",
+				24: "1.50rem",
+				28: "1.75rem",
+			},
 		},
 		// fontWeight: {
 		//   light: "300",
