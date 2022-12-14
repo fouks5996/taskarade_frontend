@@ -33,7 +33,7 @@ export default function Header() {
 							<button
 								onClick={() =>
 									signOut({
-										callbackUrl: "http://localhost:3000/auth/sign-in",
+										callbackUrl: `${process.env.NEXT_PUBLIC_NEXT_URL}/auth/sign-in`,
 									})
 								}>
 								Sign out

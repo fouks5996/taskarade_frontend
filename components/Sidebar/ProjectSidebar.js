@@ -45,7 +45,7 @@ export default function ProjectSidebar() {
 						key={proj.id}
 						name={proj.name}
 						id={proj.id}
-						project_widget={proj.project_widgets}
+						project_widget={proj?.project_widgets}
 					/>
 				))}
 				<div className='min-h-[2px] my-1 mb-2 max-h-[2px] w-full bg-stroke-blue'>
@@ -53,10 +53,10 @@ export default function ProjectSidebar() {
 				</div>
 				{user.collaborations?.map((collab) => (
 					<SidebarElement
-						key={collab.id}
-						name={collab.project?.name}
-						id={collab.project?.id}
-						project_widget={collab.project?.project_widgets}
+						key={collab?.id}
+						name={collab?.project?.name}
+						id={collab?.project?.id}
+						project_widget={collab?.project?.project_widgets}
 					/>
 				))}
 			</div>
