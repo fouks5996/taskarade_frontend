@@ -122,201 +122,30 @@ export const errorMessageValues = {
 };
 
 export function verifyTimeValue(
-	estimatedValue,
-	estimatedFormat,
-	realizedValue,
-	realizedFormat
-) {
-	let estimated = estimatedValue + estimatedFormat;
-	let realized = realizedValue + realizedFormat;
-	let success = true;
-	let error = true;
+	estimatedValue: number,
+	estimatedFormat: "min" | "h" | "d",
+	realizedValue: number,
+	realizedFormat: "min" | "h" | "d"
+): { ok: boolean; error?: string } {
+	const estimatedSeconds = convertToSeconds(estimatedValue, estimatedFormat);
+	const realizedSeconds = convertToSeconds(realizedValue, realizedFormat);
 
-	if (
-		realized.includes("min") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
+	if (realizedSeconds < estimatedSeconds) {
+		return { ok: true };
+	} else {
+		return {
+			ok: false,
+			error: "La valeur réalisée doit être inférieure à la valeur estimée",
+		};
 	}
+}
 
-	if (
-		realized.includes("h") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-	if (
-		realized.includes("min") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) === parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) === parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) === parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) === parseInt(realizedValue)
-	) {
-		console.log(" c'est ok !");
-		return { ok: success };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) > parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("min") &&
-		estimated.includes("min") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("h") &&
-		estimated.includes("h") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
-	}
-
-	if (
-		realized.includes("d") &&
-		estimated.includes("d") &&
-		parseInt(estimatedValue) < parseInt(realizedValue)
-	) {
-		console.log("erreur !");
-		return { error: error };
+function convertToSeconds(value: number, format: "min" | "h" | "d"): number {
+	if (format === "min") {
+		return value * 60;
+	} else if (format === "h") {
+		return value * 3600;
+	} else if (format === "d") {
+		return value * 86400;
 	}
 }

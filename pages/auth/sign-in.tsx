@@ -47,7 +47,7 @@ export default function SignIn({ providers }) {
 		});
 
 		if (result.ok) {
-			router.push(getRoot().FRONT_URL);
+			router.push(`${getRoot().FRONT_URL}/dashboard`);
 		} else {
 			await createServerError(
 				setServerError,

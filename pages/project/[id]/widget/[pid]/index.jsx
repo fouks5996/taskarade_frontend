@@ -1,56 +1,12 @@
-import { unstable_getServerSession } from "next-auth";
 import { useRouter } from "next/router";
 import React from "react";
-import { SWRConfig, unstable_serialize } from "swr";
 import Layout from "../../../../../components/Layout/Layout";
 import Loader from "../../../../../components/Loader/Loader";
 import Notes from "../../../../../components/Widgets/Notes/Notes";
 import Tasks from "../../../../../components/Widgets/Tasks/Tasks";
 import Tickets from "../../../../../components/Widgets/Tickets/Tickets";
 import { useCurrentNotes } from "../../../../../services/api/note";
-import { GetProjectFromApi } from "../../../../../services/api/project";
 import { useCurrentWidget } from "../../../../../services/api/widget";
-import { authOptions } from '../../../../api/auth/[...nextauth]'
-
-
-export async function getServerSideProps(context) {
-	if (context.query.q){
-		const options= {
-			method: 'GET',
-			headers:{
-				Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`
-			}
-		}
-		const resP = await GetProjectFromApi(context.params.pid, options)
-		const session = await unstable_getServerSession(
-			context.req,
-			context.res,
-			authOptions
-		);
-		const currentUserID = session.id 
-		if ((resP[0]?.widget_creator.id !== currentUserID && collaborationsIsTrue() === false) || (resP.length === 0 )) {
-		  return {
-			  redirect:{
-				  destination: '/404',
-				  permanent: false,
-			  },
-		  }
-		}
-	
-	  function collaborationsIsTrue() {
-		  return resP[0]?.project.collaborations.some(
-			  (collaboration) =>
-				  collaboration.collaborator.id === currentUserID
-		  );
-	  } 
-	}
-
-	return { 
-		props: {
-			
-		},
-	};
-}
 
 
 export default function Index() {
@@ -94,4 +50,5 @@ export default function Index() {
 	}
 }
 
-Index.auth = true;
+
+Index.auth = true; 

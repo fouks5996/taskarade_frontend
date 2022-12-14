@@ -22,20 +22,22 @@ export default function ProjectSidebar() {
 	if (isUserLoading) return <ProjectSidebarSkeleton />;
 
 	return (
-		<div className='w-[70px] text-grey-text-active flex flex-col items-center pt-6 gap-3 h-screen border-r border-stroke-blue'>
-			<span className='cursor-pointer' onClick={() => router.push("/")}>
+		<div className='w-[70px] text-grey-text-active flex flex-col items-center pt-4 gap-1.5 h-screen border-r border-stroke-blue'>
+			<span
+				className='cursor-pointer h-fit'
+				onClick={() => router.push("/dashboard")}>
 				{" "}
 				<Image
 					alt='logo'
 					src={logo}
 					layout='fixed'
 					width={38}
-					height={29}
+					height={35}
 				/>{" "}
 			</span>
 
-			<div className='mt-1 h-[1px] w-full bg-stroke-blue'> </div>
-			<div className='flex flex-col gap-2'>
+			<div className='h-[1px] w-full bg-stroke-blue'> </div>
+			<div className='flex flex-col gap-3 pt-2'>
 				{user.project?.map((proj) => (
 					<SidebarElement
 						key={proj.id}

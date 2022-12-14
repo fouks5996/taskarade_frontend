@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx", 
     "components/Layout/Header.js", "components/Sidebar/ProjectSidebar.tsx", "components/Widgets/Tickets/TicketComment.js", "components/Widgets/WidgetNavigation.js", "components/Widgets/WidgetNavigation.js"  
-  ],
+, "pages/dashboard/index.jsx"  ],
   "exclude": [
     "node_modules"
   ]
