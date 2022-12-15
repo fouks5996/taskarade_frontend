@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { makePlural } from "../../components/functions/MakePlural";
 import { getIcon } from "../../components/Icons/GetIcon";
 import Layout from "../../components/Layout/Layout";
+import LoadingPage from "../../components/Loader/LoadingPage";
 import Alert from "../../components/modal/Alert";
 import WeatherSidebar from "../../components/Sidebar/WeatherSidebar";
 import Heading from "../../components/Typography/Heading";
@@ -17,7 +18,7 @@ export default function Home() {
 	const { user, isUserLoading } = useCurrentUser(jwt);
 	const [alert, setAlert] = useAtom(alertAtom)
 
-	if (isUserLoading) return <p>loading ...</p>;
+	if (isUserLoading) return <LoadingPage />;
 
 	return (
 		<Layout title='Home'>
